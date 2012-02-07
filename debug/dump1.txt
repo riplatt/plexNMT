@@ -1,0 +1,269 @@
+//---------------------------------------------//
+Doing Main.var_dump...
+Type of Object: object
+_obj[klTimeout] = null type = null
+_obj[hlStopTimeoutId] = 27 type = number
+_obj[_hl] = 13 type = number
+_obj[_len] = 14 type = number
+_obj[overRightCB] = null type = null
+_obj[overLeftCB] = null type = null
+_obj[overBottomCB] = null type = null
+_obj[overTopCB] = null type = null
+_obj[right] = [type Function] type = function
+_obj[left] = [type Function] type = function
+_obj[down] = [type Function] type = function
+_obj[up] = [type Function] type = function
+_obj[_size] = 5 type = number
+_obj[_rSize] = 1 type = number
+_obj[_cSize] = 5 type = number
+_obj[lastR] = 0 type = number
+_obj[lastC] = 3 type = number
+_obj[lastTop] = 10 type = number
+_obj[r] = 0 type = number
+_obj[c] = 3 type = number
+_obj[top] = 10 type = number
+_obj[data] = null type = null
+_obj[xMCArray] = _level0.homeMC.item_0_1,_level0.homeMC.item_0_2,_level0.homeMC.item_0_3,_level0.homeMC.item_0_4,_level0.homeMC.item_0_0 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[0] = _level0.homeMC.item_0_1,_level0.homeMC.item_0_2,_level0.homeMC.item_0_3,_level0.homeMC.item_0_4,_level0.homeMC.item_0_0 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[4] = _level0.homeMC.item_0_0 type = movieclip
+_obj[3] = _level0.homeMC.item_0_4 type = movieclip
+_obj[2] = _level0.homeMC.item_0_3 type = movieclip
+_obj[1] = _level0.homeMC.item_0_2 type = movieclip
+_obj[0] = _level0.homeMC.item_0_1 type = movieclip
+Done Main.var_dump...
+Done Main.var_dump...
+_obj[onEnterCB] = [type Function] type = function
+_obj[onHLStopCB] = [type Function] type = function
+_obj[unhlCB] = [type Function] type = function
+_obj[hlCB] = [type Function] type = function
+_obj[onItemClearCB] = [type Function] type = function
+_obj[onItemUpdateCB] = [type Function] type = function
+_obj[xHLStopTime] = 700 type = number
+_obj[xWrapLine] = false type = boolean
+_obj[xHoriz] = true type = boolean
+_obj[keyDown] = [type Function] type = function
+_obj[keyListener] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[onKeyDown] = [type Function] type = function
+Done Main.var_dump...
+_obj[fn] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[onEnableKeyListener] = [type Function] type = function
+_obj[onHLStop] = [type Function] type = function
+_obj[updateAllMC] = [type Function] type = function
+_obj[verticalMCArrayUp] = [type Function] type = function
+_obj[verticalMCArrayDown] = [type Function] type = function
+Done Main.var_dump...
+Done Main.var_dump...
+//---------------------------------------------//
+Doing Main.var_dump...
+Type of Object: object
+_obj[klTimeout] = null type = null
+_obj[hlStopTimeoutId] = 27 type = number
+_obj[_hl] = 13 type = number
+_obj[_len] = 14 type = number
+_obj[overRightCB] = null type = null
+_obj[overLeftCB] = null type = null
+_obj[overBottomCB] = null type = null
+_obj[overTopCB] = null type = null
+_obj[right] = [type Function] type = function
+_obj[left] = [type Function] type = function
+_obj[down] = [type Function] type = function
+_obj[up] = [type Function] type = function
+_obj[_size] = -1 type = number
+_obj[_rSize] = -1 type = number
+_obj[_cSize] = -1 type = number
+_obj[lastR] = -1 type = number
+_obj[lastC] = -1 type = number
+_obj[lastTop] = -1 type = number
+_obj[r] = -1 type = number
+_obj[c] = -1 type = number
+_obj[top] = -1 type = number
+_obj[data] = null type = null
+_obj[xMCArray] = _level0.homeMC.item_0_1,_level0.homeMC.item_0_2,_level0.homeMC.item_0_3,_level0.homeMC.item_0_4,_level0.homeMC.item_0_0 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[0] = _level0.homeMC.item_0_1,_level0.homeMC.item_0_2,_level0.homeMC.item_0_3,_level0.homeMC.item_0_4,_level0.homeMC.item_0_0 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[4] = _level0.homeMC.item_0_0 type = movieclip
+_obj[3] = _level0.homeMC.item_0_4 type = movieclip
+_obj[2] = _level0.homeMC.item_0_3 type = movieclip
+_obj[1] = _level0.homeMC.item_0_2 type = movieclip
+_obj[0] = _level0.homeMC.item_0_1 type = movieclip
+Done Main.var_dump...
+Done Main.var_dump...
+_obj[onEnterCB] = [type Function] type = function
+_obj[onHLStopCB] = [type Function] type = function
+_obj[unhlCB] = [type Function] type = function
+_obj[hlCB] = [type Function] type = function
+_obj[onItemClearCB] = [type Function] type = function
+_obj[onItemUpdateCB] = [type Function] type = function
+_obj[xHLStopTime] = 700 type = number
+_obj[xWrapLine] = false type = boolean
+_obj[xHoriz] = true type = boolean
+_obj[keyDown] = [type Function] type = function
+_obj[keyListener] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[onKeyDown] = [type Function] type = function
+Done Main.var_dump...
+_obj[fn] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[onEnableKeyListener] = [type Function] type = function
+_obj[onHLStop] = [type Function] type = function
+_obj[updateAllMC] = [type Function] type = function
+_obj[verticalMCArrayUp] = [type Function] type = function
+_obj[verticalMCArrayDown] = [type Function] type = function
+Done Main.var_dump...
+Done Main.var_dump...
+Adding Data to Item MC Object...
+//---------------------------------------------//
+Doing Main.var_dump...
+Type of Object: object
+_obj[klTimeout] = null type = null
+_obj[hlStopTimeoutId] = 29 type = number
+_obj[_hl] = 0 type = number
+_obj[_len] = 7 type = number
+_obj[overRightCB] = null type = null
+_obj[overLeftCB] = null type = null
+_obj[overBottomCB] = null type = null
+_obj[overTopCB] = null type = null
+_obj[right] = [type Function] type = function
+_obj[left] = [type Function] type = function
+_obj[down] = [type Function] type = function
+_obj[up] = [type Function] type = function
+_obj[_size] = 5 type = number
+_obj[_rSize] = 5 type = number
+_obj[_cSize] = 1 type = number
+_obj[lastR] = 4 type = number
+_obj[lastC] = 0 type = number
+_obj[lastTop] = 2 type = number
+_obj[r] = 0 type = number
+_obj[c] = 0 type = number
+_obj[top] = 0 type = number
+_obj[data] = [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[6] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[title] = Settings type = string
+_obj[key] = 0 type = string
+_obj[url] =  type = string
+Done Main.var_dump...
+_obj[5] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[title] = Exit type = string
+_obj[key] = 0 type = string
+_obj[url] = system?arg0=load_launcher type = string
+Done Main.var_dump...
+_obj[4] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[title] = TV Shows type = string
+_obj[index] = 5 type = number
+_obj[key] = 4 type = string
+_obj[type] = show type = string
+_obj[url] = http://192.168.0.3:32400/4 type = string
+Done Main.var_dump...
+_obj[3] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[title] = Music type = string
+_obj[index] = 4 type = number
+_obj[key] = 5 type = string
+_obj[type] = artist type = string
+_obj[url] = http://192.168.0.3:32400/5 type = string
+Done Main.var_dump...
+_obj[2] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[title] = Movies type = string
+_obj[index] = 3 type = number
+_obj[key] = 3 type = string
+_obj[type] = movie type = string
+_obj[url] = http://192.168.0.3:32400/3 type = string
+Done Main.var_dump...
+_obj[1] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[title] = Anime Shows type = string
+_obj[index] = 2 type = number
+_obj[key] = 2 type = string
+_obj[type] = show type = string
+_obj[url] = http://192.168.0.3:32400/2 type = string
+Done Main.var_dump...
+_obj[0] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[title] = Anime Movies type = string
+_obj[index] = 1 type = number
+_obj[key] = 1 type = string
+_obj[type] = movie type = string
+_obj[url] = http://192.168.0.3:32400/1 type = string
+Done Main.var_dump...
+Done Main.var_dump...
+_obj[xMCArray] = _level0.homeMC.item_0_1,_level0.homeMC.item_0_2,_level0.homeMC.item_0_3,_level0.homeMC.item_0_4,_level0.homeMC.item_0_0 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[4] = _level0.homeMC.item_0_0 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[0] = _level0.homeMC.item_0_0 type = movieclip
+Done Main.var_dump...
+_obj[3] = _level0.homeMC.item_0_4 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[0] = _level0.homeMC.item_0_4 type = movieclip
+Done Main.var_dump...
+_obj[2] = _level0.homeMC.item_0_3 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[0] = _level0.homeMC.item_0_3 type = movieclip
+Done Main.var_dump...
+_obj[1] = _level0.homeMC.item_0_2 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[0] = _level0.homeMC.item_0_2 type = movieclip
+Done Main.var_dump...
+_obj[0] = _level0.homeMC.item_0_1 type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[0] = _level0.homeMC.item_0_1 type = movieclip
+Done Main.var_dump...
+Done Main.var_dump...
+_obj[onEnterCB] = [type Function] type = function
+_obj[onHLStopCB] = [type Function] type = function
+_obj[unhlCB] = [type Function] type = function
+_obj[hlCB] = [type Function] type = function
+_obj[onItemClearCB] = [type Function] type = function
+_obj[onItemUpdateCB] = [type Function] type = function
+_obj[xHLStopTime] = 700 type = number
+_obj[xWrapLine] = false type = boolean
+_obj[xHoriz] = true type = boolean
+_obj[keyDown] = [type Function] type = function
+_obj[keyListener] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[onKeyDown] = [type Function] type = function
+Done Main.var_dump...
+_obj[fn] = [object Object] type = object
+Doing Main.var_dump...
+Type of Object: object
+_obj[onEnableKeyListener] = [type Function] type = function
+_obj[onHLStop] = [type Function] type = function
+_obj[updateAllMC] = [type Function] type = function
+_obj[verticalMCArrayUp] = [type Function] type = function
+_obj[verticalMCArrayDown] = [type Function] type = function
+Done Main.var_dump...
+Done Main.var_dump...
+//---------------------------------------------//
