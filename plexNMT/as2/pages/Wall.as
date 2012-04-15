@@ -61,10 +61,15 @@ class plexNMT.as2.pages.Wall
 		trace("Doing Wall...");
 		
 		var i:Number = PlexData.oSettings.curLevel;
+		var l1:String = "";
+		if(i = 1)
+		{
+			var l1 = "/all";
+		}
 		
 		this.parentMC = parentMC;
 		this.mainMC = this.parentMC.attachMovie("wallMC", "mainMC", 1, {_x:0, _y:0});
-		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360});
+		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360, _width:400, _height:400});
 
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
@@ -76,7 +81,7 @@ class plexNMT.as2.pages.Wall
 			this.onLoadData(PlexData.oWall.items);
 		} else {
 			trace("Wall - Loading Wall Data with: " + PlexData.oData["level"+i].current.url);
-			PlexAPI.loadData(PlexData.oData["level"+i].current.url, Delegate.create(this, this.onLoadData), 5000);
+			PlexAPI.loadData(PlexData.oData["level"+i].current.url+l1, Delegate.create(this, this.onLoadData), 5000);
 		}
 
 	}
@@ -85,9 +90,9 @@ class plexNMT.as2.pages.Wall
 	{
 		PlexData.oWall.items = data.concat();
 		//wallData = data;
-		this.preloadMC.removeMovieClip();
+		/*this.preloadMC.removeMovieClip();
 		delete this.preloadMC;
-		this.preloadMC = null;
+		this.preloadMC = null;*/
 		
 		this.createGridLite(data);
 
@@ -190,6 +195,10 @@ class plexNMT.as2.pages.Wall
 		// If hl(data index) equals undefined or null then will load data from index 0.
 		this.g.createUI(0);
 
+		this.preloadMC.removeMovieClip();
+		delete this.preloadMC;
+		this.preloadMC = null;
+		
 		// Highlight with the specified hl(data index) and enable the keyListener.
 		if (PlexData.oWall.current.index != null)
 		{

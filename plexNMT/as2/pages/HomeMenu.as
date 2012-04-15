@@ -257,7 +257,6 @@ class plexNMT.as2.pages.HomeMenu {
 		}
 		
 		//Load background slide show
-		trace("HomeMenu - loadLevel1 oBackground items: " + PlexData.oBackground.items.length + " : " + PlexData.oBackground.init);
 		if (PlexData.oBackground.init == false)
 		{
 			this.loadRecentlyAdded();
