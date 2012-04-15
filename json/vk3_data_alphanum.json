@@ -1,0 +1,13 @@
+{"keyboard_data":{"default_language":0, "lang":[
+
+{"display_name":"English",
+	"keypads":[{"display_name":"abc123", "ac_ref":"vk3test/ac.txt", "keys":[
+		["a","b","c","d","e","1","2","3",  "f","g","h","i","j","4","5","6",  "k","l","m","n","o","7","8","9",  "p","q","r","s","t",".","0",",",  "u","v","w","x","y","z","_","-"],
+		["A","B","C","D","E","1","2","3",  "F","G","H","I","J","4","5","6",  "K","L","M","N","O","7","8","9",  "P","Q","R","S","T",".","0",",",  "U","V","W","X","Y","Z","_","-"]]} ],
+	"function_keys":{
+		"key_delete":"Delete", "key_capslock":"Caps", "key_symbol_disable":"Symbol", "key_keypad_disable":"abc123",
+		"key_clear":"Clear", "key_space":"Space", "key_left":"Left", "key_right":"Right",
+		"key_language":"Languages", "key_cancel":"Cancel", "key_ok":"OK"}
+}
+
+]}}

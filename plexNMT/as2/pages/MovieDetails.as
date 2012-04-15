@@ -8,13 +8,14 @@ import com.syabas.as2.common.Marquee;
 import com.syabas.as2.common.IMGLoader;
 
 import plexNMT.as2.api.PlexAPI;
+import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Remote;
 
 class plexNMT.as2.pages.MovieDetails
 {
-	public static var plexURL:String = "http://192.168.0.3:32400/";
-	//public static var plexRatingKey:String = "2741"; //26,8,2763, 2557,2740,2741
-	public static var plexRatingKey:String = null; //_level0.currentRatingKey;
+	//public static var plexURL:String = "http://192.168.0.3:32400/";
+	public static var plexURL:String = PlexData.oSettings.url;
+	public static var plexRatingKey:String = null;
 	
 	private var parentMC:MovieClip = null;
 	private var backdropMC:MovieClip = null;
@@ -30,181 +31,95 @@ class plexNMT.as2.pages.MovieDetails
 	private var audioChannelsMC:MovieClip = null;
 	private var audioCodecMC:MovieClip = null;
 	private var summaryMC:MovieClip = null;
+	private var castMC:MovieClip = null;
+	private var directorMC:MovieClip = null;
+	private var writerMC:MovieClip = null;
 	private var preloadMC:MovieClip = null;
 	
+	private var onLoadResize:Object = null;
+	
 	private var keyListener:Object = null;
+	private var klInterval:Number = 0;
+	
+	private var title:String = null;
+	private var videoURL:String = null;
 	
 	//var listenerObj:Object = new Object();
 	
 	// Destroy all global variables.
 	public function destroy():Void
 	{
-		this.parentMC.removeMovieClip();
-		delete this.parentMC;
-		parentMC = null;
+		cleanUp(this.parentMC);
+				
+		this.title = null;
+		this.videoURL = null;
 		
-		this.backdropMC.removeMovieClip();
-		delete this.backdropMC;
-		backdropMC = null;
-		
-		this.posterMC.removeMovieClip();
-		delete this.posterMC;
-		posterMC = null;
-		
-		this.titleMC.removeMovieClip();
-		delete this.titleMC;
-		titleMC = null;
-		
-		this.ratingMC.removeMovieClip();
-		delete this.ratingMC;
-		ratingMC = null;
-		
-		this.minMC.removeMovieClip();
-		delete this.minMC;
-		minMC = null;
-		
-		this.studioMC.removeMovieClip();
-		delete this.studioMC;
-		studioMC = null;
-		
-		this.contentRatingMC.removeMovieClip();
-		delete this.contentRatingMC;
-		contentRatingMC = null;
-		
-		this.videoResolutionMC.removeMovieClip();
-		delete this.videoResolutionMC;
-		videoResolutionMC = null;
-		
-		this.aspectRatioMC.removeMovieClip();
-		delete this.aspectRatioMC;
-		aspectRatioMC = null;
-		
-		this.audioChannelsMC.removeMovieClip();
-		delete this.audioChannelsMC;
-		audioChannelsMC = null;
-		
-		this.audioCodecMC.removeMovieClip();
-		delete this.audioCodecMC;
-		audioCodecMC = null;
-		
-		this.summaryMC.removeMovieClip();
-		delete this.summaryMC;
-		summaryMC = null;
-		
-		this.preloadMC.removeMovieClip();
-		delete this.preloadMC;
-		preloadMC = null;
-		
+		delete this.onLoadResize;
+		this.onLoadResize = null;
 		
 		delete this.keyListener;
 		this.keyListener = null;
+
 	}
 	
 	public function MovieDetails(parentMC:MovieClip)
 	{
 		trace("Doing plexNMT.movieDetails...");
-
-		plexRatingKey = _level0.currentRatingKey;
+		
+		plexRatingKey = _level0.plex.currentRatingKey;
 
 		this.parentMC = parentMC;
-		
-		this.backdropMC = this.parentMC.createEmptyMovieClip("backdropMC", parentMC.getNextHighestDepth());
-		backdropMC._y = 0;
-		backdropMC._x = 0;
-		
-		this.bgOverlayMC = this.parentMC.attachMovie("bgOverlay", "bgOverlayMC", parentMC.getNextHighestDepth());
-		backdropMC.setMask(bgOverlayMC);
-		
-		this.posterMC = this.parentMC.createEmptyMovieClip("posterMC", parentMC.getNextHighestDepth());
-		posterMC._y = 0;
-		posterMC._x = 0;
-		
-		this.titleMC = this.parentMC.createEmptyMovieClip("titleMC", parentMC.getNextHighestDepth());
-		titleMC._y = 0;
-		titleMC._x = 520;
-		titleMC.createTextField("title_txt", titleMC.getNextHighestDepth(), 10, 24, 900, 50);
-		
-		this.ratingMC = this.parentMC.createEmptyMovieClip("ratingMC", parentMC.getNextHighestDepth());
-		ratingMC._y = 80;
-		ratingMC._x = 522;
-		
-		this.minMC = this.parentMC.createEmptyMovieClip("minMC", parentMC.getNextHighestDepth());
-		minMC._y = 55;
-		minMC._x = 650;
-		minMC.createTextField("min_txt", minMC.getNextHighestDepth(), 10, 24, 900, 50);
-		
-		this.studioMC = this.parentMC.createEmptyMovieClip("studioMC", parentMC.getNextHighestDepth());
-		//studioMC.addListener(listenerObj);
-		studioMC._y = 125;
-		studioMC._x = 520;		
-		
-		this.contentRatingMC = this.parentMC.createEmptyMovieClip("contentRatingMC", parentMC.getNextHighestDepth());
-		contentRatingMC._y = 125;
-		contentRatingMC._x = 560;
-		
-		this.aspectRatioMC = this.parentMC.createEmptyMovieClip("aspectRatioMC", parentMC.getNextHighestDepth());
-		aspectRatioMC._y = 125;
-		aspectRatioMC._x = 660;
-		
-		this.videoResolutionMC = this.parentMC.createEmptyMovieClip("videoResolutionMC", parentMC.getNextHighestDepth());
-		videoResolutionMC._y = 125;
-		videoResolutionMC._x = 740;
-				
-		this.audioCodecMC = this.parentMC.createEmptyMovieClip("audioCodecMC", parentMC.getNextHighestDepth());
-		audioCodecMC._y = 125;
-		audioCodecMC._x = 825;
-		
-		this.audioChannelsMC = this.parentMC.createEmptyMovieClip("audioChannelsMC", parentMC.getNextHighestDepth());
-		audioChannelsMC._y = 125;
-		audioChannelsMC._x = 965;
-		
-		this.summaryMC = this.parentMC.createEmptyMovieClip("summaryMC", parentMC.getNextHighestDepth());
-		summaryMC._y = 165;
-		summaryMC._x = 520;
-		summaryMC.createTextField("summary_txt", summaryMC.getNextHighestDepth(), 10, 24, 700, 500);
-		summaryMC.summary_txt.multiline = true;
-		summaryMC.summary_txt.wordWrap = true;
-		
+
 		this.keyListener = new Object();
-		this.keyListener.onKeyDown = this.onKeyDown();
 		Key.addListener(this.keyListener);
 		
-		this.preloadMC = this.parentMC.attachMovie("preload200", "preload200", parentMC.getNextHighestDepth(), {_x:640, _y:360});
-		trace("plexURL: " + plexURL+"library/metadata/" + plexRatingKey)
-		PlexAPI.loadMoveDetails(plexURL+"library/metadata/" + plexRatingKey, Delegate.create(this, this.parseXML), 5000);
+		this.preloadMC = this.parentMC.attachMovie("busy", "busy", parentMC.getNextHighestDepth(), {_x:640, _y:360, _width:200, _height:200});
+		PlexAPI.loadMoveDetails(PlexData.oWall.current.url, Delegate.create(this, this.onDataLoad), 5000);
 	}
 
-	private function parseXML(data:Array):Void
+	private function onDataLoad(data:Object):Void
 	{
 			trace("Doing moveieDetails.parseXML.data: ");
 			//var_dump(data);
-			this.preloadMC.removeMovieClip();
-			delete this.preloadMC;
-			this.preloadMC = null;
 			
-			trace("artURL: " + data[0].artURL);
-			backdropMC.loadMovie(data[0].artURL);
+			this.enableKeyListener();
 			
-			trace("posterURL: " + data[0].posterURL);
-			posterMC.loadMovie(data[0].posterURL);
+			this.title = data.title;
+			this.videoURL = data.videoURL;
 			
-			trace("artURL: " + data[0].artURL);
-			backdropMC.loadMovie(data[0].artURL);
+			//Background
+			UI.loadImage(data.artURL, this.parentMC, "backdropMC", {mcProps:{_x:0, _y:0, _width:1280, _height:720}, lmcId:"busy", lmcProps:{_x:640, _y:360, _width:200, _height:200}});			
 			
-			trace("title: " + data[0].title);
+			this.bgOverlayMC = this.parentMC.attachMovie("bgOverlay", "bgOverlayMC", parentMC.getNextHighestDepth());
+			backdropMC.setMask(bgOverlayMC);
+			
+			//Poster
+			UI.loadImage(data.posterURL, this.parentMC, "posterMC", {mcProps:{_x:0, _y:0, _width:486, _height:720}, lmcId:"busy", lmcProps:{_x:173, _y:290, _width:140, _height:140}});	
+
+			//Title
+			//trace("title: " + data.title);
+			this.titleMC = this.parentMC.createEmptyMovieClip("titleMC", parentMC.getNextHighestDepth());
+			titleMC.createTextField("title_txt", titleMC.getNextHighestDepth(), 0, 0, 900, 50);
+			titleMC._y = 25;
+			titleMC._x = 520;
+			
 			var txtFormat:TextFormat = new TextFormat ();
 			txtFormat.font = "Arial";
 			txtFormat.size = 40;
 			txtFormat.color = 0xFFFFFF;
-			titleMC.title_txt.htmlText = data[0].title;
+			titleMC.title_txt.htmlText = data.title;
 			titleMC.title_txt.setTextFormat(txtFormat);	
 			
-			trace("data[0].rating: " + data[0].rating);
-			var rating:Number = 128 * data[0].rating;
+			//Rating
+			//trace("data.rating: " + data.rating);
+			this.ratingMC = this.parentMC.createEmptyMovieClip("ratingMC", parentMC.getNextHighestDepth());
+			ratingMC._y = 80;
+			ratingMC._x = 522;
+			var rating:Number = 128 * data.rating;
 			trace("rating: " + rating);
-			ratingMC.attachMovie("rating_0", "rating_0", ratingMC.getNextHighestDepth()); //background
-			ratingMC.attachMovie("rating_100", "rating_100", ratingMC.getNextHighestDepth()); //overlay
-			ratingMC.createEmptyMovieClip("ratingMask", ratingMC.getNextHighestDepth()); //crop/mask of overlay
+			ratingMC.attachMovie("rating_0", "rating_0", ratingMC.getNextHighestDepth()); 		//background
+			ratingMC.attachMovie("rating_100", "rating_100", ratingMC.getNextHighestDepth()); 	//overlay
+			ratingMC.createEmptyMovieClip("ratingMask", ratingMC.getNextHighestDepth()); 		//crop/mask of overlay
 			with(ratingMC.ratingMask)
 			{
 				moveTo(0,0);
@@ -216,55 +131,200 @@ class plexNMT.as2.pages.MovieDetails
 			}
 			ratingMC.rating_100.setMask(ratingMC.ratingMask);
 			
-			trace("durationMIN: " + data[0].durationMIN);
+			//Duration
+			//trace("durationMIN: " + data.durationMIN);
+			this.minMC = this.parentMC.createEmptyMovieClip("minMC", parentMC.getNextHighestDepth());
+			minMC.createTextField("min_txt", minMC.getNextHighestDepth(), 0, 0, 900, 50);
+			minMC._y = 79;
+			minMC._x = 652;
 			var minFormat:TextFormat = new TextFormat ();
 			minFormat.font = "Arial";
 			minFormat.size = 20;
 			minFormat.color = 0xFFFFFF;
-			minMC.min_txt.htmlText = data[0].durationMIN;
+			minMC.min_txt.htmlText = data.durationMIN;
 			minMC.min_txt.setTextFormat(minFormat);			
 			
-			trace("studioURL: " + data[0].studioURL);
-			studioMC.loadMovie(data[0].studioURL);
+			//Studio
+			//trace("studioURL: " + data.studioURL);
+			UI.loadImage(data.studioURL, this.parentMC, "studioMC", {mcProps:{_x:520, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:550, _y:130, _width:40, _height:40}});
 			//var_dump(studioMC);
 			
-			trace("contentRatingURL: " + data[0].contentRatingURL);
-			contentRatingMC.loadMovie(data[0].contentRatingURL);
+			//Content Rating
+			//trace("contentRatingURL: " + data.contentRatingURL);
+			UI.loadImage(data.contentRatingURL, this.parentMC, "contentRatingMC", {mcProps:{_x:624, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:654, _y:130, _width:40, _height:40}});
 			
-			trace("videoResolutionURL: " + data[0].videoResolutionURL);
-			videoResolutionMC.loadMovie(data[0].videoResolutionURL);
+			//Video Resolution
+			//trace("videoResolutionURL: " + data.videoResolutionURL);
+			UI.loadImage(data.videoResolutionURL, this.parentMC, "videoResolutionMC", {mcProps:{_x:728, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:758, _y:130, _width:40, _height:40}});
 			
-			trace("aspectRatioURL: " + data[0].aspectRatioURL);
-			aspectRatioMC.loadMovie(data[0].aspectRatioURL);
+			//Aspect Ratio
+			//trace("aspectRatioURL: " + data.aspectRatioURL);
+			UI.loadImage(data.aspectRatioURL, this.parentMC, "aspectRatioMC", {mcProps:{_x:832, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:832, _y:130, _width:40, _height:40}});
 			
-			trace("audioChannelsURL: " + data[0].audioChannelsURL);
-			audioChannelsMC.loadMovie(data[0].audioChannelsURL);
+			//Audio Codec
+			//trace("audioCodecURL: " + data.audioCodecURL);
+			UI.loadImage(data.audioCodecURL, this.parentMC, "audioCodecMC", {mcProps:{_x:936, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:966, _y:130, _width:40, _height:40}});
 			
-			trace("audioCodecURL: " + data[0].audioCodecURL);
-			audioCodecMC.loadMovie(data[0].audioCodecURL);
+			//Audio Channels
+			//trace("audioChannelsURL: " + data.audioChannelsURL);
+			UI.loadImage(data.audioChannelsURL, this.parentMC, "audioChannelsMC", {mcProps:{_x:1040, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:1070, _y:130, _width:40, _height:40}});
 			
-			trace("summary: " + data[0].summary);
+			//Summary
+			//trace("summary: " + data.summary);
+			this.summaryMC = this.parentMC.createEmptyMovieClip("summaryMC", parentMC.getNextHighestDepth());
+			summaryMC.createTextField("summary_txt", summaryMC.getNextHighestDepth(), 0, 0, 735, 250);
+			summaryMC._y = 178;
+			summaryMC._x = 520;
+			summaryMC.summary_txt.multiline = true;
+			summaryMC.summary_txt.wordWrap = true;
 			var sumFormat:TextFormat = new TextFormat ();
 			sumFormat.font = "Arial";
 			sumFormat.size = 18;
 			sumFormat.color = 0xFFFFFF;
-			summaryMC.summary_txt.htmlText = data[0].summary;
+			summaryMC.summary_txt.htmlText = data.summary;
 			summaryMC.summary_txt.setTextFormat(sumFormat);
 			
+			//Cast
+			//trace("cast: " + data.cast);
+			this.castMC = this.parentMC.createEmptyMovieClip("castMC", parentMC.getNextHighestDepth());
+			castMC._y = 425;
+			castMC._x = 520;
+			castMC.createTextField("cast_title_txt", castMC.getNextHighestDepth(), 0, 0, 200, 500);
+			castMC.createTextField("cast_txt", castMC.getNextHighestDepth(), 0, 22, 250, 205);
+			castMC.cast_txt.multiline = true;
+			castMC.cast_txt.wordWrap = true;
+			var castTitleFormat:TextFormat = new TextFormat ();
+			castTitleFormat.font = "Arial";
+			castTitleFormat.size = 19;
+			castTitleFormat.color = 0xFFCC00;
+			castMC.cast_title_txt.htmlText = "Cast:"
+			castMC.cast_title_txt.setTextFormat(castTitleFormat);
+			
+			var castFormat:TextFormat = new TextFormat ();
+			castFormat.font = "Arial";
+			castFormat.size = 18;
+			castFormat.color = 0xFFFFFF;
+			castMC.cast_txt.htmlText = data.cast.join("\n");
+			castMC.cast_txt.setTextFormat(castFormat);
+			
+			//Director
+			//trace("director: " + data.director);
+			this.directorMC = this.parentMC.createEmptyMovieClip("directorMC", parentMC.getNextHighestDepth());
+			directorMC._y = 425;
+			directorMC._x = 770;
+			directorMC.createTextField("director_title_txt", directorMC.getNextHighestDepth(), 0, 0, 200, 500);
+			directorMC.createTextField("director_txt", directorMC.getNextHighestDepth(), 0, 22, 250, 205);
+			directorMC.director_txt.multiline = true;
+			directorMC.director_txt.wordWrap = true;
+			var directorTitleFormat:TextFormat = new TextFormat ();
+			directorTitleFormat.font = "Arial";
+			directorTitleFormat.size = 19;
+			directorTitleFormat.color = 0xFFCC00;
+			directorMC.director_title_txt.htmlText = "Director:"
+			directorMC.director_title_txt.setTextFormat(directorTitleFormat);
+			
+			var directorFormat:TextFormat = new TextFormat ();
+			directorFormat.font = "Arial";
+			directorFormat.size = 18;
+			directorFormat.color = 0xFFFFFF;
+			directorMC.director_txt.htmlText = data.director.join("\n");
+			directorMC.director_txt.setTextFormat(directorFormat);
+			
+			//Writer
+			//trace("writer: " + data.writer);
+			this.writerMC = this.parentMC.createEmptyMovieClip("writerMC", parentMC.getNextHighestDepth());
+			writerMC._y = 425;
+			writerMC._x = 1020;
+			writerMC.createTextField("writer_title_txt", writerMC.getNextHighestDepth(), 0, 0, 200, 500);
+			writerMC.createTextField("writer_txt", writerMC.getNextHighestDepth(), 0, 22, 250, 205);
+			writerMC.writer_txt.multiline = true;
+			writerMC.writer_txt.wordWrap = true;
+			var writerTitleFormat:TextFormat = new TextFormat ();
+			writerTitleFormat.font = "Arial";
+			writerTitleFormat.size = 19;
+			writerTitleFormat.color = 0xFFCC00;
+			writerMC.writer_title_txt.htmlText = "Writer:"
+			writerMC.writer_title_txt.setTextFormat(writerTitleFormat);
+			
+			var writerFormat:TextFormat = new TextFormat ();
+			writerFormat.font = "Arial";
+			writerFormat.size = 18;
+			writerFormat.color = 0xFFFFFF;
+			writerMC.writer_txt.htmlText = data.writer.join("\n");
+			writerMC.writer_txt.setTextFormat(writerFormat);
+			
+			this.preloadMC.removeMovieClip();
+			delete this.preloadMC;
+			this.preloadMC = null;
 	}
 	
-	private function onKeyDown():Void
+	private function enableKeyListener():Void
+	{
+		if (this.keyListener.onKeyDown != null)
+			return;
+		clearInterval(this.klInterval);
+		this.klInterval = null;
+		this.klInterval = _global["setInterval"](Delegate.create(this, this.onEnableKeyListener), 100); // delay abit to prevent getting the previously press key.
+	}
+
+	private function onEnableKeyListener():Void
+	{
+		clearInterval(this.klInterval);
+		this.klInterval = null;
+		this.keyListener.onKeyDown = Delegate.create(this, this.keyDownCB);
+	}
+
+	private function disableKeyListener():Void
+	{
+		clearInterval(this.klInterval);
+		this.klInterval = null;
+		this.keyListener.onKeyDown = null;
+	}
+	
+	private function keyDownCB():Void
 	{
 		var keyCode:Number = Key.getCode();
-		trace("Doing MovieDetails.onKeyDown...");
-		trace("KeyCode: " + keyCode);
+		var asciiCode:Number = Key.getAscii();
+		
+		switch (keyCode)
+		{
+			case Remote.BACK:
+			case "soft1":
+			case 81:
+				this.disableKeyListener();
+				this.destroy();
+				gotoAndPlay("wall");
+			break;
+			case Remote.PLAY:
+				this.disableKeyListener();
+				Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + this.title + "&arg2=" + this.videoURL + "&arg3=show&arg4=0"); // Direct Play.
+			break;
+		}
+	}
+	
+	private function cleanUp(_obj:Object)
+	{
+		for (var i in _obj)
+		{
+			if (i != "plex"){
+				trace("i: " + i + ", type: " + typeof(_obj[i]));
+				if (typeof(_obj[i]) == "object"){
+					cleanUp(_obj[i]);
+				}
+				if (typeof(_obj[i]) == "movieclip"){
+					trace("Removing: " + _obj[i]);
+					_obj[i].removeMovieClip();
+					delete _obj[i];
+				}
+			}
+		}
 	}
 	
 	private function var_dump(_obj:Object)
 	{
-		trace("Doing var_dump...");
-		trace(_obj);
-		trace("Looping Through _obj...");
+		//trace("Doing var_dump...");
+		//trace(_obj);
+		//trace("Looping Through _obj...");
 		for (var i in _obj)
 		{
 			trace("_obj[" + i + "] = " + _obj[i] + " type = " + typeof(_obj[i]));

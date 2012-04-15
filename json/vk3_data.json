@@ -1,0 +1,36 @@
+{"keyboard_data":{"default_language":0, "lang":[
+
+{"display_name":"English",
+
+	/* ac_ref is the file that contains the auto complete data. */
+
+	"keypads":[{"display_name":"abc123", "ac_ref":"vk3test/ac.txt", "keys":[
+		["a","b","c","d","e","1","2","3",  "f","g","h","i","j","4","5","6",  "k","l","m","n","o","7","8","9",  "p","q","r","s","t",".","0",",",  "u","v","w","x","y","z","_","-"],
+		["A","B","C","D","E","1","2","3",  "F","G","H","I","J","4","5","6",  "K","L","M","N","O","7","8","9",  "P","Q","R","S","T",".","0",",",  "U","V","W","X","Y","Z","_","-"]]} ],
+	"symbols":[{"display_name":"Symbol", "keys":[
+		[".",",","?","!","@","+","(",")",  "'","\"","`","^","_","-","{","}",  ":",";","&","#","%","*","[","]",  "$","€","£","|","\\","/","<",">",  "¥","¢","§","°","~","=","µ","¶"]]} ],
+	"function_keys":{
+		"key_delete":"Delete", "key_capslock":"Caps", "key_symbol_disable":"Symbol", "key_keypad_disable":"abc123",
+		"key_clear":"Clear", "key_space":"Space", "key_left":"Left", "key_right":"Right",
+		"key_language":"Languages", "key_cancel":"Cancel", "key_ok":"OK"}
+},
+{"display_name":"Tiếng Việt (Conversion Sample)",
+
+	/* keypads Object's "display_name" below is the text shown on Blue button when that specific keypad is shown. */
+	/* conv_ref is the file that contains the conversion data. */
+
+	"keypads":[{"display_name":"(2/2) abc123", "conv_ref":"vk3test/conv_vietnamese.txt", "keys":[
+		["a","ă","â","b","c","1","2","3",  "d","đ","e","ê","g","4","5","6",  "h","i","k","l","m","7","8","9",  "n","o","ô","ơ","p","q","0",".",  "r","s","t","u","ư","v","y",","],
+		["A","Ă","Â","B","C","1","2","3",  "D","Đ","E","Ê","G","4","5","6",  "H","I","K","L","M","7","8","9",  "N","O","Ô","Ơ","P","Q","0",".",  "R","S","T","U","Ư","V","Y",","]]}
+		, {"display_name":"(1/2) Tiếng Việt", "keys":[
+		["a","b","c","d","e","1","2","3",  "f","g","h","i","j","4","5","6",  "k","l","m","n","o","7","8","9",  "p","q","r","s","t",".","0",",",  "u","v","w","x","y","z","_","-"],
+		["A","B","C","D","E","1","2","3",  "F","G","H","I","J","4","5","6",  "K","L","M","N","O","7","8","9",  "P","Q","R","S","T",".","0",",",  "U","V","W","X","Y","Z","_","-"]]} ],
+	"symbols":[{"display_name":"Symbol", "keys":[
+		[".",",","?","!","@","+","(",")",  "'","\"","`","^","_","-","{","}",  ":",";","&","#","%","*","[","]",  "$","€","£","|","\\","/","<",">",  "¥","¢","§","°","~","=","µ","¶"]]} ],
+	"function_keys":{
+		"key_delete":"Xóa", "key_capslock":"Caps", "key_symbol_disable":"Biểu Tượng", "key_keypad_disable":"abc123",
+		"key_clear":"Xóa Tất Cả", "key_space":"Space", "key_left":"Trái", "key_right":"Phải",
+		"key_language":"Ngôn Ngữ / Languages", "key_cancel":"Hủy Bỏ", "key_ok":"OK"}
+}
+
+]}}

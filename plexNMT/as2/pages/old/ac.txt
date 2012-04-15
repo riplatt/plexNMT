@@ -1,0 +1,5 @@
+an=an,analogize,analysis&ba=baby,bachelor,back&ca=cabal,cabbage,cabin&da=dabber,dabble,dace&en=enable,encase,encash&
+&fa=fable,fabric,face&ga=gabble,gad,gadget&ha=habit,hack,hate&in=inactive,inboard,inbound&ja=jab,jabber,jack&ka=kabob,kadi,kairos&
+&la=lab,label,laboratory&ma=machine,macro,match&na=nab,nabob,nacre&on=onanism,once,oncology&pa=pace,pacific,pack&qu=qua,quack,quad&
+&ra=rabbet,rabbit,rabble&sa=sable,sabot,sabre&ta=tab,tabby,table&un=unable,unacceptable,unaccompanied&va=vacancy,vacate,vacua&
+&wa=wack,wad,waffle&xe=xenon,xeric,xerography&ya=yack,yah,yam&za=zaire,zap,zax&

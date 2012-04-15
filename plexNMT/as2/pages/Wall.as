@@ -1,4 +1,5 @@
 ﻿import plexNMT.as2.api.PlexAPI;
+import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Remote;
 
 import mx.utils.Delegate;
@@ -12,17 +13,23 @@ import com.syabas.as2.common.IMGLoader;
 
 class plexNMT.as2.pages.Wall
 {
-	public static var plexURL:String = "http://192.168.0.3:32400/";
-	
+	//public static var plexURL:String = "http://192.168.0.3:32400/";
+	//Strings
+	private var wallC:Number = 7;
+	private var wallR:Number = 3;
 	private var plexSection:String = null;
-	private static var plexCategory:String = null;
-	private static var plexFilter:String = null; 
-	private static var plexType:String = null; 
+	private var plexCategory:String = null;
+	private var plexFilter:String = null; 
+	private var plexType:String = null;
+	private var plexPath:String = null;
+	private var wallCurrent:Number = null;
+	private var wallData:Array = new Array();
 
 	private var parentMC:MovieClip = null;
 	private var mainMC:MovieClip = null;
 	private var preloadMC:MovieClip = null;
 	private var listMC:MovieClip = null;
+	private var bobbyMC:MovieClip = null;
 	private var g:GridLite = null;
 	private var imgLoader:IMGLoader = null;
 	private var titleMarquee:Marquee = null;
@@ -31,20 +38,8 @@ class plexNMT.as2.pages.Wall
 	// Destroy all global variables.
 	public function destroy():Void
 	{
-		this.parentMC = null;
+		cleanUp(this.parentMC);
 		
-		this.mainMC.removeMovieClip();
-		delete this.mainMC;
-		
-		this.parentMC.removeMovieClip();
-		delete this.parentMC;
-		
-		this.preloadMC.removeMovieClip();
-		delete this.preloadMC;
-		
-		this.listMC.removeMovieClip();
-		delete this.listMC;
-
 		this.g.destroy();
 		delete this.g;
 		this.g = null;
@@ -57,48 +52,43 @@ class plexNMT.as2.pages.Wall
 		delete this.titleMarquee;
 		this.titleMarquee = null;
 		
-		/*delete this.keyListener;
-		this.keyListener = null;*/
+		trace("Done Wall.Clean Up...");
+		//var_dump(_level0);
 	}
 
 	public function Wall(parentMC:MovieClip)
 	{
-	//trace("Doing Wall...");
+		trace("Doing Wall...");
 		
-		plexSection = _level0.currentSection;
-		plexCategory = _level0.currentCategory;
-		plexFilter = _level0.currentFilter;
-		plexType = _level0.currentType;
+		var i:Number = PlexData.oSettings.curLevel;
 		
 		this.parentMC = parentMC;
 		this.mainMC = this.parentMC.attachMovie("wallMC", "mainMC", 1, {_x:0, _y:0});
-		this.preloadMC = this.parentMC.attachMovie("preload200", "preload200", 3, {_x:640, _y:360});
+		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360});
 
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
 
 		this.titleMarquee = new Marquee();
 
-		var plexPath:String = "/" + plexSection;
-		if (plexCategory!=null)
-		{
-			plexPath = plexPath + "/" + plexCategory;
+		if (PlexData.oWall.current.index != null){
+			trace("Already Loaded Wall Data..");
+			this.onLoadData(PlexData.oWall.items);
+		} else {
+			trace("Wall - Loading Wall Data with: " + PlexData.oData["level"+i].current.url);
+			PlexAPI.loadData(PlexData.oData["level"+i].current.url, Delegate.create(this, this.onLoadData), 5000);
 		}
-		if (plexFilter!=null)
-		{
-			plexPath = plexPath + "/" + plexFilter;
-		}
-		//trace("plexPath: " + plexPath);
-		PlexAPI.loadData(plexURL+"library/sections"+plexPath, Delegate.create(this, this.onLoadData), 5000);
-		//this.createGrid2();
-	//trace("Done Wall...");
+
 	}
 
 	private function onLoadData(data:Array)
 	{
+		PlexData.oWall.items = data.concat();
+		//wallData = data;
 		this.preloadMC.removeMovieClip();
 		delete this.preloadMC;
 		this.preloadMC = null;
+		
 		this.createGridLite(data);
 
 	//trace("Done onLoadData...");
@@ -107,12 +97,20 @@ class plexNMT.as2.pages.Wall
 	private function createGridLite(data:Array):Void
 	{
 		this.listMC = this.mainMC.createEmptyMovieClip("listMC", 1);
-
+		
 		// using UI class to create and attach 4 columns and 3 rows MovieClip 2D arrays with 20 pixels horizontal and 10 pixels vertical gaps.
 		var mcArray:Array = UI.attachMovieClip({
-			parentMC:this.listMC, cSize:9, rSize:3,
-			mcPrefix:"item", mcName:"itemMC",
-			x:73.5, y:80, hgap:10, vgap:10
+												parentMC:this.listMC, 
+												cSize:PlexData.oWall.columns, 
+												rSize:PlexData.oWall.rows,
+												mcPrefix:"item", 
+												mcName:"itemMC",
+												x:PlexData.oWall.topLeft.x, 
+												y:PlexData.oWall.topLeft.y,
+												width:PlexData.oWall.thumb.width,
+												height:PlexData.oWall.thumb.height,
+												hgap:PlexData.oWall.hgap, 
+												vgap:PlexData.oWall.vgap
 		});
 
 		this.g = new GridLite();
@@ -193,50 +191,15 @@ class plexNMT.as2.pages.Wall
 		this.g.createUI(0);
 
 		// Highlight with the specified hl(data index) and enable the keyListener.
-		this.g.highlight(0);
-
-		// Disable the keyListener and remove the highlight.
-		//this.g.unhighlight();
-
-		// Get highlighted row value. If dataIndex equals undefined or null then will return current highlighted row value.
-		/*var r:Number = this.g.getR();
-		trace("\nrow for current highlighted item: " + r);
-
-		// Get highlighted column value. If dataIndex equals undefined or null then will return current highlighted column value.
-		var c:Number = this.g.getC();
-		trace("\ncolumn for current highlighted item: " + c);
-
-		// Get highlighted movieClip.
-		// If both column and row is undefined or null then will get current highlighted movieClip.
-		// Else if column is undefined or null then column=0.
-		// Else if row is undefined or null then row=0.
-		// If column or row is less than 0 then will return null.
-		var mc:MovieClip = this.g.getMC();
-		trace("\nmovieclip for current highlighted item: " + mc);*/
-
-		// Get current page number. Start from 1.
-		/*var p:Number = this.g.getPage();
-		trace("\npage for current viewing: " + mc);*/
-
-		// Get data. If dataIndex equals undefined or null then will return current highlighted data.
-		/*var obj:Object = this.g.getData();
-		trace("\ndata for current highlighted item:")
-		for(var str:String in obj)
-			trace(str + " : " + obj[str]);*/
-
-		// Select/unselect single item. If dataIndex equals undefined or null then will select/unselect current highlighted item.
-		//this.g.singleSelect(0);
-
-		// --- Reset data for GridLite ---
-
-		// Clear data and MC.
-		//this.g.clear();
-
-		// re-create grid by passing new data
-		//this.g.createUI(newData, 0);
-
-		// --- Destroy all global variables ---
-		//this.g.destroy();
+		if (PlexData.oWall.current.index != null)
+		{
+			//trace("Highlighting Current...");
+			this.g.unhighlight()
+			this.g.highlight(PlexData.oWall.current.index);
+		} else {
+			//trace("Highlighting Default...");
+			this.g.highlight(0);
+		}
 	}
 
 	
@@ -244,7 +207,7 @@ class plexNMT.as2.pages.Wall
 	{
 		//trace("Doing onItemShowCB...");
 		o.mc.preload.removeMovieClip();
-		var preload:MovieClip = o.mc.attachMovie("preload40", "preload", 1, {_x:58, _y:87});
+		var preload:MovieClip = o.mc.attachMovie("preload40", "busy", 1, {_x:58, _y:87});
 		o.mc.fail.text = "";
 		//trace("o.mc._name:" + o.mc._name);
 		//trace("o.mc.imgMC:" + o.mc.imgMC);
@@ -253,21 +216,23 @@ class plexNMT.as2.pages.Wall
 
 	private function onItemUpdateCB(o:Object):Void
 	{
+		trace("Doing onItemUpdateCB with: " + o.mc);
 		if(o.dataIndex == this.g._hl)
 		{
 			this.hlCB(o);
 			this.onHLStopCB(o);
 		}
+		/*o.mc._width = 65;
+		o.mc._height = 96;*/
 		this.imgLoader.load(o.mc._name, o.data.thumbURL, o.mc.imgMC,
 			{
-				/*mcProps:{_height:200,_width:200}, lmcId:null, lmcProps:null,
-				retry:0, timeout:30000, addToFirst:false,
-				scaleMode:2, scaleProps:{center:false, width:117, height:174, actualSizeOption:1},
-				mc:o.mc,*/
-				mcProps:{_height:200,_width:200}, lmcId:"preload40",
+				mcProps:{_height:200,_width:200}, lmcId:"busy",
 				lmcProps:{_x:100,_y:100},
 				retry:0, timeout:30000, addToFirst:false,
-				scaleMode:2, scaleProps:{center:false, width:117, height:174, actualSizeOption:1},
+				scaleMode:2, scaleProps:{center:false, 
+										width:PlexData.oWall.thumb.width,
+										height:PlexData.oWall.thumb.height,
+										actualSizeOption:1},
 				doneCB:Delegate.create(this, function(success:Boolean, obj:Object)
 					{
 						o.mc.preload.removeMovieClip();
@@ -275,12 +240,14 @@ class plexNMT.as2.pages.Wall
 							obj.o.mc.fail.text = "NoImage"
 					})
 			});
+		//o.mc._width = 117;
+		//o.mc._height = 174;
 	}
 
 	private function onItemClearCB(o:Object):Void
 	{
-	//trace("onItemClearCB...");
-		this.imgLoader.unload(o.mc._name, o.mc.imgMC, "preload40");
+		//trace("onItemClearCB...");
+		this.imgLoader.unload(o.mc._name, o.mc.imgMC, "busy");
 
 		this.mainMC.txtName.htmlText = "";
 		o.mc.gotoAndStop("unhl");
@@ -288,7 +255,7 @@ class plexNMT.as2.pages.Wall
 
 	private function hlCB(o:Object):Void
 	{
-	//trace("Doing hlCB...");
+		//trace("Doing hlCB...");
 		var data:Object = o.data;
 		var mc:MovieClip = o.mc;
 		mc.gotoAndStop("hl");
@@ -332,8 +299,9 @@ class plexNMT.as2.pages.Wall
 		{
 			 case "soft1":
 			 case Remote.BACK:
-			 case Remote.NUM1:
 				this.destroy();
+				PlexData.oWall.current = new Object();
+				PlexData.oWall.items = new Array();
 				gotoAndPlay("main");
 			 break;
 		}
@@ -341,14 +309,14 @@ class plexNMT.as2.pages.Wall
 
 	private function onEnterCB(o:Object):Void
 	{
-		trace("Doing onEnterCB...");
-		trace("mc: " + o.mc);
-		//trace("data: " + o.data);
-		//var_dump(o.data);
-		switch (plexType)
+		switch (o.data.type)
 		{
 			case "movie":
-				_level0.currentRatingKey = o.data.ratingKey;
+				PlexData.oWall.current.url = PlexData.oSettings.url + "library/metadata/" + o.data.ratingKey;
+				PlexData.oWall.current.index = o.data.index - 1;
+				/*_level0.plex.currentRatingKey = o.data.ratingKey;
+				_level0.plex.wallCurrent = o.data.index - 1;
+				_level0.plex.wallData = wallData;*/
 				this.destroy();
 				gotoAndPlay("movieDetails");
 			break;
@@ -379,6 +347,25 @@ class plexNMT.as2.pages.Wall
 	{
 	//trace("over bottom...");
 		return true; // return false to unhighlight from grid
+	}
+	
+	private function cleanUp(_obj:Object)
+	{
+		for (var i in _obj)
+		{
+			trace("i: " + i);
+			if (i != "plex"){
+				trace("i: " + i + ", type: " + typeof(_obj[i]));
+				if (typeof(_obj[i]) == "object"){
+					cleanUp(_obj[i]);
+				}
+				if (typeof(_obj[i]) == "movieclip"){
+					trace("Removing: " + _obj[i]);
+					_obj[i].removeMovieClip();
+					delete _obj[i];
+				}
+			}
+		}
 	}
 	
 	private function var_dump(_obj:Object)
