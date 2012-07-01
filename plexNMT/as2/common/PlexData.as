@@ -1,5 +1,5 @@
 ﻿
-import com.adobe.as2.MobileSharedObject;
+//import com.adobe.as2.MobileSharedObject;
 
 class plexNMT.as2.common.PlexData {
 
@@ -9,9 +9,10 @@ class plexNMT.as2.common.PlexData {
 	public static var oBackground:Object = {};
 	public static var oSettings:Object = {};
 	public static var oWall:Object = {};
+	public static var oPage:Object = {};
 	
 	public static var iBob:Number = 0;
-	private static var soPlex:MobileSharedObject = null;
+	//private static var soPlex:MobileSharedObject = null;
 	
 	
 	private function PlexData()
@@ -24,7 +25,7 @@ class plexNMT.as2.common.PlexData {
 		if(oSettings.init != true){
 			trace("Building PlexData...");
 			//SO
-			soPlex = new MobileSharedObject("");
+			//soPlex = new MobileSharedObject("");
 			
 			//Menus
 			oData.level1 = {};
@@ -75,7 +76,9 @@ class plexNMT.as2.common.PlexData {
 			oSettings.init = true;
 			oSettings.previous = null;
 			
-			readSO();
+			//Page
+			oPage.current = "HomeMenu"
+			//oPage.histroy = new Array();
 			
 		} else {
 			trace("PlexData already built...");
@@ -97,21 +100,12 @@ class plexNMT.as2.common.PlexData {
 	
 	public static function rotateItemsLeft(_level:String):Void
 	{
-		//trace("PlexData - Rotating Left...");
-		//push shift
-		//trace("Before:"+oData[_level].items[0].title+", "+oData[_level].items[1].title+", "+oData[_level].items[2].title);
-		oData[_level].items.push(oData[_level].items.shift());
-		//trace("After:"+oData[_level].items[0].title+", "+oData[_level].items[1].title+", "+oData[_level].items[2].title); 
+		oData[_level].items.push(oData[_level].items.shift()); 
 	}
 	
 	public static function rotateItemsRight(_level:String):Void
 	{
-		//iBob++;
-		//trace("PlexData - Rotating Right..." + iBob);
-		//unshift pop
-		//trace("Before:"+oData[_level].items[0].title+", "+oData[_level].items[1].title+", "+oData[_level].items[2].title);
 		oData[_level].items.unshift(oData[_level].items.pop());
-		//trace("After:"+oData[_level].items[0].title+", "+oData[_level].items[1].title+", "+oData[_level].items[2].title); 
 	}
 	
 	public static function setCurrent(_level:String, _item:Object):Void
@@ -124,7 +118,7 @@ class plexNMT.as2.common.PlexData {
 		oSettings.url = _url
 	}
 	
-	public static function readSO():Void
+	/*public static function readSO():Void
 	{
 		trace("PlexData Reading SO...");
 		oSettings.ip = soPlex.readFromSO("plexIP");
@@ -141,7 +135,7 @@ class plexNMT.as2.common.PlexData {
 		soPlex.writeToSO("plexPort", oSettings.port);
 		soPlex.writeToSO("wallCol", oSettings.wallCol);
 		soPlex.writeToSO("wallRow", oSettings.wallRow);
-	}
+	}*/
 	
 	public static function setWall():Void
 	{
@@ -149,7 +143,7 @@ class plexNMT.as2.common.PlexData {
 		oWall.rows = (oWall.rows == null) ? 3 : oWall.rows;
 		oWall.rows = (oWall.rows == 0) ? 1 : oWall.rows;
 		
-		oWall.columns = (oWall.columns == null) ? 7 : oWall.columns;
+		oWall.columns = (oWall.columns == null) ? 9 : oWall.columns;
 		oWall.columns = (oWall.columns == 0) ? 1 : oWall.columns;
 		
 		var wallWidth = 1120;
@@ -181,9 +175,7 @@ class plexNMT.as2.common.PlexData {
 	}
 	
 	private static function var_dump(_obj:Object) {
-		//trace("Doing var_dump...");
-		//trace(_obj);
-		//trace("Looping Through _obj...");
+		
 		for (var i in _obj) {
 			trace("key: " + i + ", value: " + _obj[i] + ", type: " + typeof(_obj[i]));
 			if (typeof (_obj[i]) == "object" || typeof (_obj[i]) == "movieclip") {

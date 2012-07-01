@@ -6,6 +6,7 @@ import plexNMT.as2.common.Remote;
 import com.syabas.as2.common.GridLite;
 import com.syabas.as2.common.UI;
 import com.syabas.as2.common.Util;
+import com.syabas.as2.common.D;
 
 //import com.adobe.as2.MobileSharedObject;
 
@@ -21,6 +22,7 @@ class plexNMT.as2.pages.HomeMenu {
 	// Constants:
 	public static var CLASS_REF = plexNMT.as2.pages.HomeMenu;
 	public var plexData:PlexData = null;
+	//public var D:D = null;
 	//PlexData = plexData; 
 	//public static var plexURL:String = "http://192.168.1.3:32400/";
 
@@ -69,8 +71,10 @@ class plexNMT.as2.pages.HomeMenu {
 	public function HomeMenu(parentMC:MovieClip) {
 		
 		PlexData.init();
+		//var_dump(_level0);
 		
 		trace("Doing HomeMenu with: "+parentMC);
+		D.debug(D.lInfo,"HomeMenu - Plex Server URL: " + PlexData.oSettings.url);
 		
 		this.keyListener = new Object();
 		this.keyListener.onKeyDown = Delegate.create(this, this.onKeyDown);
@@ -155,7 +159,8 @@ class plexNMT.as2.pages.HomeMenu {
 	{
 		var keyCode:Number = Key.getCode();
 		var i:Number = PlexData.oSettings.curLevel;
-		trace("HomeMenu - Doing Key With: "+keyCode+" @ Level: "+i);
+		//trace("HomeMenu - Doing Key With: "+keyCode+" @ Level: "+i);
+		D.debug(D.lDebug,"HomeMenu - Doing Key With: "+keyCode+" @ Level: " + i);
 
 		switch (keyCode)
 		{
@@ -202,13 +207,16 @@ class plexNMT.as2.pages.HomeMenu {
 			break;
 			
 		}
+		D.debug(D.lDebug,"HomeMenu - Done Key Press Current Level: " + PlexData.oSettings.curLevel);
 		
 	}
 	
 	private function updateMenu(i:Number) {
 		
 		//var i:Number = PlexData.oSettings.curLevel;
-		trace("HomeMenu - Updataing the menu @ level " + i);
+		//trace("HomeMenu - Updataing the menu @ level " + i);
+		D.debug(D.lDebug,"HomeMenu - Updataing the menu @ level " + i);
+		D.debug(D.lDebug,"HomeMenu - Current URL:" + PlexData.oData["level"+i].current.url);
 		PlexData.oData["level"+i].current = PlexData.oData["level"+i].items[2];
 		for (var j:Number = 0; j<5; j++) {
 				this["menu"+i+"MC"]["item_"+j].txt.htmlText = PlexData.oData["level"+i].items[0].title;
@@ -250,6 +258,7 @@ class plexNMT.as2.pages.HomeMenu {
 		
 		if (PlexData.oSettings.url == null) 
 		{	
+			D.debug(D.lDebug,"HomeMenu - loadLevel1: PlexData.oSettings.url == null...");
 			this.destroy();
 			gotoAndPlay("settings");
 			return;
@@ -262,8 +271,9 @@ class plexNMT.as2.pages.HomeMenu {
 			this.loadRecentlyAdded();
 		}
 		
-		trace("HomeMenu - loadLevel1...");
-				
+		//D.debug(D.lInfo,"HomeMenu - loadLevel1...");
+		//D.debug(D.lInfo,"HomeMenu - D.loaded = " + D.loaded);
+		
 		//trace(g11);
 		var todayData:Date = new Date();
 		var timeTemp:Number = todayData.getTime();
@@ -360,12 +370,12 @@ class plexNMT.as2.pages.HomeMenu {
 				var wd:Number = 0;
 				while(PlexData.oData["level"+i].items[2].title != PlexData.oData["level"+i].current.title)
 				{
-					trace("Doing while...");
+					D.debug(D.lDebug,"HomeMenu - Doing while...");
 					PlexData.rotateItemsLeft("level"+i);
 					wd++;
 					if(wd > dataLen)
 					{
-						trace("HomeMenu exiting while via watchdog...");
+						D.debug(D.lDebug,"HomeMenu - exiting while via watchdog...");
 						break;
 					}
 				}
@@ -530,7 +540,7 @@ class plexNMT.as2.pages.HomeMenu {
 		//trace(_obj);
 		//trace("Looping Through _obj...");
 		for (var i in _obj) {
-			trace("key: " + i + ", value: " + _obj[i] + ", type: " + typeof(_obj[i]));
+			D.debug(D.lInfo,"key: " + i + ", value: " + _obj[i] + ", type: " + typeof(_obj[i]));
 			if (typeof(_obj[i]) == "object" || typeof(_obj[i]) == "movieclip") {
 				var_dump(_obj[i]);
 			}

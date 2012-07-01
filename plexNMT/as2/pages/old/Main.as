@@ -48,10 +48,12 @@ class plexNMT.as2.pages.Main {
 	// Destroy all global variables.
 	public function destroy():Void
 	{
-		trace("Doing Main.Clean Up...");
-
-		cleanUp(this.parentMC);
+		this.parentMC = null;
 		
+		this.mainMC.removeMovieClip();
+		delete this.mainMC;
+		//this.showHideInSec = null;
+
 		this.g.destroy();
 		delete this.g;
 		this.g = null;
@@ -73,15 +75,6 @@ class plexNMT.as2.pages.Main {
 		Key.removeListener(this.keyListener);
 		delete this.keyListener;
 		this.keyListener = null;
-		
-		delete this.Main;
-		this.Main = null;
-		
-		//var_dump(_level0);
-		//trace("Done root dump...");
-		//var_dump(_root);
-		trace("Done Main.Clean Up...");
-
 	}
 	
 	// Initialization:
@@ -115,7 +108,13 @@ class plexNMT.as2.pages.Main {
 		this.keyListener = new Object();
 		Key.addListener(this.keyListener);
 		
-		this.show();
+		/*// initialized grid.
+		mcArray = UI.attachMovieClip({
+			parentMC:this.mainMC,
+			cSize:5,
+			rSize:1,
+			mcPrefix:"item"
+		});*/
 	}
 	
 	private function onKeyDown():Void
@@ -126,8 +125,10 @@ class plexNMT.as2.pages.Main {
 		switch (keyCode)
 		{
 			case Key.LEFT:
+				//trace("Doing Left Key...");
 				break;
 			case Key.RIGHT:
+				
 				break;
 			case Key.DOWN:
 				this.navDown();
@@ -178,6 +179,10 @@ class plexNMT.as2.pages.Main {
 			this.g.data = data;
 			this.g.createUI(0);
 			this.g.highlight(0);
+			
+			/*trace("//---------------------------------------------//");
+			var_dump(this.g);
+			trace("//---------------------------------------------//");*/
 		}
 
 		this.mainMC.loadingMC.removeMovieClip(); // remove loading animation.
@@ -236,15 +241,15 @@ class plexNMT.as2.pages.Main {
 		trace("Doing onLoadRecentlyAdded...");
 		//var_dump(data);
 		var dataLen:Number = data.length;
-		var titleArray:Array = new Array();
+		var msgString:String = "";
 		for (var i:Number=0; i<dataLen; i++)
 		{
 			//var_dump(i);
-			titleArray[i] = data[i].title.toString();
+			msgString = msgString + ", " + data[i].title.toString();
 		}
 		
-		this.mainMC.msg.text = "Recently Added: " + titleArray.join("  |  ");
-		this.msgMarquee.start(this.mainMC.msg, {delayInMillis:300, stepPerMove:2, endGap:30, vertical:false, framePerMove:1}); // start description Marquee.
+		this.mainMC.msg.text = "Recently Added: " + msgString;
+		this.msgMarquee.start(this.mainMC.msg, {delayInMillis:1000, stepPerMove:2, endGap:30, vertical:false, framePerMove:1}); // start description Marquee.
 		trace("Done onLoadRecentlyAdded...");
 	}
 	
@@ -304,6 +309,16 @@ class plexNMT.as2.pages.Main {
 		var data:Object = o.data;
 		var mc:MovieClip = o.mc;
 		mc.gotoAndStop("hl"); // show highlight.
+
+		//var mainMC:MovieClip = this.mainMC;
+		//mainMC.count.text = (this.g._hl+1) + " / " + this.g._len; // show highlight item index.
+		//mainMC.date.text = data.pubDate;
+		//mainMC.desc.htmlText = (Util.isBlank(data.desc) ? "No description." : data.desc);
+		
+		var r:Number = this.g.getR();
+		trace("\nrow for current highlighted item: " + r);
+		var c:Number = this.g.getC();
+		trace("\ncolumn for current highlighted item: " + c);
 	}
 	
 	/*
@@ -325,8 +340,7 @@ class plexNMT.as2.pages.Main {
 	{
 		trace("Doing onEnterCB...");
 		var menuItem:Object = getSelected();
-		//var_dump(menuItem);
-		var plex:Array = new Array();
+		var_dump(menuItem);
 		
 		var itemTitle:String = menuItem.title;
 		trace("itemTitle: " + itemTitle);
@@ -343,21 +357,20 @@ class plexNMT.as2.pages.Main {
 				switch (menuLevel)
 				{
 					case 0 :
-						plex.currentSection = menuItem.key;
-						plex.currentCategory = "all";
-						plex.currentFilter = null;
+						plexSection = menuItem.key;
+						plexCategory = "all";
 					break;
 					case 1 :
-						plex.currentCategory = menuItem.key;
-						plex.currentFilter = null;
+						plexCategory = menuItem.key;
 					break;
 					case 2 :
-						plex.currentFilter = menuItem.key;
+						plexFilter = menuItem.key;
 					break;
 				}
-				plex.currentType =  menuItem.type;
-				_level0.plex = plex;
-				//var_dump(_level0);		
+				_level0.currentSection = plexSection;
+				_level0.currentCategory = plexCategory;
+				_level0.currentFilter = plexFilter;
+				_level0.currentType =  menuItem.type;
 				this.destroy();
 				gotoAndPlay("wall");
 			break;
@@ -410,35 +423,17 @@ class plexNMT.as2.pages.Main {
 		return this.g.getData(hl);
 	}
 	
-	private function cleanUp(_obj:Object)
-	{
-		for (var i in _obj)
-		{
-			if (i != "plex"){
-				trace("i: " + i + ", type: " + typeof(_obj[i]));
-				if (typeof(_obj[i]) == "object"){
-					cleanUp(_obj[i]);
-				}
-				if (typeof(_obj[i]) == "movieclip"){
-					trace("Removing: " + _obj[i]);
-					_obj[i].removeMovieClip();
-					delete _obj[i];
-				}
-			}
-		}
-	}
-	
 	private function var_dump(_obj:Object)
 	{
-		trace(_obj);
+		trace("Doing Main.var_dump...");
+		trace("Type of Object: " + typeof(_obj));
 		for (var i in _obj)
 		{
-			trace("_obj[" + i + "]: " + _obj[i] + ", type: " + typeof(_obj[i]));
+			trace("_obj[" + i + "] = " + _obj[i] + " type = " + typeof(_obj[i]));
 			if (typeof(_obj[i]) == "object")
 			{
 				var_dump(_obj[i]);
 			}
-			trace(_obj[i]);
 		}
 		trace("Done Main.var_dump...");
 	}

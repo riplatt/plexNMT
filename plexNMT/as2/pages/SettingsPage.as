@@ -5,10 +5,9 @@ import com.syabas.as2.common.JSONUtil;
 
 import mx.utils.Delegate;
 
-//import com.adobe.as2.MobileSharedObject;
-
 import plexNMT.as2.common.Remote;
 import plexNMT.as2.common.PlexData;
+import plexNMT.as2.common.popSharedObjects;
 
 class plexNMT.as2.pages.SettingsPage {
 	
@@ -107,7 +106,7 @@ class plexNMT.as2.pages.SettingsPage {
 		// set txt_2 equal to SO data 'wallCol'
 		if (PlexData.oWall.columns == null)
 		{
-			this.mainMC.txt_2.text = "7";
+			this.mainMC.txt_2.text = "9";
 		} else {
 			this.mainMC.txt_2.text = PlexData.oWall.columns;
 		}
@@ -156,7 +155,8 @@ class plexNMT.as2.pages.SettingsPage {
 			break;
 			case "soft1":  //for testing on pc
 			case Remote.BACK:
-				//PlexData.readSO();
+			case Remote.HOME:
+				popSharedObjects.savePlexData();
 				this.destroy();
 				gotoAndPlay("main");
 			break;
@@ -167,8 +167,20 @@ class plexNMT.as2.pages.SettingsPage {
 	
 	private function focusTextField():Void
 	{
+		var offColor:Number = 0x6E7B8B;
+		var onColor:Number = 0xFFFFFF;
 		trace("Setting pointer with index: "+this.index);
-		this.mainMC.mc_pointer._y = this.mainMC["txt_" + this.index]._y; // move red pointer
+		this.mainMC["txt_0"].background = true;
+		this.mainMC["txt_0"].backgroundColor = offColor;
+		this.mainMC["txt_1"].background = true;
+		this.mainMC["txt_1"].backgroundColor = offColor;
+		this.mainMC["txt_2"].background = true;
+		this.mainMC["txt_2"].backgroundColor = offColor;
+		this.mainMC["txt_3"].background = true;
+		this.mainMC["txt_3"].backgroundColor = offColor;
+		
+		this.mainMC["txt_" + this.index].backgroundColor = onColor;
+		//this.mainMC.mc_pointer._y = this.mainMC["txt_" + this.index]._y; // move red pointer
 	}
 	
 	private function startInput():Void
@@ -219,10 +231,11 @@ class plexNMT.as2.pages.SettingsPage {
 		}
 		this.mainMC["txt_" + this.index].text = s;
 		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port+"/"
-		PlexData.writeSO();
+		//PlexData.writeSO();
 		this.lastSuggString = null;
 		this.vkMain.hideVK();
 		this.keyListener.onKeyDown = this.fn.onKeyDown;
+		fn.onKeyDown;
 	}
 
 	private function onCancelCB(s:String):Void

@@ -10,6 +10,7 @@ import com.syabas.as2.common.Util;
 import com.syabas.as2.common.UI;
 import com.syabas.as2.common.Marquee;
 import com.syabas.as2.common.IMGLoader;
+import com.syabas.as2.common.D;
 
 class plexNMT.as2.pages.Wall
 {
@@ -61,8 +62,10 @@ class plexNMT.as2.pages.Wall
 		trace("Doing Wall...");
 		
 		var i:Number = PlexData.oSettings.curLevel;
+		D.debug(D.lDebug,"Wall - PlexData.oSettings.curLevel: " + i);
+		D.debug(D.lDebug,"Wall - Current URL: " + PlexData.oData["level"+i].current.url);
 		var l1:String = "";
-		if(i = 1)
+		if(i == 1)
 		{
 			var l1 = "/all";
 		}
@@ -77,10 +80,10 @@ class plexNMT.as2.pages.Wall
 		this.titleMarquee = new Marquee();
 
 		if (PlexData.oWall.current.index != null){
-			trace("Already Loaded Wall Data..");
+			D.debug(D.lDebug,"Wall - Using Old Wall Data...");
 			this.onLoadData(PlexData.oWall.items);
 		} else {
-			trace("Wall - Loading Wall Data with: " + PlexData.oData["level"+i].current.url);
+			D.debug(D.lDebug,"Wall - Loading Wall Data with: " + PlexData.oData["level"+i].current.url+l1);
 			PlexAPI.loadData(PlexData.oData["level"+i].current.url+l1, Delegate.create(this, this.onLoadData), 5000);
 		}
 

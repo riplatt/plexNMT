@@ -1,5 +1,7 @@
 com/syabas/as2/common/*.as
 com/adobe/stagecraft/*.as
 com/designvox/tranniex/*.as
+.flashProjectProperties
+plexNMT.swf
 Thumbs.db
 download

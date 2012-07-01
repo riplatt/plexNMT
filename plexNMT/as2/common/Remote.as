@@ -4,6 +4,7 @@
 	public static var CLASS_REF = plexNMT.as2.common.Remote;
 	
 	// Public Properties:
+	public static var HOME:Number = 36;
 	public static var FILEMODE:Number = 268436485;
     public static var TITLE:Number = 268436486;
 	public static var REPEAT:Number = 268436487;
