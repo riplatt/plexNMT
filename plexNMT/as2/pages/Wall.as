@@ -63,7 +63,8 @@ class plexNMT.as2.pages.Wall
 		
 		var i:Number = PlexData.oSettings.curLevel;
 		D.debug(D.lDebug,"Wall - PlexData.oSettings.curLevel: " + i);
-		D.debug(D.lDebug,"Wall - Current URL: " + PlexData.oData["level"+i].current.url);
+		D.debug(D.lInfo,"Wall - Current URL: " + PlexData.oData["level"+i].current.url);
+		D.debug(D.lDebug, "Wall - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		var l1:String = "";
 		if(i == 1)
 		{
@@ -302,8 +303,8 @@ class plexNMT.as2.pages.Wall
 	//trace(obj.keyCode); // key code receive from listener
 	//trace(obj.asciiCode); // ASCII code receive from listener
 		var txtKeyCode = obj.keyCode;
-		trace ("Code: " + txtKeyCode + ", ASCII: " + obj.asciiCode);
-		this.mainMC.keyCode.text = "Code: " + txtKeyCode + ", ASCII: " + obj.asciiCode;
+		//trace ("Code: " + txtKeyCode + ", ASCII: " + obj.asciiCode);
+		//this.mainMC.keyCode.text = "Code: " + txtKeyCode + ", ASCII: " + obj.asciiCode;
 		// onPlayDownCB
 		//localhost:8008/playback?arg0=start_vod&arg1=Super 8&arg2=http://192.168.0.3:32400/library/parts/22736/file.avi&arg3=show&arg4=
 		
@@ -316,6 +317,21 @@ class plexNMT.as2.pages.Wall
 				PlexData.oWall.items = new Array();
 				gotoAndPlay("main");
 			 break;
+			 case "soft2":
+			 case Remote.PLAY:
+				//this.destroy();
+				//var_dump(obj);
+				//D.debug(D.lInfo,"Wall - Trying to play, Title: " + obj.title + " From: " + obj.playURL);
+				//Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + obj.title + "&arg2=" + obj.playURL + "&arg3=show&arg4=0"); // Direct Play.
+			break;
+			 case Remote.HOME:
+				this.destroy();
+				gotoAndPlay("main");
+			break;
+			case Remote.YELLOW:
+				this.destroy();
+				gotoAndPlay("settings");
+			break;
 		}
 	}
 
@@ -326,9 +342,6 @@ class plexNMT.as2.pages.Wall
 			case "movie":
 				PlexData.oWall.current.url = PlexData.oSettings.url + "library/metadata/" + o.data.ratingKey;
 				PlexData.oWall.current.index = o.data.index - 1;
-				/*_level0.plex.currentRatingKey = o.data.ratingKey;
-				_level0.plex.wallCurrent = o.data.index - 1;
-				_level0.plex.wallData = wallData;*/
 				this.destroy();
 				gotoAndPlay("movieDetails");
 			break;

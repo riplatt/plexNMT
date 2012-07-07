@@ -1,16 +1,67 @@
 ﻿
 import com.syabas.as2.common.Util;
+import com.syabas.as2.common.D;
+
 import mx.utils.Delegate;
 import mx.xpath.XPathAPI;
 
 import plexNMT.as2.common.PlexData;
+
+/* -- to infrom plex what we are
+?X-Plex-Client-Capabilities => 
+	protocols=
+		http-live-streaming,
+		http-mp4-streaming,
+		http-streaming-video,
+		http-streaming-video-720p,
+		http-mp4-video,
+		http-mp4-video-720p;
+	videoDecoders=
+		h264{
+			profile:high
+			&resolution:1080
+			&level:51
+			};
+	audioDecoders=
+		mp3,
+		aac{
+			bitrate:160000
+			}
+&X-Plex-Client-Platform => 
+	iOS
+&X-Plex-Product =>
+	Plex/iOS
+&X-Plex-Version =>
+	2.4.0
+	
+   -- to tell plex how much we have seen of video
+/progress?key => 
+	14872
+&identifier => 
+	com.plexapp.plugins.library
+&time =>
+	22672
+&state => 
+	playing //playing, stopped
+	
+	
+-- myPlex Headers
+
+X-Plex-Platform (Platform name, eg iOS, MacOSX, Android, LG, etc)
+X-Plex-Platform-Version (Operating system version, eg 4.3.1, 10.6.7, 3.2)
+X-Plex-Provides (one or more of [player, controller, server])
+X-Plex-Product (Plex application name, eg Laika, Plex Media Server, Media Link)
+X-Plex-Version (Plex application version number)
+X-Plex-Device (Device name and model number, eg iPhone3,2, Motorola XOOM™, LG5200TV)
+X-Plex-Client-Identifier (UUID, serial number, or other number unique per device)
+
+*/
 
 class plexNMT.as2.api.PlexAPI 
 {
 	
 	// Constants:
 	public static var CLASS_REF = plexNMT.as2.api.PlexAPI;
-	//public static var plexURL:String = "http://192.168.1.3:32400";
 	public static var plexURL:String = null;
 	
 	// Public Properties:
@@ -21,18 +72,18 @@ class plexNMT.as2.api.PlexAPI
 	public static function loadData(url:String, onLoad:Function, timeout:Number):Void 
 	{
 		//trace("Doing PlexAPI.loadData...");
+		D.debug(D.lDebug,"PlexAPI - Getting Data From: " + url);
 		Util.loadURL(url, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if (success)
 			{
-				//trace("PlexAPI.loadData Successful...");
+				D.debug(D.lDebug,"PlexAPI - Successfully Got Data From: " + url);
+				
+				
 				plexURL = PlexData.oSettings.url;
 				plexURL = plexURL.substr(1, plexURL.length - 1);
 				menu = Util.trim(XPathAPI.selectSingleNode(xml.firstChild, "/MediaContainer").attributes.viewGroup.toString());
 				
-				//trace("PlexAPI.loadData.menu : ");
-				//trace(menu);
-				//switch (type) 
 				switch (menu)
 				{
 					case "" :
@@ -66,7 +117,8 @@ class plexNMT.as2.api.PlexAPI
 									index:Number(i+1),
 									key:Util.trim(itemNode.attributes["key"]),
 									type:Util.trim(itemNode.attributes["type"]),
-									url:url + "/" + Util.trim(itemNode.attributes["key"])
+									url:url + "/" + Util.trim(itemNode.attributes["key"]),
+									playURL:url + Util.trim(itemNode.childNodes["Media"].childNodes["Part"].attributes["key"])
 								});
 							}
 							//Debug 
@@ -181,6 +233,7 @@ class plexNMT.as2.api.PlexAPI
 			else
 			{
 				this.onLoad(null);
+				D.debug(D.lError,"PlexAPI - Failed to Get Data From: " + url);
 			}
 		}), {target:"xml", timeout:timeout});
 	}

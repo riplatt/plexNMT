@@ -70,14 +70,13 @@ class plexNMT.as2.common.PlexData {
 			oSettings.url = null;
 			oSettings.ip = null;
 			oSettings.port = null;
-			//oSettings.wallCol = null;
-			//oSettings.wallRow = null;
 			oSettings.curLevel = null;
 			oSettings.init = true;
 			oSettings.previous = null;
+			oSettings.debugLevel = 3;
 			
 			//Page
-			oPage.current = "HomeMenu"
+			oPage = new Object({current:"main", plexDataURL:""});
 			//oPage.histroy = new Array();
 			
 		} else {

@@ -21,14 +21,9 @@ class plexNMT.as2.pages.HomeMenu {
 
 	// Constants:
 	public static var CLASS_REF = plexNMT.as2.pages.HomeMenu;
-	public var plexData:PlexData = null;
-	//public var D:D = null;
-	//PlexData = plexData; 
-	//public static var plexURL:String = "http://192.168.1.3:32400/";
-
 	// Public Properties:
+	public var plexData:PlexData = null;
 	// Private Properties:
-	//private var plexSO:MobileSharedObject = null;
 	private var plex:Object = new Object();
 	private var history:Object = new Object();
 	private var wallData:Array = new Array();
@@ -40,8 +35,7 @@ class plexNMT.as2.pages.HomeMenu {
 	private var arrPos:Number = 0;
 	private var crossfadeInterval:Number = null;
 	private var keyListener:Object = null;
-	//private var fpsComp:FPS = null;
-	//private var myTimeline:TimelineLite = null;
+
 	//Home Data
 	private var firstHistory:Array = null;
 	private var secondHistory:Array = null;
@@ -52,11 +46,13 @@ class plexNMT.as2.pages.HomeMenu {
 	private var firstAge:Number = null;
 	private var secondAge:Number = null;
 	private var thirdAge:Number = null;
+	
 	//Menu Background
 	private var level1Offset:Number = null;
 	private var level2Offset:Number = null;
 	private var level3Offset:Number = null;
 	private var menuBGOffset:Number = null;
+	
 	//MovieClips
 	private var parentMC:MovieClip = null;
 	private var mainMC:MovieClip = null;
@@ -70,11 +66,9 @@ class plexNMT.as2.pages.HomeMenu {
 	// Initialization:
 	public function HomeMenu(parentMC:MovieClip) {
 		
-		PlexData.init();
-		//var_dump(_level0);
-		
-		trace("Doing HomeMenu with: "+parentMC);
-		D.debug(D.lInfo,"HomeMenu - Plex Server URL: " + PlexData.oSettings.url);
+		D.debug(D.lInfo,"Home - Plex Server URL: " + PlexData.oSettings.url);
+		D.debug(D.lDev, "Home - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
+		PlexData.oPage.curret = "main"
 		
 		this.keyListener = new Object();
 		this.keyListener.onKeyDown = Delegate.create(this, this.onKeyDown);
@@ -97,7 +91,6 @@ class plexNMT.as2.pages.HomeMenu {
 		
 		if (PlexData.oSettings.curLevel == null || PlexData.oData.level1.age == null)
 		{
-			trace("bob a...");
 			PlexData.oSettings.curLevel = 1;
 			PlexData.oData.level1.loaded = false;
 			//load main menu
@@ -105,7 +98,6 @@ class plexNMT.as2.pages.HomeMenu {
 		} else {
 			for (var i:Number = 1; i<=PlexData.oSettings.curLevel;i++)
 			{
-				trace("bob b...");
 				this.updateMenu(i);
 				this.startBackground();
 			}
@@ -159,8 +151,8 @@ class plexNMT.as2.pages.HomeMenu {
 	{
 		var keyCode:Number = Key.getCode();
 		var i:Number = PlexData.oSettings.curLevel;
-		//trace("HomeMenu - Doing Key With: "+keyCode+" @ Level: "+i);
-		D.debug(D.lDebug,"HomeMenu - Doing Key With: "+keyCode+" @ Level: " + i);
+		//trace("Home - Doing Key With: "+keyCode+" @ Level: "+i);
+		D.debug(D.lDev,"Home - Doing Key With: "+keyCode+" @ Level: " + i);
 
 		switch (keyCode)
 		{
@@ -205,18 +197,26 @@ class plexNMT.as2.pages.HomeMenu {
 				this.destroy();
 				gotoAndPlay("main");
 			break;
+			case Remote.HOME:
+				this.destroy();
+				gotoAndPlay("main");
+			break;
+			case Remote.YELLOW:
+				this.destroy();
+				gotoAndPlay("settings");
+			break;
 			
 		}
-		D.debug(D.lDebug,"HomeMenu - Done Key Press Current Level: " + PlexData.oSettings.curLevel);
+		D.debug(D.lDev,"Home - Done Key Press Current Level: " + PlexData.oSettings.curLevel);
 		
 	}
 	
 	private function updateMenu(i:Number) {
 		
 		//var i:Number = PlexData.oSettings.curLevel;
-		//trace("HomeMenu - Updataing the menu @ level " + i);
-		D.debug(D.lDebug,"HomeMenu - Updataing the menu @ level " + i);
-		D.debug(D.lDebug,"HomeMenu - Current URL:" + PlexData.oData["level"+i].current.url);
+		//trace("Home - Updataing the menu @ level " + i);
+		D.debug(D.lDev,"Home - Updataing the menu @ level " + i);
+		D.debug(D.lDev,"Home - Current URL:" + PlexData.oData["level"+i].current.url);
 		PlexData.oData["level"+i].current = PlexData.oData["level"+i].items[2];
 		for (var j:Number = 0; j<5; j++) {
 				this["menu"+i+"MC"]["item_"+j].txt.htmlText = PlexData.oData["level"+i].items[0].title;
@@ -258,7 +258,7 @@ class plexNMT.as2.pages.HomeMenu {
 		
 		if (PlexData.oSettings.url == null) 
 		{	
-			D.debug(D.lDebug,"HomeMenu - loadLevel1: PlexData.oSettings.url == null...");
+			D.debug(D.lDebug,"Home - loadLevel1: PlexData.oSettings.url == null...");
 			this.destroy();
 			gotoAndPlay("settings");
 			return;
@@ -271,8 +271,8 @@ class plexNMT.as2.pages.HomeMenu {
 			this.loadRecentlyAdded();
 		}
 		
-		//D.debug(D.lInfo,"HomeMenu - loadLevel1...");
-		//D.debug(D.lInfo,"HomeMenu - D.loaded = " + D.loaded);
+		//D.debug(D.lInfo,"Home - loadLevel1...");
+		//D.debug(D.lInfo,"Home - D.loaded = " + D.loaded);
 		
 		//trace(g11);
 		var todayData:Date = new Date();
@@ -290,14 +290,14 @@ class plexNMT.as2.pages.HomeMenu {
 			//trace("Getting New Data For First Menu...");
 			//trace("Loading URL "+PlexData.oSettings.url+"library/sections");
 			PlexData.oData.level1.loaded = false;
-			PlexAPI.loadData(PlexData.oSettings.url+"library/sections",Delegate.create(this, this.onLoadLevel),5000);
+			PlexAPI.loadData(PlexData.oSettings.url+"library/sections", Delegate.create(this, this.onLoadLevel), 5000);
 		}
 		
 		
 	}
 
 	private function loadLevel2():Void {
-		trace("HomeMenu - Doing loadLevel2...");
+		trace("Home - Doing loadLevel2...");
 		
 		var todayData:Date = new Date();
 		var timeTemp:Number = todayData.getTime();
@@ -316,7 +316,7 @@ class plexNMT.as2.pages.HomeMenu {
 	}
 	
 	private function loadLevel3():Void {
-		trace("HomeMenu - Doing loadLevel3...");
+		trace("Home - Doing loadLevel3...");
 		
 		var todayData:Date = new Date();
 		var timeTemp:Number = todayData.getTime();
@@ -337,7 +337,7 @@ class plexNMT.as2.pages.HomeMenu {
 	private function onLoadLevel(data:Array):Void {
 		
 		var i:Number = PlexData.oSettings.curLevel;
-		trace("HomeMenu - menu type:" + data.type);
+		trace("Home - menu type:" + data.type);
 		if (data.type == "secondary")
 		{
 
@@ -357,7 +357,7 @@ class plexNMT.as2.pages.HomeMenu {
 		}
 		
 		var dataLen = PlexData.oData["level"+i].items.length;
-		//trace("HomeMenu - oData.level"+i+".current.title: " + PlexData.oData["level"+i].current.title);
+		//trace("Home - oData.level"+i+".current.title: " + PlexData.oData["level"+i].current.title);
 		
 		if (PlexData.oData["level"+i].current.title == "")
 		{
@@ -370,12 +370,12 @@ class plexNMT.as2.pages.HomeMenu {
 				var wd:Number = 0;
 				while(PlexData.oData["level"+i].items[2].title != PlexData.oData["level"+i].current.title)
 				{
-					D.debug(D.lDebug,"HomeMenu - Doing while...");
+					D.debug(D.lDebug,"Home - Doing while...");
 					PlexData.rotateItemsLeft("level"+i);
 					wd++;
 					if(wd > dataLen)
 					{
-						D.debug(D.lDebug,"HomeMenu - exiting while via watchdog...");
+						D.debug(D.lDebug,"Home - exiting while via watchdog...");
 						break;
 					}
 				}
@@ -416,7 +416,7 @@ class plexNMT.as2.pages.HomeMenu {
 		PlexAPI.loadData(PlexData.oSettings.url+"library/sections/1/recentlyAdded",Delegate.create(this, this.onLoadRecentlyAdded),5000);
 	}
 	private function onLoadRecentlyAdded(data:Array):Void{
-		//trace("HomeMenu - Dumming onLoadRecentlyAdded data...");
+		//trace("Home - Dumming onLoadRecentlyAdded data...");
 		//var_dump(data);
 		PlexData.oBackground.init = true;
 		PlexData.oBackground.items = data.concat();

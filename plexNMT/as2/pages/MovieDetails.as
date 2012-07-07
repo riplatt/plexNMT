@@ -6,6 +6,7 @@ import com.syabas.as2.common.Util;
 import com.syabas.as2.common.UI;
 import com.syabas.as2.common.Marquee;
 import com.syabas.as2.common.IMGLoader;
+import com.syabas.as2.common.D;
 
 import plexNMT.as2.api.PlexAPI;
 import plexNMT.as2.common.PlexData;
@@ -13,7 +14,6 @@ import plexNMT.as2.common.Remote;
 
 class plexNMT.as2.pages.MovieDetails
 {
-	//public static var plexURL:String = "http://192.168.0.3:32400/";
 	public static var plexURL:String = PlexData.oSettings.url;
 	public static var plexRatingKey:String = null;
 	
@@ -57,8 +57,9 @@ class plexNMT.as2.pages.MovieDetails
 		delete this.onLoadResize;
 		this.onLoadResize = null;
 		
-		delete this.keyListener;
-		this.keyListener = null;
+		//Remove Listener
+		Key.removeListener(this.keyListener);
+		delete keyListener;
 
 	}
 	
@@ -291,12 +292,20 @@ class plexNMT.as2.pages.MovieDetails
 			case Remote.BACK:
 			case "soft1":
 			case 81:
-				this.disableKeyListener();
+				//this.disableKeyListener();
 				this.destroy();
 				gotoAndPlay("wall");
 			break;
+			case Remote.YELLOW:
+				this.destroy();
+				gotoAndPlay("settings");
+			break;
+			case Remote.HOME:
+				this.destroy();
+				gotoAndPlay("main");
+			break;
 			case Remote.PLAY:
-				this.disableKeyListener();
+				//this.disableKeyListener();
 				Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + this.title + "&arg2=" + this.videoURL + "&arg3=show&arg4=0"); // Direct Play.
 			break;
 		}

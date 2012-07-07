@@ -40,6 +40,7 @@ class plexNMT.as2.common.popSharedObjects {
 		
 		writeToSO("plexIP", PlexData.oSettings.ip);
 		writeToSO("plexPort", PlexData.oSettings.port);
+		writeToSO("debugLevel", PlexData.oSettings.debugLevel);
 		writeToSO("wallCol", PlexData.oWall.columns);
 		writeToSO("wallRow", PlexData.oWall.rows);
 		writeToSO("currentPage", PlexData.oPage.current);
@@ -68,10 +69,12 @@ class plexNMT.as2.common.popSharedObjects {
 		
 		PlexData.oSettings.ip = readFromSO("plexIP");
 		PlexData.oSettings.port = readFromSO("plexPort");
+		PlexData.oSettings.debugLevel = (readFromSO("debugLevel") == undefined ? PlexData.oSettings.debugLevel : readFromSO("debugLevel"));
 		PlexData.oSettings.url = (readFromSO("plexIP") == undefined ? PlexData.oSettings.url : "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port+"/");
 		PlexData.oWall.columns = (readFromSO("wallCol") == undefined ? PlexData.oWall.columns : readFromSO("wallCol"));
 		PlexData.oWall.rows = (readFromSO("wallRow") == undefined ? PlexData.oWall.rows : readFromSO("wallRow"));
 		PlexData.oPage.current = (readFromSO("currentPage") == undefined ? PlexData.oPage.curren : readFromSO("currentPage"));
+		
 		
 		strSharedObjectState = "retrieved"
 	}
