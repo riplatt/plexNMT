@@ -1,5 +1,6 @@
 ﻿
 //import com.adobe.as2.MobileSharedObject;
+import mx.xpath.XPathAPI;
 
 class plexNMT.as2.common.PlexData {
 
@@ -48,6 +49,8 @@ class plexNMT.as2.common.PlexData {
 			oBackground.current = new Array();
 			oBackground.init = false;
 			oBackground.index = 0;
+			oBackground.speed = 7;											//Speed of background image change in seconds
+			oBackground.highres = true;
 			
 			//Wall
 			oWall.items = new Array();
@@ -73,7 +76,17 @@ class plexNMT.as2.common.PlexData {
 			oSettings.curLevel = null;
 			oSettings.init = true;
 			oSettings.previous = null;
-			oSettings.debugLevel = 3;
+			oSettings.debugLevel = 0;
+			oSettings.overscan = false;
+			oSettings.overscanbg = false;
+			oSettings.overscanxshift = 0;
+			oSettings.overscanyshift = 0;
+			oSettings.overscanx = 1;
+			oSettings.overscany = 1;
+			oSettings.language = "en";
+			
+			//Language
+			oLanguage = new Object();
 			
 			//Page
 			oPage = new Object({current:"main", plexDataURL:""});
@@ -172,6 +185,20 @@ class plexNMT.as2.common.PlexData {
 		oWall.topLeft.y = 720/2 - gridHeight/2;
 		
 	}
+	
+	public static function setLanguage():Void {
+		var xml:XML = new XML();
+		xml.ignoreWhite = true;
+		
+		xml.onLoad = function(success:Boolean):Void {
+			
+			//Clean XML Call
+			delete xml.idMap;
+			xml = null;
+		}
+		xml,load("./lang" + oSettings.language);
+	}
+	
 	
 	private static function var_dump(_obj:Object) {
 		

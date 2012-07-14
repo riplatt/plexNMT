@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EVERSION English prompts
+	
+	********************** NOT UPDATE FRIENDLY  *********************
+	If you want to make changes to any translation file, please make
+	a unique filename for it.  This is the best way to make sure your
+	file is not lost during upgrades.
+	******************************************************************
+	
+	If you translate the skin into your native language, please let us 
+	know so we can include the translation in a future release (and 
+	contact you if we add new prompts before future releases)
+	
+	Edit <translation>en.xml</translation> controls what language file 
+	to use.
+	
+	Changes to this file will not work until you copy it to your Jukebox 
+	folder AND you have added this file as your translation setting in 
+	skinsettings.xml.
+	
+	For help, visit: http://www.dentedboxes.com/doku.php/help:settings
+-->
+
+<translation>
+  <!-- *** System  -->
+	<starting>Starte</starting>
+	<pleasewait>Bitte warten</pleasewait>
+	<reset>Zurücksetzen</reset>
+	<ignore>Ignorieren</ignore>
+	<exit>Beenden</exit>
+	<help>Hilfe</help>
+	<home>Home</home>
+	<about>Über</about>
+	<sapps>Apps</sapps>	
+	<apps>Apps</apps>
+	<okselect>OK</okselect>      <!-- ok prompt on popup messages -->
+	<yupdate>YAMJ JUKEBOX UPDATE VERFÜGBAR</yupdate>
+	<alert>Information</alert>
+	<eskin>Eskin</eskin>
+	<loading>Laden</loading>
+	<prepcat>Lade Kategorien</prepcat>
+	<prepcset>Lade benutzerdefinierte Einstellungen</prepcset>
+	
+  <!-- *** SDK Player      	-->
+	<skipto>Überspringen</skipto>
+	<goto>Gehe zu</goto>
+	<playlist>Wiedergabeliste</playlist>
+	<couldnotplay>Wiedergabe nicht möglich</couldnotplay>
+	<infopanel>Info</infopanel>
+	<dlspeed>Download Geschwindigkeit</dlspeed>
+	<videoquality>Video Qualität</videoquality>
+	<connstatus>Verbinde mit Medien...</connstatus>
+	<buffstatus>Lade Puffer...</buffstatus>	
+	<ttpl>Wiedergabeliste</ttpl>	
+	<ttseek>Zeitsuche</ttseek>
+	
+	<!-- *** playlist -->
+	<preprom>Suche Optische Laufwerke</preprom>
+	<prepnet>Suche Freigaben</prepnet>
+	<prepdrives>Aktualisiere Laufwerk-Liste</prepdrives>
+	<prepintdrive>Suche interne Laufwerke</prepintdrive>
+	<usbdrive>USB Laufwerk</usbdrive>
+	<intdrive>Internes Laufwerk</intdrive>
+	<updateshare>Aktualisiere Freigaben-Liste</updateshare>
+	
+	<!-- *** skins -->
+	
+	<!-- home menu -->
+	
+	<3d>3D</3d>
+	<all>All</all>
+	<award>Preis</award>
+	<awards>Preise</awards>
+	<categories>Kategorien</categories>
+	<category>Kategorie</category>
+	<cast>Darsteller</cast>
+	<casts>Darsteller</casts>
+	<countries>Länder</countries>
+	<country>Land</country>
+	<director>Regie</director>
+	<directors>Regie</directors>
+	<extra>Extra</extra>
+	<extras>Extras</extras>
+	<hd>HD</hd>
+	<hd-720>HD-720</hd-720>
+	<hd-1080>HD-1080</hd-1080>
+	<libraries>Bibliotheken</libraries>
+	<library>Bibliothek</library>
+	<librarydescription>Bibliothek</librarydescription>
+	<movie>Film</movie>
+	<movies>Filme</movies>		
+	<new>Neu</new>
+	<news>Neu</news>
+	<new-movie>Neuer Film</new-movie>
+	<new-movies>Neuer Film</new-movies>
+	<new-tv>Neuer Serie</new-tv>
+	<new-tvs>Neue Serien</new-tvs>
+	<other>Anderer</other>
+	<people>People</people>
+	<person>Person</person>
+	<persons>Personen</persons>
+	<rating>Bewertung</rating>
+	<ratings>Bewertungen</ratings>
+	<set>Set</set>
+	<sets>Sets</sets>   
+	<top250>Top-250</top250>
+	<trailer>Anhänger</trailer>
+	<trailers>Anhänger</trailers>
+	<tv-shows>Serie</tv-shows>   
+	<unwatched>Ungesehen</unwatched>
+	<watched>Gesehen</watched>
+	<weather>Wetter</weather>
+	<writer>Drehbuch</writer>
+	<writers>Drehbuch</writers>
+	<year>Jahr</year>
+	<years>Jahre</years>   
+
+<!-- details page -->
+	<actor>Darsteller</actor>
+	<actors>Darsteller</actors>
+	<aired>Erstausstrahlung</aired>
+	<airsinfo>Airs Info</airsinfo>
+	<aspect>Aspekt</aspect>
+	<aspectratio>Aspekt Ratio</aspectratio>
+	<audio>Audio</audio>
+	<audiochannel>Audio Kanäle</audiochannel>
+	<audiochannels>Audio Kanäle</audiochannels>
+	<audiocodec>Audio Codec</audiocodec>
+	<budget>Budget</budget>
+	<budgets>Budgets</budgets>
+	<business>Business</business>
+	<channel>Kanäle</channel>
+	<channels>Kanäle</channels>
+	<container>Behälter</container>
+	<company>Firma</company>
+	<certification>Altersfreigabe</certification>
+	<certifications>Altersfreigabe</certifications>
+	<date>Datum</date>
+	<details>Details</details>
+	<didyouknow>Tat Sie wissen</didyouknow>
+	<episode>Episode</episode>			
+	<episodes>Episoden</episodes>			
+	<episodeshort>E</episodeshort>
+	<event>Ereignis</event>
+	<events>Ereignisse</events>
+	<filedate>Dateidatum</filedate>
+	<filesize>Dateigröße</filesize>
+	<firstaired>Erstausstrahlung</firstaired>
+	<fps>Fps</fps>
+	<gross>Gross</gross>
+	<language>Sprache</language>
+	<languageflag>Sprache Flag</languageflag>
+	<languages>Sprachen</languages>
+	<name>Name</name>
+	<names>Namen</names>
+	<nominated>Berufen</nominated>
+	<openweek>Offene Woche</openweek>
+	<outline>Umrißlinie</outline>
+	<part>Teil</part>
+	<parts>Teile</parts>
+	<plot>Handlung</plot>
+	<quote>Quote</quote>
+	<rated>Bewertet</rated>
+	<releasedate>Befreiung</releasedate>
+	<resolution>Entschlossenheit</resolution>
+	<resolutions>Entschlossenheiten</resolutions>
+	<runtime>Laufzeit</runtime>
+	<season>Staffel</season>       		
+	<seasons>Staffeln</seasons>
+	<seasonshort>S</seasonshort>
+	<size>Größe</size>
+	<studio>Studio</studio>
+	<studiologo>Studio Logo</studiologo>
+	<subtitle>Untertitel</subtitle>
+	<subtitles>Untertitel</subtitles>
+	<tagline>Tagline</tagline>
+	<unknown>Unbekannt</unknown>
+	<videocodec>Video Codec</videocodec>
+	<videocontainer>Video Container</videocontainer>
+	<videosource>Videoquelle</videosource>
+	<videooutput>Video Output</videooutput>
+	<win>Gewinn</win>
+	<won>Gewonnen</won>		
+	
+	<!-- Person details -->
+	<biography>Biographie</biography>
+	<birthday>Geburtstag</birthday>
+	<character>Character</character>
+	<department>Abteilung</department>
+	<doublage>Doublage</doublage>
+	<filmography>Filmography</filmography>
+	<photo>Foto</photo>
+	<photofile>Foto</photofile>
+	<photos>Foto</photos>
+	
+	
+    <!-- *** various for  skin 	-->
+	<false>Falsch</false>
+	<file>Feile</file>
+	<files>Feilen</files>
+	<firmware>Firmware</firmware>
+	<firstpart>Erste Teil</firstpart>
+	<genre>Genre</genre>
+	<genres>Genres</genres>
+	<hardware>Hardware</hardware>
+	<index>Index</index>
+	<known>Bekannt</known>
+	<last>Zuletzt</last>
+	<lastpart>Zuletzt Teil</lastpart>
+	<model>Modell</model>
+	<next>Nächste</next>
+	<no>Nein</no>
+	<page>Seite</page>
+	<pages>Seiten</pages>
+	<play-disc>Spielen-Scheibe</play-disc>
+	<previous>Vorherige</previous>
+	<settingsfile>Einstellungsdatei</settingsfile>
+	<show>Serie</show>
+	<shows>Serien</shows>
+	<special>Special</special>     		
+	<specials>Specials</specials>
+	<status>Status</status>
+	<title>Titel</title>
+	<titles>Titel</titles>
+	<true>Richtig</true>
+	<tv>TV</tv>
+	<tvs>TVs</tvs>
+	<video>Video</video>
+	<videos>Videos</videos>
+	<webpage>Webseite</webpage>
+	<yes>Ja</yes> 
+	
+<!-- *** Error messages     -->   
+	<badevupdate>Eversion falsch installiert</badevupdate>
+	<badevupgrade>Fehlerhaftes Eversion BETA2 Upgrade</badevupgrade>
+	<ehw>Keine Hardware Rückmeldung</ehw>
+	<enodatain>Keine Daten in </enodatain>
+	<enovideo>Keine abspielbaren Videos</enovideo>
+	<enativeresp>Nativer Player reagiert nicht</enativeresp>
+	<enocdrom>Kein DVD/Bluray Laufwerk gefunden</enocdrom>
+	<enodata>Keine Daten</enodata>
+	<enodisc>Bitte Disc einlegen</enodisc>
+	<enoload>Kann nicht geladen werden: </enoload>
+	<enomount>Keine Verbindung zu Freigaben:</enomount>
+	<enomountzero>Keine Verbindung zu Datei:</enomountzero>
+	<enoshare>Keine Freigabe in den Systemeinstellungen angegeben:</enoshare>
+	<enotfound>nicht gefunden</enotfound>
+	<eprobfile>Problem mit Datei: </eprobfile>	
+	<error>Fehler</error>
+	<evupdatefinish>Eversion update incomplete</evupdatefinish>
+	<ewarning>Defektes Eversion Upgrade. Bitte beenden und Einstellungen prüfen.</ewarning>
+	<ewarninga>Unvollständiges Upgrade von BETA1 nach BETA2.  Hilfe auf www.dentedboxes.com/beta2.</ewarninga>
+	<ewinpath>Falscher Wiedergabepfad, Windows-Pfad Angabe gefunden</ewinpath>
+	<eyver>Bitte YAMJ aktualisieren. Eversion arbeitet am besten mit R</eyver>
+	<noeps>Keine Folgen</noeps>
+	<oldyamj>Veraltete Version von YAMJ entdeckt</oldyamj>
+	<restartev>Incomplete update detected.  Please exit Eversion and start again to finish.</restartev>
+	<segment>Segment</segment> 
+	
+<!-- eskins skinner errors (most likely not needed for end users) -->
+	<enoextras>Keine Extras in YAMJ XML gefunden</enoextras>
+	<enoindexfilename>Kein Index Dateiname</enoindexfilename>
+	<enoparts>Keine Multi-Part Film-Dateien in YAMJ XML gefunden</enoparts>
+	<esnoxtradata>Kann EXTRA nicht starten, keine Daten</esnoxtradata>
+	<esnoxtrafile>Kann EXTRA nicht starten, kein Eskin Dateiname</esnoxtrafile>
+	<eunknownscreen>Unbekannter Bildschirmtyp</eunknownscreen>
+
+
+</translation>
