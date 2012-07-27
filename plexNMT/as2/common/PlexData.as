@@ -1,6 +1,7 @@
 ﻿
-//import com.adobe.as2.MobileSharedObject;
 import mx.xpath.XPathAPI;
+
+import plexNMT.as2.common.Utils;
 
 class plexNMT.as2.common.PlexData {
 
@@ -11,6 +12,10 @@ class plexNMT.as2.common.PlexData {
 	public static var oSettings:Object = {};
 	public static var oWall:Object = {};
 	public static var oPage:Object = {};
+	public static var oLanguage:Object = {};
+	public static var oSections:Object = {};
+	public static var oCategory:Object = {};
+	public static var oID:Object = {}
 	
 	public static var iBob:Number = 0;
 	//private static var soPlex:MobileSharedObject = null;
@@ -92,12 +97,43 @@ class plexNMT.as2.common.PlexData {
 			oPage = new Object({current:"main", plexDataURL:""});
 			//oPage.histroy = new Array();
 			
+			//ID
+			/*
+			* X-Plex-Platform (Platform name, eg iOS, MacOSX, Android, LG, etc)
+			* X-Plex-Platform-Version (Operating system version, eg 4.3.1, 10.6.7, 3.2)
+			* X-Plex-Provides (one or more of [player, controller, server])
+			* X-Plex-Product (Plex application name, eg Laika, Plex Media Server, Media Link)
+			* X-Plex-Version (Plex application version number)
+			* X-Plex-Device (Device name and model number, eg iPhone3,2, Motorola XOOM™, LG5200TV)
+			* X-Plex-Client-Identifier (UUID, serial number, or other number unique per device)
+			* X-Plex-Client-Platform
+			*/
+			oID.version = "0.0.1.gitString";
+			oID.uuid = "uuid";
+			oID.os = "syabas";
+			oHeaders.platform = "X-Plex-Platform=POP-408";
+			oHeaders.platformVersion = "&X-Plex-Platform-Version=xxxx-xxxx";
+			oHeaders.provides = "&X-Plex-Provides=Player";
+			oHeaders.product = "&X-Plex-Product=plexNMT";
+			oHeaders.version = "&X-Plex-Version=0.0.1.gitString";
+			oHeaders.device = "&X-Plex-Device=";
+			oHeaders.clientIdentifier = "&X-Plex-Client-Identifier=";
+			oHeaders.clientPlatform = "&X-Plex-Client-Platform=";
+			oHeaders.header = 
+			
 		} else {
 			trace("PlexData already built...");
 		}
 		
-		//trace("Dumping PlexData...");
-		//var_dump(oData);
+	}
+	
+	public static function setSections()
+	{
+		var tmpObj1:Object = new Object({attributes:{title:"Settings"}});
+		var tmpObj2:Object = new Object({attributes:{title:"Exit"}});
+		oSections.MediaContainer[0].Directory.push(tmpObj1);
+		oSections.MediaContainer[0].Directory.push(tmpObj2);
+		Utils.varDump(oSections)
 	}
 	
 	public static function _addItem(_level:String, _item:Object):Void
@@ -129,25 +165,6 @@ class plexNMT.as2.common.PlexData {
 	{
 		oSettings.url = _url
 	}
-	
-	/*public static function readSO():Void
-	{
-		trace("PlexData Reading SO...");
-		oSettings.ip = soPlex.readFromSO("plexIP");
-		oSettings.port = soPlex.readFromSO("plexPort");
-		oSettings.url = (soPlex.readFromSO("plexIP") == undefined ? oSettings.url : "http://"+oSettings.ip+":"+oSettings.port+"/");
-		oWall.columns = (soPlex.readFromSO("wallCol") == undefined ? oWall.columns : soPlex.readFromSO("wallCol"));
-		oWall.rows = (soPlex.readFromSO("wallRow") == undefined ? oWall.rows : soPlex.readFromSO("wallRow"));
-	}
-	
-	public static function writeSO():Void
-	{
-		trace("PlexData Writing SO...");
-		soPlex.writeToSO("plexIP", oSettings.ip);
-		soPlex.writeToSO("plexPort", oSettings.port);
-		soPlex.writeToSO("wallCol", oSettings.wallCol);
-		soPlex.writeToSO("wallRow", oSettings.wallRow);
-	}*/
 	
 	public static function setWall():Void
 	{
@@ -196,18 +213,6 @@ class plexNMT.as2.common.PlexData {
 			delete xml.idMap;
 			xml = null;
 		}
-		xml,load("./lang" + oSettings.language);
-	}
-	
-	
-	private static function var_dump(_obj:Object) {
-		
-		for (var i in _obj) {
-			trace("key: " + i + ", value: " + _obj[i] + ", type: " + typeof(_obj[i]));
-			if (typeof (_obj[i]) == "object" || typeof (_obj[i]) == "movieclip") {
-				var_dump(_obj[i]);
-			}
-			trace("end: " + i);
-		}
+		xml.load("./lang" + oSettings.language);
 	}
 }

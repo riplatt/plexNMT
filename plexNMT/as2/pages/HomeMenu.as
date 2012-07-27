@@ -89,6 +89,9 @@ class plexNMT.as2.pages.HomeMenu {
 		//Build stage
 		this.setStage();
 		
+		//Test
+		PlexAPI.getSections();
+		
 		if (PlexData.oSettings.curLevel == null || PlexData.oData.level1.age == null)
 		{
 			PlexData.oSettings.curLevel = 1;
@@ -290,6 +293,7 @@ class plexNMT.as2.pages.HomeMenu {
 			//trace("Getting New Data For First Menu...");
 			//trace("Loading URL "+PlexData.oSettings.url+"library/sections");
 			PlexData.oData.level1.loaded = false;
+			//PlexAPI.getSections(Delegate.create(this, this.onLoadLevel), 5000);
 			PlexAPI.loadData(PlexData.oSettings.url+"library/sections", Delegate.create(this, this.onLoadLevel), 5000);
 		}
 		

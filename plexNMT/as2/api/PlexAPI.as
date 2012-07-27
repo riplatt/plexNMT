@@ -2,10 +2,13 @@
 import com.syabas.as2.common.Util;
 import com.syabas.as2.common.D;
 
+import it.sephiroth.XMLObject;
+
 import mx.utils.Delegate;
 import mx.xpath.XPathAPI;
 
 import plexNMT.as2.common.PlexData;
+import plexNMT.as2.common.Utils;
 
 /* -- to infrom plex what we are
 ?X-Plex-Client-Capabilities => 
@@ -70,6 +73,38 @@ class plexNMT.as2.api.PlexAPI
 	private static var menu:String = "";
 
 	// Initialization:
+	public static function getSections(onLoad:Function, timeout:Number):Void
+	{
+		Util.loadURL(PlexData.oSettings.url + "/library/sections", Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		{
+			if(success)
+			{
+				trace("Doing PlexAPI - getSections: " + success);
+                PlexData.oSections = new XMLObject().parseXML(xml,true);
+				PlexData.setSections();
+                delete xml
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to get sections...");
+			}
+		}), {target:"xml", timeout:timeout});
+	}
+	
+	public static function getCategory(key:String, onLoad:Function, timeout:Number):Void
+	{
+		Util.loadURL(PlexData.oSettings.url + "/library/sections/" + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		{
+			if(success)
+			{
+				trace("Doing PlexAPI - getSections: " + success);
+                PlexData.oCategory = new XMLObject().parseXML(xml, true);
+                delete xml
+				Utils.varDump(PlexData.oCategory)
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to get sections...");
+			}
+		}), {target:"xml", timeout:timeout});
+	}
+	
 	public static function loadData(url:String, onLoad:Function, timeout:Number):Void 
 	{
 		//trace("Doing PlexAPI.loadData...");
@@ -387,19 +422,5 @@ class plexNMT.as2.api.PlexAPI
 				
 			}
 		}), {target:"xml", timeout:timeout});
-	}
-	private function var_dump(_obj:Object)
-	{
-		//trace("Doing var_dump...");
-		trace(_obj);
-		//trace("Looping Through _obj...");
-		for (var i in _obj)
-		{
-			trace("_obj[" + i + "] = " + _obj[i] + " type = " + typeof(_obj[i]));
-			if (typeof(_obj[i]) == "object")
-			{
-				var_dump(_obj[i]);
-			}
-		}
 	}
 }
