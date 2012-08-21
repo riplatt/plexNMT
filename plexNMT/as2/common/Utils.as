@@ -1,4 +1,5 @@
-﻿class plexNMT.as2.common.Utils
+﻿
+class plexNMT.as2.common.Utils
 {
 	public static function varDump(_obj:Object, indent:String) 
 	{
@@ -14,5 +15,34 @@
 				varDump(_obj[i], indent + indentPlus);
 			}
 		}
+	}
+	
+	public static function clone(obj:Object):Object
+	{
+		var i;
+		var o;
+		
+		o = new Object()
+		
+		for(i in obj)
+		{
+			if(typeof(obj[i]) == "object")
+			{
+				o[i] = clone(obj[i]);
+			} else {
+				o[i] = obj[i];
+			}
+		}
+		return(o);
+	}
+	
+	public static function getObjectLength(obj:Object):Number
+	{
+		var len:Number = 0;
+		for(var item in obj)
+		{
+			len++;
+		}
+		return len;
 	}
 }

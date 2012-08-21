@@ -2,6 +2,7 @@
 import plexNMT.as2.api.PlexAPI;
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Remote;
+import plexNMT.as2.common.Utils;
 
 import com.syabas.as2.common.GridLite;
 import com.syabas.as2.common.UI;
@@ -89,8 +90,6 @@ class plexNMT.as2.pages.HomeMenu {
 		//Build stage
 		this.setStage();
 		
-		//Test
-		PlexAPI.getSections();
 		
 		if (PlexData.oSettings.curLevel == null || PlexData.oData.level1.age == null)
 		{
@@ -221,16 +220,32 @@ class plexNMT.as2.pages.HomeMenu {
 		D.debug(D.lDev,"Home - Updataing the menu @ level " + i);
 		D.debug(D.lDev,"Home - Current URL:" + PlexData.oData["level"+i].current.url);
 		PlexData.oData["level"+i].current = PlexData.oData["level"+i].items[2];
-		for (var j:Number = 0; j<5; j++) {
-				this["menu"+i+"MC"]["item_"+j].txt.htmlText = PlexData.oData["level"+i].items[0].title;
+		/*for (var j:Number = 0; j<5; j++) {
+				this["menu"+i+"MC"]["item_"+j].txt.htmlText = PlexData.oData["level"+i].items[0].attributes.title;
 				PlexData.oData["level"+i].items[0].width = this["menu"+i+"MC"]["item_"+j].txt.textWidth;
 				PlexData.rotateItemsLeft("level"+i);
 			}
 
 		for (var k:Number =0; k<5; k++) {
 			PlexData.rotateItemsRight("level"+i);
+		}*/
+		switch (i)
+		{
+			case 1:
+				this["menu"+i+"MC"]["item_0"].txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",-2)].title
+				this["menu"+i+"MC"]["item_1"].txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",-1)].title
+				this["menu"+i+"MC"]["item_2"].txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",0)].title
+				this["menu"+i+"MC"]["item_3"].txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",1)].title
+				this["menu"+i+"MC"]["item_4"].txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",2)].title
+			break;
+			case 2:
+			
+			break;
+			case 3:
+			
+			break;
+			
 		}
-		
 		this["level"+i+"MaxX"] = getMaxTxtLen(PlexData.oData["level"+i].items);
 		
 		switch (i)
@@ -276,13 +291,9 @@ class plexNMT.as2.pages.HomeMenu {
 		
 		//D.debug(D.lInfo,"Home - loadLevel1...");
 		//D.debug(D.lInfo,"Home - D.loaded = " + D.loaded);
-		
-		//trace(g11);
+
 		var todayData:Date = new Date();
 		var timeTemp:Number = todayData.getTime();
-		
-		//trace("loadFirstMenu Dumpimg PlexData.oData.level1..");
-		//var_dump(PlexData.oData.level1);
 		
 		if (PlexData.oData.level1.age != null && timeTemp < PlexData.oData.level1.age) {
 			//trace("Loading First Menu With Previous Data...");
@@ -293,7 +304,7 @@ class plexNMT.as2.pages.HomeMenu {
 			//trace("Getting New Data For First Menu...");
 			//trace("Loading URL "+PlexData.oSettings.url+"library/sections");
 			PlexData.oData.level1.loaded = false;
-			//PlexAPI.getSections(Delegate.create(this, this.onLoadLevel), 5000);
+			PlexAPI.getSections(Delegate.create(this, this.onLoadLevel), 5000);
 			PlexAPI.loadData(PlexData.oSettings.url+"library/sections", Delegate.create(this, this.onLoadLevel), 5000);
 		}
 		
@@ -347,7 +358,23 @@ class plexNMT.as2.pages.HomeMenu {
 
 		}
 		//data.sort(Array.CASEINSENSITIVE);
-		PlexData.oData["level"+i].items = data.concat();
+		/*switch (i) {
+			case 1 :
+				PlexData.oData["level1"].items = Utils.clone(PlexData.oSections.MediaContainer[0].Directory);
+				break;
+			case 2 :
+				PlexData.oData["level2"].items = PlexData.oCategory.MediaContainer[0].Directory.concet();
+				break;
+			case 3 :
+				PlexData.oData["level3"].items = PlexData.oFilters.MediaContainer[0].Directory.concet();
+				break;
+		}*/
+		trace("items:");
+		Utils.varDump(PlexData.oSections);
+		/*trace("Directory:");
+		Utils.varDump(PlexData.oSections.MediaContainer[0].Directory);*/
+		
+		/*PlexData.oData["level"+i].items = data.concat();
 		if (i == 1 and PlexData.oData.level1.loaded == false )
 		{
 			//Add Exit and Setting to Menu
@@ -358,12 +385,15 @@ class plexNMT.as2.pages.HomeMenu {
 			PlexData.oData.level1.loaded = true;
 			
 			
-		}
+		}*/
 		
-		var dataLen = PlexData.oData["level"+i].items.length;
-		//trace("Home - oData.level"+i+".current.title: " + PlexData.oData["level"+i].current.title);
+		//var dataLen = PlexData.oData["level"+i].items.length;
+		var dataLen:Number = Utils.getObjectLength(PlexData.oData["level"+i].items);
+		trace("Home - dataLen:" + dataLen);
+		trace("Home - oData.level" + i + ".current.attributes.title: " + PlexData.oData["level"+i].current.attributes.title);
+		trace("Home - PlexData.oData" + i + ".items[2].attributes.title: " + PlexData.oData["level"+i].items[2].attributes.title);
 		
-		if (PlexData.oData["level"+i].current.title == "")
+		if (PlexData.oData["level"+i].current.attributes.title == "")
 		{
 			for (var c:Number = 0; c<2; c++)
 			{
@@ -372,7 +402,7 @@ class plexNMT.as2.pages.HomeMenu {
 			PlexData.oData["level"+i].current = PlexData.oData["level"+i].items[2];
 		} else {
 				var wd:Number = 0;
-				while(PlexData.oData["level"+i].items[2].title != PlexData.oData["level"+i].current.title)
+				while(PlexData.oData["level"+i].items[2].attributes.title != PlexData.oData["level"+i].current.attributes.title)
 				{
 					D.debug(D.lDebug,"Home - Doing while...");
 					PlexData.rotateItemsLeft("level"+i);
@@ -384,7 +414,7 @@ class plexNMT.as2.pages.HomeMenu {
 					}
 				}
 		}
-		
+		trace("Going to update menu..")
 		this.updateMenu(i);
 	}
 
@@ -537,18 +567,5 @@ class plexNMT.as2.pages.HomeMenu {
 			}
 		}
 		return mxm;
-	}
-	
-	private function var_dump(_obj:Object) {
-		//trace("Doing var_dump...");
-		//trace(_obj);
-		//trace("Looping Through _obj...");
-		for (var i in _obj) {
-			D.debug(D.lInfo,"key: " + i + ", value: " + _obj[i] + ", type: " + typeof(_obj[i]));
-			if (typeof(_obj[i]) == "object" || typeof(_obj[i]) == "movieclip") {
-				var_dump(_obj[i]);
-			}
-			trace("end: " + i);
-		}
 	}
 }

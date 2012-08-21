@@ -15,7 +15,9 @@ class plexNMT.as2.common.PlexData {
 	public static var oLanguage:Object = {};
 	public static var oSections:Object = {};
 	public static var oCategory:Object = {};
-	public static var oID:Object = {}
+	public static var oFilters:Object = {};
+	public static var oHeaders:Object = {};
+	
 	
 	public static var iBob:Number = 0;
 	//private static var soPlex:MobileSharedObject = null;
@@ -108,9 +110,6 @@ class plexNMT.as2.common.PlexData {
 			* X-Plex-Client-Identifier (UUID, serial number, or other number unique per device)
 			* X-Plex-Client-Platform
 			*/
-			oID.version = "0.0.1.gitString";
-			oID.uuid = "uuid";
-			oID.os = "syabas";
 			oHeaders.platform = "X-Plex-Platform=POP-408";
 			oHeaders.platformVersion = "&X-Plex-Platform-Version=xxxx-xxxx";
 			oHeaders.provides = "&X-Plex-Provides=Player";
@@ -119,7 +118,15 @@ class plexNMT.as2.common.PlexData {
 			oHeaders.device = "&X-Plex-Device=";
 			oHeaders.clientIdentifier = "&X-Plex-Client-Identifier=";
 			oHeaders.clientPlatform = "&X-Plex-Client-Platform=";
-			oHeaders.header = 
+			oHeaders.header = oHeaders.platform +
+							  oHeaders.platformVersion +
+							  oHeaders.provides +
+							  oHeaders.product +
+							  oHeaders.product +
+							  oHeaders.version +
+							  oHeaders.device +
+							  oHeaders.clientIdentifier +
+							  oHeaders.clientPlatform;
 			
 		} else {
 			trace("PlexData already built...");
@@ -133,9 +140,26 @@ class plexNMT.as2.common.PlexData {
 		var tmpObj2:Object = new Object({attributes:{title:"Exit"}});
 		oSections.MediaContainer[0].Directory.push(tmpObj1);
 		oSections.MediaContainer[0].Directory.push(tmpObj2);
-		Utils.varDump(oSections)
+		oSections.MediaContainer[0].attributes.size = (oSections.MediaContainer[0].attributes.size*1) + 2
+		oSections.intPos = 0;
+		//Utils.varDump(oSections)
 	}
 	
+	public static function GetRotation(_objItem:String, _rotation:Number):Number
+	{
+		var intPos:Number = PlexData[_objItem].intPos;
+		var len:Number = PlexData[_objItem].MediaContainer[0].attributes.size - 1
+		for(var i=0;i>_rotation;i--)
+		{
+			if(intPos = 0)
+			{
+				intPos = len;
+			}else{
+				intPos--;
+			}
+		}
+		return intPos;
+	}
 	public static function _addItem(_level:String, _item:Object):Void
 	{
 		oData[_level].items.push(_item)
