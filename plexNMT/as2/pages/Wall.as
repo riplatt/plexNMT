@@ -1,6 +1,8 @@
 ﻿import plexNMT.as2.api.PlexAPI;
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Remote;
+import plexNMT.as2.common.Utils;
+import plexNMT.as2.common.Background;
 
 import mx.utils.Delegate;
 import mx.xpath.XPathAPI;
@@ -25,6 +27,7 @@ class plexNMT.as2.pages.Wall
 	private var plexPath:String = null;
 	private var wallCurrent:Number = null;
 	private var wallData:Array = new Array();
+	private var delayUpdate:Number = null;
 
 	private var parentMC:MovieClip = null;
 	private var mainMC:MovieClip = null;
@@ -36,9 +39,13 @@ class plexNMT.as2.pages.Wall
 	private var titleMarquee:Marquee = null;
 	private var data:Array = null;
 	
+	private var _background:Background = null;
+	
 	// Destroy all global variables.
 	public function destroy():Void
 	{
+		_background.destroy();
+		
 		cleanUp(this.parentMC);
 		
 		this.g.destroy();
@@ -71,6 +78,7 @@ class plexNMT.as2.pages.Wall
 			var l1 = "/all";
 		}
 		
+		_background = new Background(parentMC);
 		this.parentMC = parentMC;
 		this.mainMC = this.parentMC.attachMovie("wallMC", "mainMC", 1, {_x:0, _y:0});
 		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360, _width:400, _height:400});
@@ -79,20 +87,39 @@ class plexNMT.as2.pages.Wall
 		this.imgLoader = new IMGLoader(6);
 
 		this.titleMarquee = new Marquee();
-
-		if (PlexData.oWall.current.index != null){
+		
+		if (PlexData.oWallData.MediaContainer[0] != undefined)
+		{	
+			this.onLoadData(PlexData.oSettings.curLevel);
+		} else {
+			var key:String = "/library/sections/";
+			if (PlexData.oSections.MediaContainer[0] != undefined && PlexData.oCategories.MediaContainer[0] == undefined) 
+			{
+				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/all";
+			}else{
+				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/";
+				key = key + PlexData.oCategories.MediaContainer[0].Directory[PlexData.oCategories.intPos].attributes.key + "/";
+			}
+			if (PlexData.oFilters.MediaContainer[0] != undefined) 
+			{
+				key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
+			}
+			trace("Calling getWallData with: " + key);
+			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), 5000);
+		}
+		/*if (PlexData.oWall.current.index != null){
 			D.debug(D.lDebug,"Wall - Using Old Wall Data...");
 			this.onLoadData(PlexData.oWall.items);
 		} else {
 			D.debug(D.lDebug,"Wall - Loading Wall Data with: " + PlexData.oData["level"+i].current.url+l1);
 			PlexAPI.loadData(PlexData.oData["level"+i].current.url+l1, Delegate.create(this, this.onLoadData), 5000);
-		}
+		}*/
 
 	}
 
 	private function onLoadData(data:Array)
 	{
-		PlexData.oWall.items = data.concat();
+		//PlexData.oWall.items = data.concat();
 		//wallData = data;
 		/*this.preloadMC.removeMovieClip();
 		delete this.preloadMC;
@@ -141,7 +168,16 @@ class plexNMT.as2.pages.Wall
 		this.g.xHLStopTime = 700;
 
 		// data to be displayed on the Grid.
-		this.g.data = data;
+		//this.g.data = data;
+		switch (PlexData.oWallData.MediaContainer[0].attributes.viewGroup)
+		{
+			case "movie":
+				this.g.data = PlexData.oWallData.MediaContainer[0].Video;
+			break;
+			case "show":
+				this.g.data = PlexData.oWallData.MediaContainer[0].Directory;
+			break;
+		}
 
 		// --- Set callback functions ---
 
@@ -204,15 +240,10 @@ class plexNMT.as2.pages.Wall
 		this.preloadMC = null;
 		
 		// Highlight with the specified hl(data index) and enable the keyListener.
-		if (PlexData.oWall.current.index != null)
-		{
-			//trace("Highlighting Current...");
-			this.g.unhighlight()
-			this.g.highlight(PlexData.oWall.current.index);
-		} else {
-			//trace("Highlighting Default...");
-			this.g.highlight(0);
-		}
+		//trace("Highlighting Current...");
+		this.g.unhighlight()
+		this.g.highlight(PlexData.oWallData.intPos);
+
 	}
 
 	
@@ -235,9 +266,8 @@ class plexNMT.as2.pages.Wall
 			this.hlCB(o);
 			this.onHLStopCB(o);
 		}
-		/*o.mc._width = 65;
-		o.mc._height = 96;*/
-		this.imgLoader.load(o.mc._name, o.data.thumbURL, o.mc.imgMC,
+		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width="+PlexData.oWall.thumb.size+"&height="+PlexData.oWall.thumb.size+"&url=" + escape(PlexData.oSettings.url + Util.trim(o.data.attributes.thumb))
+		this.imgLoader.load(o.mc._name, url, o.mc.imgMC,
 			{
 				mcProps:{_height:200,_width:200}, lmcId:"busy",
 				lmcProps:{_x:100,_y:100},
@@ -253,8 +283,6 @@ class plexNMT.as2.pages.Wall
 							obj.o.mc.fail.text = "NoImage"
 					})
 			});
-		//o.mc._width = 117;
-		//o.mc._height = 174;
 	}
 
 	private function onItemClearCB(o:Object):Void
@@ -273,16 +301,18 @@ class plexNMT.as2.pages.Wall
 		var mc:MovieClip = o.mc;
 		mc.gotoAndStop("hl");
 		//mc.txt.htmlText = Number(this.g._hl + 1) + "/" + this.g._len;
-		if(!(data.title == undefined || data.title == null))
+		this.mainMC.title.htmlText = o.data.attributes.title
+		this.mainMC.tagline.htmlText = o.data.attributes.tagline
+		/*if(!(data.title == undefined || data.title == null))
 			this.mainMC.title.htmlText = data.title;
 		if(!(data.tagline == undefined || data.tagline == null))
-			this.mainMC.tagline.htmlText = data.tagline;
+			this.mainMC.tagline.htmlText = data.tagline;*/
 		this.mainMC.count.text = Number(this.g._hl + 1) + "/" + this.g._len;
 	}
 
 	private function unhlCB(o:Object):Void
 	{
-	//trace("Doing unhlCB...");
+		//trace("Doing unhlCB...");
 		this.titleMarquee.stop();
 		this.mainMC.txtName.htmlText = "";
 		o.mc.gotoAndStop("unhl");
@@ -290,31 +320,47 @@ class plexNMT.as2.pages.Wall
 
 	private function onHLStopCB(o:Object):Void
 	{
-	//trace("Doing onHLStopCB...");
+		//trace("Doing onHLStopCB...");
 		// Stop the Marquee
 		this.mainMC.txtName.htmlText = "";
 		this.titleMarquee.stop();
 
 		this.titleMarquee.start(o.mc.title, {delayInMillis:1000, stepPerMove:2, endGap:10, vertical:false, framePerMove:1});
+		clearInterval(delayUpdate);
+		delayUpdate = setInterval(Delegate.create(this, updateBackground),700);
 	}
-
+	
+	private function updateBackground()
+	{
+		trace("Wall - Doing Background up date...");
+		clearInterval(delayUpdate);
+		var key:String = "";
+		switch (PlexData.oWallData.MediaContainer[0].attributes.viewGroup) {
+			case "show":
+				key = PlexData.oWallData.MediaContainer[0].Directory[this.g._hl].attributes.art;
+			break;
+			case "movie":
+			case "episode":
+				key = PlexData.oWallData.MediaContainer[0].Video[this.g._hl].attributes.art;
+			break;
+		}
+		this._background._update(key);
+	}
 	private function onKeyDownCB(obj:Object):Void
 	{
-	//trace(obj.keyCode); // key code receive from listener
-	//trace(obj.asciiCode); // ASCII code receive from listener
+		//trace(obj.keyCode); // key code receive from listener
+		//trace(obj.asciiCode); // ASCII code receive from listener
 		var txtKeyCode = obj.keyCode;
-		//trace ("Code: " + txtKeyCode + ", ASCII: " + obj.asciiCode);
-		//this.mainMC.keyCode.text = "Code: " + txtKeyCode + ", ASCII: " + obj.asciiCode;
-		// onPlayDownCB
-		//localhost:8008/playback?arg0=start_vod&arg1=Super 8&arg2=http://192.168.0.3:32400/library/parts/22736/file.avi&arg3=show&arg4=
+		clearInterval(delayUpdate);
 		
 		switch (txtKeyCode)
 		{
 			 case "soft1":
 			 case Remote.BACK:
 				this.destroy();
-				PlexData.oWall.current = new Object();
-				PlexData.oWall.items = new Array();
+				PlexData.oWallData = new Object();
+				//PlexData.oWall.current = new Object();
+				//PlexData.oWall.items = new Array();
 				gotoAndPlay("main");
 			 break;
 			 case "soft2":
@@ -333,15 +379,17 @@ class plexNMT.as2.pages.Wall
 				gotoAndPlay("settings");
 			break;
 		}
+		//delayUpdate = setInterval(Delegate.create(this, updateBackground),700);
 	}
 
 	private function onEnterCB(o:Object):Void
 	{
-		switch (o.data.type)
+		switch (o.data.attributes.type)
 		{
 			case "movie":
-				PlexData.oWall.current.url = PlexData.oSettings.url + "library/metadata/" + o.data.ratingKey;
-				PlexData.oWall.current.index = o.data.index - 1;
+				//PlexData.oWall.current.url = PlexData.oSettings.url + o.data.attributes.key //"library/metadata/" + o.data.ratingKey;
+				//PlexData.oWall.current.index = o.data.index - 1;
+				PlexData.oWallData.intPos = this.g._hl;
 				this.destroy();
 				gotoAndPlay("movieDetails");
 			break;

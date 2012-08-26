@@ -1,6 +1,54 @@
 CHANGE LOG : GREENSOCK TWEENING PLATFORM (AS2)
 ----------------------------------------------
 
+2012-06-30
+---------------------------------------------
+TimelineLite		1.699
+	- Added logic to TimelineLite/Max so that if you insert/append a child that extends the duration and the timeline had already finished, it will adjust its startTime and resume playback (as long as it wasn't paused of course)
+
+2012-03-29
+---------------------------------------------
+TimelineLite		1.698
+TimelineMax			1.698
+	- Fixed issue that could cause a TimelineLite or TimelineMax not to call its onComplete (or dispatch the TweenEvent.COMPLETE event) if the entire timeline's duration was 0 (like if it contained only zero-duration tweens)
+
+2012-03-27
+---------------------------------------------
+TweenLite			1.698
+TweenMax			1.698
+	- Fixed issue that could cause a zero-duration tween that's nested in a TimelineLite/Max not to render correctly in reverse (only if a very specific timing scenario occurred). 
+
+2012-02-23
+---------------------------------------------
+TweenMax			1.697
+TimelineMax			1.697
+	- Fixed minor issue with TweenMax and TimelineMax that caused them to render unnecessarily during the repeatDelay (if there was one defined). The change just helps things be more efficient and avoids calls to onUpdate during the repeatDelay
+
+2012-02-17
+---------------------------------------------
+TweenMax			1.696
+	- Fixed issue that prevented TweenMax.getTweensOf() from working properly (AS2 only)
+
+2012-01-19
+---------------------------------------------
+TweenLite			1.696
+	- Fixed issue that could cause an error if you set a "reversed" value in the vars parameter (like reversed:true) and the target was non-dynamic.
+
+2011-12-08
+---------------------------------------------
+TweenLite			1.695
+TweenMax			1.695
+TimelineLite		1.695
+TimelineMax			1.695
+	- Fixed issue that could cause a delayedCall(), zero-duration tween, or a callback added to TimelineMax with its addCallback() method to be called an extra time when playing in reverse (and only when the parent TimelineMax renders EXACTLY on that callback's startTime before moving on). 
+
+2011-12-06
+---------------------------------------------
+TimelineMax			1.694
+TweenMax			1.694
+	- Fixed issue that could cause a timeline that has a non-zero "repeat" to trigger callbacks in child tweens when its currentProgress is set to 0 after having repeated at least once. 
+	- Fixed issue that caused TimelineMax to always render in its first cycle when currentProgress was set, rather than honoring the current cycle if it had repeated one or more times. 
+
 2011-11-08
 ---------------------------------------------
 TimelineLite			1.693

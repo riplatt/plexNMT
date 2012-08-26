@@ -84,53 +84,115 @@ class plexNMT.as2.api.PlexAPI
 				PlexData.setSections();
                 delete xml
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get sections...");
+				D.debug(D.lDebug, "PlexAPI - Faled to get Sections...");
 			}
 			this.onLoad(PlexData.oSections);
 		}), {target:"xml", timeout:timeout});
 	}
 	
-	public static function getCategory(key:String, onLoad:Function, timeout:Number):Void
+	public static function getCategories(key:String, onLoad:Function, timeout:Number):Void
 	{
 		Util.loadURL(PlexData.oSettings.url + "/library/sections/" + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if(success)
 			{
-				trace("Doing PlexAPI - getSections: " + success);
-                PlexData.oCategory = new XMLObject().parseXML(xml, true);
+				trace("Doing PlexAPI - getCategories: " + success);
+                PlexData.oCategories = new XMLObject().parseXML(xml, true);
+				PlexData.setCategories();
                 delete xml
-				Utils.varDump(PlexData.oCategory)
+				//Utils.varDump(PlexData.oCategories)
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get sections...");
+				D.debug(D.lDebug, "PlexAPI - Faled to get Categories...");
 			}
+			this.onLoad(PlexData.oCategories);
 		}), {target:"xml", timeout:timeout});
 	}
 	
-	public static function getFilter(key:String, onLoad:Function, timeout:Number):Void
+	public static function getFilters(key:String, onLoad:Function, timeout:Number):Void
 	{
 		Util.loadURL(PlexData.oSettings.url + "/library/sections/" + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if(success)
 			{
-				trace("Doing PlexAPI - getSections: " + success);
+				trace("Doing PlexAPI - getFilters: " + success);
                 PlexData.oFilters = new XMLObject().parseXML(xml, true);
+				PlexData.setFilters();
                 delete xml
-				Utils.varDump(PlexData.oCategory)
+				//Utils.varDump(PlexData.oFilters)
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get sections...");
+				D.debug(D.lDebug, "PlexAPI - Faled to get Filters...");
 			}
+			this.onLoad(PlexData.oFilters);
+		}), {target:"xml", timeout:timeout});
+	}
+	
+	public static function getWallData(key:String, onLoad:Function, timeout:Number):Void
+	{
+		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		{
+			if(success)
+			{
+				trace("Doing PlexAPI - getWallData: " + success);
+                PlexData.oWallData = new XMLObject().parseXML(xml, true);
+				PlexData.setWallData();
+                delete xml
+				//Utils.varDump(PlexData.oWallData)
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to get WallData...");
+			}
+			this.onLoad(PlexData.oWallData);
+		}), {target:"xml", timeout:timeout});
+	}
+	
+	public static function getMovieData(key:String, onLoad:Function, timeout:Number):Void
+	{
+		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		{
+			if(success)
+			{
+				trace("Doing PlexAPI - getMovieData: " + success);
+                PlexData.oMovieData = new XMLObject().parseXML(xml, true);
+				//PlexData.setMovieData();
+                delete xml
+				//Utils.varDump(PlexData.oMovieData)
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to get MovieData...");
+			}
+			this.onLoad(PlexData.oMovieData);
+		}), {target:"xml", timeout:timeout});
+	}
+	
+	public static function getBackground(key:String, onLoad:Function, timeout:Number):Void
+	{
+		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		{
+			if(success)
+			{
+				trace("Doing PlexAPI - Got Background XML...");
+                PlexData.oBackground = new XMLObject().parseXML(xml, true);
+				PlexData.setBackground();
+                delete xml
+				//Utils.varDump(PlexData.oBackground)
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to get Background...");
+			}
+			this.onLoad(PlexData.oFilters);
 		}), {target:"xml", timeout:timeout});
 	}
 	
 	public static function getViewGroup(url:String, onLoad:Function, timeout:Number):Void
 	{
-		Util.loadURL(PlexData.oSettings.url + url + "?X-Plex-Container-Start=0&X-Plex-Container-Size=0", Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):String
+		trace("Doing getViewGroup with: " + url);
+		Util.loadURL(PlexData.oSettings.url + url + "?X-Plex-Container-Start=0&X-Plex-Container-Size=0", Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
+			var viewGroup:String = "Error";
 			if(success)
 			{
-				var viewGroup:String = Util.trim(XPathAPI.selectSingleNode(xml.firstChild, "/MediaContainer").attributes.viewGroup.toString());
-				return viewGroup;
+				viewGroup = Util.trim(XPathAPI.selectSingleNode(xml.firstChild, "/MediaContainer").attributes.viewGroup.toString());
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to get ViewGroup...");
 			}
+			this.onLoad(viewGroup);
 		}), {target:"xml", timeout:timeout});
 	}
 	

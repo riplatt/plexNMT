@@ -14,8 +14,10 @@ class plexNMT.as2.common.PlexData {
 	public static var oPage:Object = {};
 	public static var oLanguage:Object = {};
 	public static var oSections:Object = {};
-	public static var oCategory:Object = {};
+	public static var oCategories:Object = {};
 	public static var oFilters:Object = {};
+	public static var oWallData:Object = {};
+	public static var oMovieData:Object = {};
 	public static var oHeaders:Object = {};
 	
 	
@@ -52,18 +54,18 @@ class plexNMT.as2.common.PlexData {
 			oData.level3.age = null;										//Age - getTime();
 			
 			//Background
-			oBackground.items = new Array();
+			/*oBackground.items = new Array();
 			oBackground.current = new Array();
 			oBackground.init = false;
 			oBackground.index = 0;
 			oBackground.speed = 7;											//Speed of background image change in seconds
-			oBackground.highres = true;
+			oBackground.highres = true;*/
 			
 			//Wall
 			oWall.items = new Array();
 			oWall.current = new Object();
-			oWall.rows = null;
-			oWall.columns = null;
+			oWall.rows = 3;
+			oWall.columns = 9;
 			oWall.vgap = null;
 			oWall.hgap = null;
 			oWall.thumb = {};
@@ -78,8 +80,8 @@ class plexNMT.as2.common.PlexData {
 			
 			//Settings
 			oSettings.url = null;
-			oSettings.ip = null;
-			oSettings.port = null;
+			oSettings.ip = "192.168.1.3";
+			oSettings.port = "32400";
 			oSettings.curLevel = null;
 			oSettings.init = true;
 			oSettings.previous = null;
@@ -91,6 +93,7 @@ class plexNMT.as2.common.PlexData {
 			oSettings.overscanx = 1;
 			oSettings.overscany = 1;
 			oSettings.language = "en";
+			oSettings.backgroundKey = "/library/sections/2/recentlyAdded?X-Plex-Container-Start=0&X-Plex-Container-Size=50"
 			
 			//Language
 			oLanguage = new Object();
@@ -142,22 +145,64 @@ class plexNMT.as2.common.PlexData {
 		oSections.MediaContainer[0].Directory.push(tmpObj2);
 		oSections.MediaContainer[0].attributes.size = (oSections.MediaContainer[0].attributes.size*1) + 2
 		oSections.intPos = 0;
+		oSections.intLength = oSections.MediaContainer[0].attributes.size - 1;
 		//Utils.varDump(oSections)
 	}
 	
-	public static function GetRotation(_objItem:String, _rotation:Number):Number
+	public static function setCategories()
+	{
+		oCategories.intPos = 0;
+		oCategories.intLength = oCategories.MediaContainer[0].attributes.size - 1;
+	}
+	
+	public static function setFilters()
+	{
+		oFilters.intPos = 0;
+		oFilters.intLength = oFilters.MediaContainer[0].attributes.size - 1;
+	}
+	
+	public static function setBackground()
+	{
+		oBackground.intPos = 0;
+		oBackground.intLength = oBackground.MediaContainer[0].attributes.size - 1;
+		trace("PlexData - oBackground.intLength: " + oBackground.intLength);
+	}
+	
+	public static function setWallData()
+	{
+		oWallData.intPos = 0;
+		oWallData.intLength = oWallData.MediaContainer[0].attributes.size - 1;
+	}
+	
+	public static function GetRotation(_objItem:String, menuRotation:Number):Number
 	{
 		var intPos:Number = PlexData[_objItem].intPos;
 		var len:Number = PlexData[_objItem].MediaContainer[0].attributes.size - 1
-		for(var i=0;i>_rotation;i--)
+		var rot:Number = Math.abs(menuRotation);
+		var ve:Boolean = false;
+		
+		if (menuRotation < 0)
 		{
-			if(intPos = 0)
+			ve = true;
+		}
+		for(var i=0;i<rot;i++)
+		{
+			if(ve)
 			{
-				intPos = len;
-			}else{
 				intPos--;
+				if (intPos < 0)
+				{
+					intPos = len;
+				}
+			}else{
+				intPos++;
+				if (intPos > len)
+				{
+					intPos = 0;
+				}
 			}
 		}
+		//trace("PlexData - GetRotation Returning: " + intPos + " From a Rotation of: " + menuRotation);
 		return intPos;
 	}
 	public static function _addItem(_level:String, _item:Object):Void

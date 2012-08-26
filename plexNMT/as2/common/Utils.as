@@ -45,4 +45,12 @@ class plexNMT.as2.common.Utils
 		}
 		return len;
 	}
+	
+	public static function formatTime(ms:Number):String
+	{
+		var hr:Number = int(ms/(1000 * 60 * 60));
+		var min:Number = int(ms/(1000 *60)) - (hr * 60);
+		
+		return(hr + "hr " + min + "min");
+	}
 }

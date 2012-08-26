@@ -1,6 +1,6 @@
 /**
- * VERSION: 1.693
- * DATE: 2011-11-08
+ * VERSION: 1.699
+ * DATE: 2012-06-30
  * AS2 (AS3 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com/timelinelite/
  **/
@@ -111,7 +111,7 @@ import com.greensock.core.*;
  **/
 class com.greensock.TimelineLite extends SimpleTimeline {
 		/** @private **/
-		public static var version:Number = 1.693;
+		public static var version:Number = 1.699;
 		/** @private **/
 		private static var _overwriteMode:Number = (OverwriteManager.enabled) ? OverwriteManager.mode : OverwriteManager.init(); //Ensures that TweenLite instances don't overwrite each other before being put into the timeline/sequence.
 		/** @private **/
@@ -324,7 +324,7 @@ class com.greensock.TimelineLite extends SimpleTimeline {
 			}
 			
 			//if the timeline has already ended but the inserted tween/timeline extends the duration past the parent timeline's currentTime, we should enable this timeline again so that it renders properly.  
-			if (this.gc && !this.cachedPaused && this.cachedStartTime + (tween.cachedStartTime + (tween.cachedTotalDuration / tween.cachedTimeScale)) / this.cachedTimeScale > this.timeline.cachedTime) {
+			if (this.gc && !this.cachedPaused && this.cachedTime == this.cachedDuration && this.cachedTime < this.duration) {
 				if (this.timeline == TweenLite.rootTimeline || this.timeline == TweenLite.rootFramesTimeline) { //we don't typically want to shift the startTime if this TimelineLite/Max is nested inside of another one, but if it's at the root, we would. For example, if a TimelineLite/Max was created (empty) and then a while later a tween was appended to it and then play() was called, if we don't have this code in place, it would appear to skip ahead however much time has elapsed since the TimelineLite/Max's startTime on the parent timeline (typically not what folks expect).
 					this.setTotalTime(this.cachedTotalTime, true);
 				}
@@ -544,7 +544,7 @@ class com.greensock.TimelineLite extends SimpleTimeline {
 			}
 			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, prevStart:Number = this.cachedStartTime, prevTimeScale:Number = this.cachedTimeScale, tween:TweenCore, isComplete:Boolean, rendered:Boolean, next:TweenCore, dur:Number, prevPaused:Boolean = this.cachedPaused;
 			if (time >= totalDur) {
-				if (prevTime != totalDur && _rawPrevTime != time) {
+				if ((prevTime != totalDur || this.cachedDuration == 0) && _rawPrevTime != time) {
 					this.cachedTotalTime = this.cachedTime = totalDur;
 					forceChildrenToEnd(totalDur, suppressEvents);
 					isComplete = !this.hasPausedChild() && !this.cachedReversed;
@@ -556,7 +556,7 @@ class com.greensock.TimelineLite extends SimpleTimeline {
 			} else if (time <= 0) {
 				if (time < 0) {
 					this.active = false;
-					if (this.cachedDuration == 0 && _rawPrevTime >= 0) { //In order to accommodate zero-duration timelines, we must discern the momentum/direction of time in order to render values properly when the "playhead" goes past 0 in the forward direction or lands directly on it, and also when it moves past it in the backward direction (from a postitive time to a negative time).
+					if (this.cachedDuration == 0 && _rawPrevTime > 0) { //In order to accommodate zero-duration timelines, we must discern the momentum/direction of time in order to render values properly when the "playhead" goes past 0 in the forward direction or lands directly on it, and also when it moves past it in the backward direction (from a postitive time to a negative time).
 						force = true;
 						isComplete = true;
 					}

@@ -1,6 +1,6 @@
 /**
- * VERSION: 0.61
- * DATE: 2010-10-13
+ * VERSION: 0.7
+ * DATE: 2011-11-29
  * AS2 (AS3 is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com/roughease/
  **/
@@ -57,7 +57,7 @@ class com.greensock.easing.RoughEase {
 		 * @param points quantity of random points to plot in the ease. A larger number will cause more (and quicker) flickering.
 		 * @param restrictMaxAndMin If true, the ease will prevent random points from exceeding the end value or dropping below the starting value. For example, if you're tweening the x property from 0 to 100, the RoughEase would force all random points to stay between 0 and 100 if restrictMaxAndMin is true, but if it is false, a x could potentially jump above 100 or below 0 at some point during the tween (it would always end at 100 though).
 		 * @param templateEase an easing equation that should be used as a template or guide. Then random points are plotted at a certain distance away from the templateEase (based on the strength parameter). The default is Linear.easeNone.
-		 * @param taper to make the strength of the roughness taper towards the end or beginning, use "out" or "in" respectively here (default is "none") .
+		 * @param taper to make the strength of the roughness taper towards the end or beginning or both, use "out", "in", or "both" respectively here (default is "none").
 		 * @param randomize to randomize the placement of the points, set randomize to true (otherwise the points will zig-zag evenly across the ease)
 		 * @param name a name to associate with the ease so that you can use RoughEase.byName() to look it up later. Of course you should always make sure you use a unique name for each ease (if you leave it blank, a name will automatically be generated). 
 		 */
@@ -88,18 +88,25 @@ class com.greensock.easing.RoughEase {
 			}
 			var a:Array = [];
 			var cnt:Number = 0;
+			strength *= 0.4;
 			var x:Number, y:Number, bump:Number, invX:Number, obj:Object;
 			var i:Number = points;
 			while (i--) {
-				x = Math.random();
+				x = randomize ? Math.random() : (1 / points) * i;
 				y = (templateEase != undefined) ? templateEase(x, 0, 1, 1) : x;
 				if (taper == "none") {
-					bump = 0.4 * strength;
+					bump = strength;
 				} else if (taper == "out") {
 					invX = 1 - x;
-					bump = invX * invX * strength * 0.4;
-				} else {
-					bump = x * x * strength * 0.4;
+					bump = invX * invX * strength;
+				} else if (taper == "in") {
+					bump = x * x * strength;
+				} else if (x < 0.5) { 	//"both" (start)
+					invX = x * 2;
+					bump = invX * invX * 0.5 * strength;
+				} else {				//"both" (end)
+					invX = (1 - x) * 2;
+					bump = invX * invX * 0.5 * strength;
 				}
 				if (randomize) {
 					y += (Math.random() * bump) - (bump * 0.5);
@@ -126,7 +133,7 @@ class com.greensock.easing.RoughEase {
 				obj = a[i];
 				_first = new EasePoint(obj.x, obj.y, _first);
 			}
-			_first = new EasePoint(0, 0, _first);
+			_first = new EasePoint(0, 0, (_first.time != 0) ? _first : _first.next);
 			
 			this.ease = Delegate.create(this, easeProxy); //to ensure scope is correct in AS2.
 		}
@@ -142,7 +149,7 @@ class com.greensock.easing.RoughEase {
 		 * @param points quantity of random points to plot in the ease. A larger number will cause more (and quicker) flickering.
 		 * @param restrictMaxAndMin If true, the ease will prevent random points from exceeding the end value or dropping below the starting value. For example, if you're tweening the x property from 0 to 100, the RoughEase would force all random points to stay between 0 and 100 if restrictMaxAndMin is true, but if it is false, a x could potentially jump above 100 or below 0 at some point during the tween (it would always end at 100 though).
 		 * @param templateEase an easing equation that should be used as a template or guide. Then random points are plotted at a certain distance away from the templateEase (based on the strength parameter). The default is Linear.easeNone.
-		 * @param taper to make the strength of the roughness taper towards the end or beginning, use "out" or "in" respectively here (default is "none") .
+		 * @param taper to make the strength of the roughness taper towards the end or beginning or both, use "out", "in", or "both" respectively here (default is "none").
 		 * @param randomize to randomize the placement of the points, set randomize to true (otherwise the points will zig-zag evenly across the ease)
 		 * @param name a name to associate with the ease so that you can use RoughEase.byName() to look it up later. Of course you should always make sure you use a unique name for each ease (if you leave it blank, a name will automatically be generated). 
 		 * @return easing function

@@ -267,7 +267,7 @@ class plexNMT.as2.pages.SettingsPage {
 			break;
 		}
 		this.mainMC["txt_" + this.index].text = s;
-		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port+"/"
+		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port
 		//PlexData.writeSO();
 		this.lastSuggString = null;
 		this.vkMain.hideVK();

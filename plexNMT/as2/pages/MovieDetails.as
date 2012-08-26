@@ -11,6 +11,7 @@ import com.syabas.as2.common.D;
 import plexNMT.as2.api.PlexAPI;
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Remote;
+import plexNMT.as2.common.Utils;
 
 class plexNMT.as2.pages.MovieDetails
 {
@@ -75,7 +76,12 @@ class plexNMT.as2.pages.MovieDetails
 		Key.addListener(this.keyListener);
 		
 		this.preloadMC = this.parentMC.attachMovie("busy", "busy", parentMC.getNextHighestDepth(), {_x:640, _y:360, _width:200, _height:200});
-		PlexAPI.loadMoveDetails(PlexData.oWall.current.url, Delegate.create(this, this.onDataLoad), 5000);
+		
+		var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.key
+		trace("oWallData.intPos: " + PlexData.oWallData.intPos);
+		//trace("Calling getMovieData With: " + key);
+		trace("Calling getMovieData With: " + key);
+		PlexAPI.getMovieData(key, Delegate.create(this, this.onDataLoad), 5000);
 	}
 
 	private function onDataLoad(data:Object):Void
@@ -85,17 +91,19 @@ class plexNMT.as2.pages.MovieDetails
 			
 			this.enableKeyListener();
 			
-			this.title = data.title;
-			this.videoURL = data.videoURL;
+			this.title = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.title//data.title;
+			//this.videoURL = data.videoURL;
 			
 			//Background
-			UI.loadImage(data.artURL, this.parentMC, "backdropMC", {mcProps:{_x:0, _y:0, _width:1280, _height:720}, lmcId:"busy", lmcProps:{_x:640, _y:360, _width:200, _height:200}});			
+			var artURL:String = PlexData.oSettings.url + "/photo/:/transcode?width=1280&height=720&url=" + escape(PlexData.oSettings.url + PlexData.oMovieData.MediaContainer[0].Video[0].attributes.art)
+			UI.loadImage(artURL, this.parentMC, "backdropMC", {mcProps:{_x:0, _y:0, _width:1280, _height:720}, lmcId:"busy", lmcProps:{_x:640, _y:360, _width:200, _height:200}});			
 			
 			this.bgOverlayMC = this.parentMC.attachMovie("bgOverlay", "bgOverlayMC", parentMC.getNextHighestDepth());
 			backdropMC.setMask(bgOverlayMC);
 			
 			//Poster
-			UI.loadImage(data.posterURL, this.parentMC, "posterMC", {mcProps:{_x:0, _y:0, _width:486, _height:720}, lmcId:"busy", lmcProps:{_x:173, _y:290, _width:140, _height:140}});	
+			var posterURL:String = PlexData.oSettings.url + "/photo/:/transcode?width=402&height=595&url=" + escape(PlexData.oSettings.url + PlexData.oMovieData.MediaContainer[0].Video[0].attributes.thumb)
+			UI.loadImage(posterURL, this.parentMC, "posterMC", {mcProps:{_x:0, _y:0, _width:486, _height:720}, lmcId:"busy", lmcProps:{_x:173, _y:290, _width:140, _height:140}});	
 
 			//Title
 			//trace("title: " + data.title);
@@ -108,7 +116,7 @@ class plexNMT.as2.pages.MovieDetails
 			txtFormat.font = "Arial";
 			txtFormat.size = 40;
 			txtFormat.color = 0xFFFFFF;
-			titleMC.title_txt.htmlText = data.title;
+			titleMC.title_txt.htmlText = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.title; //data.title;
 			titleMC.title_txt.setTextFormat(txtFormat);	
 			
 			//Rating
@@ -116,7 +124,7 @@ class plexNMT.as2.pages.MovieDetails
 			this.ratingMC = this.parentMC.createEmptyMovieClip("ratingMC", parentMC.getNextHighestDepth());
 			ratingMC._y = 80;
 			ratingMC._x = 522;
-			var rating:Number = 128 * data.rating;
+			var rating:Number = 128 * int(PlexData.oMovieData.MediaContainer[0].Video[0].attributes.rating) / 10 //data.rating;
 			trace("rating: " + rating);
 			ratingMC.attachMovie("rating_0", "rating_0", ratingMC.getNextHighestDepth()); 		//background
 			ratingMC.attachMovie("rating_100", "rating_100", ratingMC.getNextHighestDepth()); 	//overlay
@@ -142,12 +150,13 @@ class plexNMT.as2.pages.MovieDetails
 			minFormat.font = "Arial";
 			minFormat.size = 20;
 			minFormat.color = 0xFFFFFF;
-			minMC.min_txt.htmlText = data.durationMIN;
+			minMC.min_txt.htmlText = Utils.formatTime(int(PlexData.oMovieData.MediaContainer[0].Video[0].Media[0].attributes.duration)); //data.durationMIN;
 			minMC.min_txt.setTextFormat(minFormat);			
 			
 			//Studio
 			//trace("studioURL: " + data.studioURL);
-			UI.loadImage(data.studioURL, this.parentMC, "studioMC", {mcProps:{_x:520, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:550, _y:130, _width:40, _height:40}});
+			var studioURL:String = "";
+			UI.loadImage(studioURL, this.parentMC, "studioMC", {mcProps:{_x:520, _y:125, _width:100, _height:45}, lmcId:"preload40", lmcProps:{_x:550, _y:130, _width:40, _height:40}});
 			//var_dump(studioMC);
 			
 			//Content Rating
@@ -182,7 +191,7 @@ class plexNMT.as2.pages.MovieDetails
 			sumFormat.font = "Arial";
 			sumFormat.size = 18;
 			sumFormat.color = 0xFFFFFF;
-			summaryMC.summary_txt.htmlText = data.summary;
+			summaryMC.summary_txt.htmlText = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.summary //.data.summary;
 			summaryMC.summary_txt.setTextFormat(sumFormat);
 			
 			//Cast
