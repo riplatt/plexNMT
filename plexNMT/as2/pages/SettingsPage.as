@@ -123,6 +123,7 @@ class plexNMT.as2.pages.SettingsPage {
 		}
 		// set txt_4 equal to defualt debug level
 		this.mainMC.txt_4.text = PlexData.oSettings.debugLevel;
+		this.mainMC.txt_4.text = PlexData.oSettings.buffer;
 				
 		this.index = 0;
 		trace("Settings plexData.oSettings.url:" + PlexData.oSettings.url);
@@ -144,13 +145,13 @@ class plexNMT.as2.pages.SettingsPage {
 				this.index --;
 				if (this.index < 0)
 				{
-					this.index =4;
+					this.index =5;
 				}
 				this.focusTextField();
 			break;
 			case Key.DOWN:
 				this.index ++;
-				if (this.index > 4)
+				if (this.index > 5)
 				{
 					this.index = 0;
 				}
@@ -161,16 +162,19 @@ class plexNMT.as2.pages.SettingsPage {
 			break;
 			case "soft1":  //for testing on pc
 			case Remote.BACK:
+				this.setSettingsData();
 				popSharedObjects.savePlexData();
 				this.destroy();
 				gotoAndPlay("main");
 				break;
 			case Remote.HOME:
+				this.setSettingsData();
 				popSharedObjects.savePlexData();
 				this.destroy();
 				gotoAndPlay("main");
 			break;
-			case Remote.SETUP:
+			case Remote.YELLOW:
+				this.setSettingsData();
 				popSharedObjects.savePlexData();
 				this.destroy();
 				gotoAndPlay("settings");
@@ -180,6 +184,18 @@ class plexNMT.as2.pages.SettingsPage {
 		
 	}
 	
+	private function setSettingsData()
+	{
+		PlexData.oSettings.ip = this.mainMC.txt_0.text;
+		PlexData.oSettings.port = this.mainMC.txt_1.text;
+		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port
+		
+		PlexData.oWall.rows = this.mainMC.txt_2.text;
+		PlexData.oWall.columns = this.mainMC.txt_3.text;
+		PlexData.oSettings.buffer = this.mainMC.txt_4.text;
+		
+		PlexData.setWall();
+	}
 	private function focusTextField():Void
 	{
 		var offColor:Number = 0x6E7B8B;
@@ -195,6 +211,8 @@ class plexNMT.as2.pages.SettingsPage {
 		this.mainMC["txt_3"].backgroundColor = offColor;
 		this.mainMC["txt_4"].background = true;
 		this.mainMC["txt_4"].backgroundColor = offColor;
+		this.mainMC["txt_5"].background = true;
+		this.mainMC["txt_5"].backgroundColor = offColor;
 		
 		this.mainMC["txt_" + this.index].backgroundColor = onColor;
 		//this.mainMC.mc_pointer._y = this.mainMC["txt_" + this.index]._y; // move red pointer
@@ -264,6 +282,9 @@ class plexNMT.as2.pages.SettingsPage {
 						
 					}
 				}
+			break;
+			case 5:
+				PlexData.oSettings.buffer = s;
 			break;
 		}
 		this.mainMC["txt_" + this.index].text = s;

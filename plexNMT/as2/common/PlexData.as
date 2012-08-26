@@ -86,6 +86,7 @@ class plexNMT.as2.common.PlexData {
 			oSettings.init = true;
 			oSettings.previous = null;
 			oSettings.debugLevel = 0;
+			oSettings.buffer = 0;
 			oSettings.overscan = false;
 			oSettings.overscanbg = false;
 			oSettings.overscanxshift = 0;

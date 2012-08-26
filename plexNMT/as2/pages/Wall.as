@@ -3,6 +3,7 @@ import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Remote;
 import plexNMT.as2.common.Utils;
 import plexNMT.as2.common.Background;
+import plexNMT.as2.common.WallDetails;
 
 import mx.utils.Delegate;
 import mx.xpath.XPathAPI;
@@ -40,6 +41,7 @@ class plexNMT.as2.pages.Wall
 	private var data:Array = null;
 	
 	private var _background:Background = null;
+	private var _details:WallDetails = null;
 	
 	// Destroy all global variables.
 	public function destroy():Void
@@ -79,9 +81,13 @@ class plexNMT.as2.pages.Wall
 		}
 		
 		_background = new Background(parentMC);
+		
+		
 		this.parentMC = parentMC;
 		this.mainMC = this.parentMC.attachMovie("wallMC", "mainMC", 1, {_x:0, _y:0});
 		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360, _width:400, _height:400});
+		
+		_details = new WallDetails(parentMC);
 
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
@@ -169,14 +175,11 @@ class plexNMT.as2.pages.Wall
 
 		// data to be displayed on the Grid.
 		//this.g.data = data;
-		switch (PlexData.oWallData.MediaContainer[0].attributes.viewGroup)
+		if (PlexData.oWallData.MediaContainer[0].Video != undefined) 
 		{
-			case "movie":
-				this.g.data = PlexData.oWallData.MediaContainer[0].Video;
-			break;
-			case "show":
-				this.g.data = PlexData.oWallData.MediaContainer[0].Directory;
-			break;
+			this.g.data = PlexData.oWallData.MediaContainer[0].Video;
+		} else {
+			this.g.data = PlexData.oWallData.MediaContainer[0].Directory;
 		}
 
 		// --- Set callback functions ---
@@ -260,7 +263,7 @@ class plexNMT.as2.pages.Wall
 
 	private function onItemUpdateCB(o:Object):Void
 	{
-		trace("Doing onItemUpdateCB with: " + o.mc);
+		//trace("Doing onItemUpdateCB with: " + o.mc);
 		if(o.dataIndex == this.g._hl)
 		{
 			this.hlCB(o);
@@ -335,15 +338,23 @@ class plexNMT.as2.pages.Wall
 		trace("Wall - Doing Background up date...");
 		clearInterval(delayUpdate);
 		var key:String = "";
-		switch (PlexData.oWallData.MediaContainer[0].attributes.viewGroup) {
+		if (PlexData.oWallData.MediaContainer[0].Directory != undefined) 
+		{
+			key = PlexData.oWallData.MediaContainer[0].Directory[this.g._hl].attributes.art;
+		} else {
+			key = PlexData.oWallData.MediaContainer[0].Video[this.g._hl].attributes.art;
+		}
+		/*switch (PlexData.oWallData.MediaContainer[0].attributes.viewGroup) {
 			case "show":
+			case "artist":
+			case "album":
 				key = PlexData.oWallData.MediaContainer[0].Directory[this.g._hl].attributes.art;
 			break;
 			case "movie":
 			case "episode":
 				key = PlexData.oWallData.MediaContainer[0].Video[this.g._hl].attributes.art;
 			break;
-		}
+		}*/
 		this._background._update(key);
 	}
 	private function onKeyDownCB(obj:Object):Void

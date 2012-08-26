@@ -315,7 +315,7 @@ class plexNMT.as2.pages.MovieDetails
 			break;
 			case Remote.PLAY:
 				//this.disableKeyListener();
-				Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + this.title + "&arg2=" + this.videoURL + "&arg3=show&arg4=0"); // Direct Play.
+				Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + this.title + "&arg2=" + this.videoURL + "&arg3=show&arg4=0&arg5=" + PlexData.oSettings.buffer + "&arg6=enable"); // Direct Play.
 			break;
 		}
 	}
