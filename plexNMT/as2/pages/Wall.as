@@ -4,6 +4,7 @@ import plexNMT.as2.common.Remote;
 import plexNMT.as2.common.Utils;
 import plexNMT.as2.common.Background;
 import plexNMT.as2.common.WallDetails;
+import plexNMT.as2.common.MenuTop;
 
 import mx.utils.Delegate;
 import mx.xpath.XPathAPI;
@@ -42,11 +43,14 @@ class plexNMT.as2.pages.Wall
 	
 	private var _background:Background = null;
 	private var _details:WallDetails = null;
+	private var _menu:MenuTop = null;
 	
 	// Destroy all global variables.
 	public function destroy():Void
 	{
 		_background.destroy();
+		_details.destroy();
+		_menu.destroy();
 		
 		cleanUp(this.parentMC);
 		
@@ -83,11 +87,13 @@ class plexNMT.as2.pages.Wall
 		_background = new Background(parentMC);
 		
 		
+		
 		this.parentMC = parentMC;
 		this.mainMC = this.parentMC.attachMovie("wallMC", "mainMC", 1, {_x:0, _y:0});
 		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360, _width:400, _height:400});
 		
 		_details = new WallDetails(parentMC);
+		_menu = new MenuTop(parentMC);
 
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
@@ -96,7 +102,7 @@ class plexNMT.as2.pages.Wall
 		
 		if (PlexData.oWallData.MediaContainer[0] != undefined)
 		{	
-			this.onLoadData(PlexData.oSettings.curLevel);
+			this.onLoadData();
 		} else {
 			var key:String = "/library/sections/";
 			if (PlexData.oSections.MediaContainer[0] != undefined && PlexData.oCategories.MediaContainer[0] == undefined) 
@@ -123,20 +129,21 @@ class plexNMT.as2.pages.Wall
 
 	}
 
-	private function onLoadData(data:Array)
+	private function onLoadData()
 	{
 		//PlexData.oWall.items = data.concat();
 		//wallData = data;
 		/*this.preloadMC.removeMovieClip();
 		delete this.preloadMC;
 		this.preloadMC = null;*/
+		this.updateBackground();
 		
-		this.createGridLite(data);
+		this.createGridLite();
 
 	//trace("Done onLoadData...");
 	}
 
-	private function createGridLite(data:Array):Void
+	private function createGridLite():Void
 	{
 		this.listMC = this.mainMC.createEmptyMovieClip("listMC", 1);
 		
@@ -300,6 +307,9 @@ class plexNMT.as2.pages.Wall
 	private function hlCB(o:Object):Void
 	{
 		//trace("Doing hlCB...");
+		PlexData.oWallData.intPos = this.g._hl;
+		_details.setText();
+		
 		var data:Object = o.data;
 		var mc:MovieClip = o.mc;
 		mc.gotoAndStop("hl");
@@ -325,17 +335,19 @@ class plexNMT.as2.pages.Wall
 	{
 		//trace("Doing onHLStopCB...");
 		// Stop the Marquee
+		_details._update();
+		
 		this.mainMC.txtName.htmlText = "";
 		this.titleMarquee.stop();
 
 		this.titleMarquee.start(o.mc.title, {delayInMillis:1000, stepPerMove:2, endGap:10, vertical:false, framePerMove:1});
 		clearInterval(delayUpdate);
-		delayUpdate = setInterval(Delegate.create(this, updateBackground),700);
+		delayUpdate = setInterval(Delegate.create(this, updateBackground),3000);
 	}
 	
 	private function updateBackground()
 	{
-		trace("Wall - Doing Background up date...");
+		//trace("Wall - Doing Background up date...");
 		clearInterval(delayUpdate);
 		var key:String = "";
 		if (PlexData.oWallData.MediaContainer[0].Directory != undefined) 
@@ -344,17 +356,6 @@ class plexNMT.as2.pages.Wall
 		} else {
 			key = PlexData.oWallData.MediaContainer[0].Video[this.g._hl].attributes.art;
 		}
-		/*switch (PlexData.oWallData.MediaContainer[0].attributes.viewGroup) {
-			case "show":
-			case "artist":
-			case "album":
-				key = PlexData.oWallData.MediaContainer[0].Directory[this.g._hl].attributes.art;
-			break;
-			case "movie":
-			case "episode":
-				key = PlexData.oWallData.MediaContainer[0].Video[this.g._hl].attributes.art;
-			break;
-		}*/
 		this._background._update(key);
 	}
 	private function onKeyDownCB(obj:Object):Void
@@ -383,6 +384,7 @@ class plexNMT.as2.pages.Wall
 			break;
 			 case Remote.HOME:
 				this.destroy();
+				PlexData.oWallData = new Object();
 				gotoAndPlay("main");
 			break;
 			case Remote.YELLOW:

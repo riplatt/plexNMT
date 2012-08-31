@@ -75,7 +75,7 @@ class plexNMT.as2.pages.HomeMenu {
 		D.debug(D.lInfo,"Home - Plex Server URL: " + PlexData.oSettings.url);
 		D.debug(D.lDev, "Home - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		trace("Home - parentMC:" + parentMC);
-		Utils.varDump(this.parentMC);
+		//Utils.varDump(this.parentMC);
 		
 		//PlexData.oPage.curret = "main"
 		
@@ -509,7 +509,7 @@ class plexNMT.as2.pages.HomeMenu {
 		trace("Home - Calling background update with: " + PlexData.oBackground.MediaContainer[0].Video[PlexData.oBackground.intPos].attributes.art);
 		_background._update(PlexData.oBackground.MediaContainer[0].Video[PlexData.oBackground.intPos].attributes.art);
 		clearInterval(crossfadeInterval);
-		crossfadeInterval = setInterval(Delegate.create(this,crossfade),15000);
+		crossfadeInterval = setInterval(Delegate.create(this,crossfade),7500);
 	}
 	
 	private function crossfade() {

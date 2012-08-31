@@ -196,6 +196,18 @@ class plexNMT.as2.api.PlexAPI
 		}), {target:"xml", timeout:timeout});
 	}
 	
+	public static function getFlag(_arg:Object):String
+	{
+		trace("Plex API - Doing getFlag with:");
+		Utils.varDump(_arg);
+		var strURL:String = PlexData.oSettings.url + "/photo/:/transcode";
+		strURL = strURL + "?width=" + _arg.width;
+		strURL = strURL + "&height=" + _arg.height;
+		strURL = strURL + "&url=" + escape(PlexData.oSettings.url + _arg.key);
+		trace("Plex API - Returning: " + strURL);
+		return strURL;
+	}
+	
 	public static function loadData(url:String, onLoad:Function, timeout:Number):Void 
 	{
 		//trace("Doing PlexAPI.loadData...");
