@@ -1,7 +1,12 @@
-com/syabas/as2/common/*.as
-com/adobe/stagecraft/*.as
-com/designvox/tranniex/*.as
+com/syabas/as2/
+com/adobe/
+com/designvox/
+com/dentedboxes/
+com/greensock/
+download/
+icon/
+it/
+plexNMT/
 .flashProjectProperties
-plexNMT.swf
 Thumbs.db
-download
+plexNMT.fla
