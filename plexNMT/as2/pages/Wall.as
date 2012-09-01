@@ -85,15 +85,12 @@ class plexNMT.as2.pages.Wall
 		}
 		
 		_background = new Background(parentMC);
-		
-		
-		
+
 		this.parentMC = parentMC;
 		this.mainMC = this.parentMC.attachMovie("wallMC", "mainMC", 1, {_x:0, _y:0});
 		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360, _width:400, _height:400});
 		
-		_details = new WallDetails(parentMC);
-		_menu = new MenuTop(parentMC);
+		
 
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
@@ -127,6 +124,8 @@ class plexNMT.as2.pages.Wall
 			PlexAPI.loadData(PlexData.oData["level"+i].current.url+l1, Delegate.create(this, this.onLoadData), 5000);
 		}*/
 
+		_details = new WallDetails(parentMC);
+		_menu = new MenuTop(parentMC);
 	}
 
 	private function onLoadData()
@@ -262,7 +261,7 @@ class plexNMT.as2.pages.Wall
 		//trace("Doing onItemShowCB...");
 		o.mc.preload.removeMovieClip();
 		var preload:MovieClip = o.mc.attachMovie("preload40", "busy", 1, {_x:58, _y:87});
-		o.mc.fail.text = "";
+		o.mc.fail.text = "Unable to Load Image...";
 		//trace("o.mc._name:" + o.mc._name);
 		//trace("o.mc.imgMC:" + o.mc.imgMC);
 		this.imgLoader.unload(o.mc._name, o.mc.imgMC, null);
@@ -309,6 +308,7 @@ class plexNMT.as2.pages.Wall
 		//trace("Doing hlCB...");
 		PlexData.oWallData.intPos = this.g._hl;
 		_details.setText();
+		_menu._update();
 		
 		var data:Object = o.data;
 		var mc:MovieClip = o.mc;

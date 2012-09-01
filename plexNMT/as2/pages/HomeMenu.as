@@ -426,17 +426,20 @@ class plexNMT.as2.pages.HomeMenu {
 		trace("oSections: " + PlexData.oSections.MediaContainer[0]);
 		trace("oCategories: " + PlexData.oCategories.MediaContainer[0]);
 		trace("oFilters: " + PlexData.oFilters.MediaContainer[0]);
-		var key:String = "/library/sections/";
-		if (PlexData.oSections.MediaContainer[0] != undefined && PlexData.oCategories.MediaContainer[0] == undefined) 
+		var key:String = "/library/sections";
+		if (PlexData.oCategories.MediaContainer[0] == undefined && PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key != undefined)
 		{
-			key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/all";
-		}else{
-			key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/";
-			key = key + PlexData.oCategories.MediaContainer[0].Directory[PlexData.oCategories.intPos].attributes.key + "/";
+			var sectionKey:String = PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key;
+			PlexAPI.getCategories(sectionKey, Delegate.create(this, this.loadPage), 5000);
+			PlexData.oSettings.curLevel ++;
+			return;
+		} else {
+			key = key + "/" + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key;
+			key = key + "/" + PlexData.oCategories.MediaContainer[0].Directory[PlexData.oCategories.intPos].attributes.key;
 		}
 		if (PlexData.oFilters.MediaContainer[0] != undefined) 
 		{
-			key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
+			key = key + "/" + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
 		}
 		trace("Calling getViewGroup with: " + key);
 		PlexAPI.getViewGroup(key, Delegate.create(this, this.onLoadPage), 5000);

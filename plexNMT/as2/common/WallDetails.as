@@ -151,7 +151,7 @@ class plexNMT.as2.common.WallDetails {
 
 
 	public function destroy():Void {
-
+		this.detailsMC.removeMovieClip();
 	}
 	// Private Methods:
 	private function onFlagLoad(success:Boolean, o:Object)
