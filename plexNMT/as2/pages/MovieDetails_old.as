@@ -12,36 +12,52 @@ import plexNMT.as2.api.PlexAPI;
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Remote;
 import plexNMT.as2.common.Utils;
-//
-import plexNMT.as2.common.Background;
-import plexNMT.as2.common.MovieDetailsPane;
-import plexNMT.as2.common.MenuTop;
-import plexNMT.as2.common.PosterNav;
 
 class plexNMT.as2.pages.MovieDetails
 {
-	// Constants:
-	public static var CLASS_REF = plexNMT.as2.pages.MovieDetails;
+	public static var plexURL:String = PlexData.oSettings.url;
+	public static var plexRatingKey:String = null;
 	
-	// Private Variables
 	private var parentMC:MovieClip = null;
+	private var backdropMC:MovieClip = null;
+	private var bgOverlayMC:MovieClip = null;
+	private var posterMC:MovieClip = null;
+	private var titleMC:MovieClip = null;
+	private var ratingMC:MovieClip = null;
+	private var minMC:MovieClip = null;
+	private var studioMC:MovieClip = null;
+	private var contentRatingMC:MovieClip = null;
+	private var videoResolutionMC:MovieClip = null;
+	private var aspectRatioMC:MovieClip = null;
+	private var audioChannelsMC:MovieClip = null;
+	private var audioCodecMC:MovieClip = null;
+	private var summaryMC:MovieClip = null;
+	private var castMC:MovieClip = null;
+	private var directorMC:MovieClip = null;
+	private var writerMC:MovieClip = null;
 	private var preloadMC:MovieClip = null;
-	//key Listener
+	
+	private var onLoadResize:Object = null;
+	
 	private var keyListener:Object = null;
 	private var klInterval:Number = 0;
-	//TAB Control
-	private var select:Array = new Array();
 	
-	private var _background:Background = null;
-	private var _details:MovieDetailsPane = null;
-	private var _poster:PosterNav = null;
-	private var _menu:MenuTop = null;
+	private var title:String = null;
+	private var videoURL:String = null;
+	
 	//var listenerObj:Object = new Object();
 	
 	// Destroy all global variables.
 	public function destroy():Void
 	{
-			
+		cleanUp(this.parentMC);
+				
+		this.title = null;
+		this.videoURL = null;
+		
+		delete this.onLoadResize;
+		this.onLoadResize = null;
+		
 		//Remove Listener
 		Key.removeListener(this.keyListener);
 		delete keyListener;
@@ -52,6 +68,8 @@ class plexNMT.as2.pages.MovieDetails
 	{
 		trace("Doing plexNMT.movieDetails...");
 		
+		plexRatingKey = _level0.plex.currentRatingKey;
+
 		this.parentMC = parentMC;
 
 		this.keyListener = new Object();
@@ -69,22 +87,11 @@ class plexNMT.as2.pages.MovieDetails
 	private function onDataLoad(data:Object):Void
 	{
 			trace("Doing moveieDetails.parseXML.data: ");
-			//Add Components
-			_background = new Background(this.parentMC);
+			//var_dump(data);
 			
-			_details = new MovieDetailsPane(this.parentMC);
-			
-			_poster = new PosterNav(this.parentMC, PlexData.oWallData.MediaContainer[0].Video);
-			
-			_menu = new MenuTop(this.parentMC);
-			
-			_background._update(PlexData.oMovieData.MediaContainer[0].Video[0].attributes.art);
-			//_background._update(PlexData.oMovieData.MediaContainer[0].Video[0].attributes.art);
-			
-			this.select = [_details, _poster, _menu];
 			this.enableKeyListener();
 			
-			/*this.title = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.title//data.title;
+			this.title = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.title//data.title;
 			//this.videoURL = data.videoURL;
 			
 			//Background
@@ -254,7 +261,7 @@ class plexNMT.as2.pages.MovieDetails
 			writerFormat.size = 18;
 			writerFormat.color = 0xFFFFFF;
 			writerMC.writer_txt.htmlText = data.writer.join("\n");
-			writerMC.writer_txt.setTextFormat(writerFormat);*/
+			writerMC.writer_txt.setTextFormat(writerFormat);
 			
 			this.preloadMC.removeMovieClip();
 			delete this.preloadMC;
@@ -288,7 +295,6 @@ class plexNMT.as2.pages.MovieDetails
 	{
 		var keyCode:Number = Key.getCode();
 		var asciiCode:Number = Key.getAscii();
-		trace("Moveie Details - keyDownCB.keyCode: " + keyCode);
 		
 		switch (keyCode)
 		{
@@ -303,27 +309,13 @@ class plexNMT.as2.pages.MovieDetails
 				this.destroy();
 				gotoAndPlay("settings");
 			break;
-			case Remote.RED:
-			case 79:
-				//TAB Toggle select's
-				this.select[0]._unselect();
-				this.select.push(this.select.shift());
-				this.select[0]._select();
-			break;
-			case Remote.BLUE:
-			case 80:
-				//SHIFT+TAB Toggle select's
-				this.select.unshift(this.select.pop());
-				this.select[0]._select();
-				this.select[1]._unselect();
-			break;
 			case Remote.HOME:
 				this.destroy();
 				gotoAndPlay("main");
 			break;
 			case Remote.PLAY:
 				//this.disableKeyListener();
-				//Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + this.title + "&arg2=" + this.videoURL + "&arg3=show&arg4=0&arg5=" + PlexData.oSettings.buffer + "&arg6=enable"); // Direct Play.
+				Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + this.title + "&arg2=" + this.videoURL + "&arg3=show&arg4=0&arg5=" + PlexData.oSettings.buffer + "&arg6=enable"); // Direct Play.
 			break;
 		}
 	}
@@ -342,6 +334,21 @@ class plexNMT.as2.pages.MovieDetails
 					_obj[i].removeMovieClip();
 					delete _obj[i];
 				}
+			}
+		}
+	}
+	
+	private function var_dump(_obj:Object)
+	{
+		//trace("Doing var_dump...");
+		//trace(_obj);
+		//trace("Looping Through _obj...");
+		for (var i in _obj)
+		{
+			trace("_obj[" + i + "] = " + _obj[i] + " type = " + typeof(_obj[i]));
+			if (typeof(_obj[i]) == "object")
+			{
+				var_dump(_obj[i]);
 			}
 		}
 	}

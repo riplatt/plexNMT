@@ -14,10 +14,10 @@ import com.greensock.plugins.AutoAlphaPlugin;
 
 import mx.utils.Delegate;
 
-class plexNMT.as2.common.WallDetails {
+class plexNMT.as2.common.MovieDetailsPane {
 
 	// Constants:
-	public static var CLASS_REF = plexNMT.as2.common.WallDetails;
+	public static var CLASS_REF = plexNMT.as2.common.MovieDetailsPane;
 
 	// Public Properties:
 	// Private Properties:
@@ -35,49 +35,35 @@ class plexNMT.as2.common.WallDetails {
 	private var ratingMC:MovieClip = null;
 
 	// Initialization:
-	public function WallDetails(parentMC:MovieClip) {
-		trace("WallDetails - parentMC:" + parentMC);
+	public function MovieDetailsPane(parentMC:MovieClip) {
+		trace("MovieDetailsPane - parentMC:" + parentMC);
 		//Utils.varDump(this.parentMC);
-		trace("WallDetails - Adding new Details Box...");
+		trace("MovieDetailsPane - Adding new Details Box...");
 		detailsMC = parentMC.createEmptyMovieClip("detailsMC", parentMC.getNextHighestDepth()); //,{_x:10, _y:600});
 		//trace("WallDetails - Calling draw...");
-		detailsMC._x = 10 //, 50);
-		detailsMC._y = 615;
+		detailsMC._x = 500 //, 50);
+		detailsMC._y = 100;
 		buildDetails(detailsMC);
 		
 		current = 0;
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin]);
-
-		/*trace("WallDetails - Dumping detailsMC...");
-		Utils.varDump(detailsMC);*/
+		
 		return;
 	}
 
 	// Public Methods:
 	public function setText():Void 
 	{
-		var _data:Array = new Array();
-		if (PlexData.oWallData.MediaContainer[0].Video != undefined) 
-		{
-			_data = PlexData.oWallData.MediaContainer[0].Video;
-		} else {
-			_data = PlexData.oWallData.MediaContainer[0].Directory;
-		}
-		scTitle.text = _data[PlexData.oWallData.intPos].attributes.title;
-		this.detailsMC._title._x = (this.detailsMC._width/2) - (this.detailsMC._title._width/2);
-		this.detailsMC._title._visible = true;
-		scRunTime.text = "Running Time: " + Utils.formatTime(_data[PlexData.oWallData.intPos].attributes.duration);
-		this.detailsMC._runTime._x = (this.detailsMC._width/2) - (this.detailsMC._runTime._width/2);
-		this.detailsMC._runTime._visible = true;
-		scWatchTime.text = "Watched Time: " + Utils.formatTime(_data[PlexData.oWallData.intPos].attributes.viewOffset);
-		this.detailsMC._watchTime._x = (this.detailsMC._width/2) - (this.detailsMC._watchTime._width/2);
-		this.detailsMC._watchTime._visible = true;
-		this.detailsMC._year.text = _data[PlexData.oWallData.intPos].attributes.year;
-		
-		//Utils.varDump(this.detailsMC);
+
 	}
+	
+	public function _select()
+	{
+		
+	}
+	
 	public function _update():Void 
 	{	
 		var _data:Array = new Array();
@@ -206,7 +192,7 @@ class plexNMT.as2.common.WallDetails {
 			_data = PlexData.oWallData.MediaContainer[0].Directory;
 		}
 		//background
-		drawRoundedRectangle(mc, 1260, 90, 30, 0x000000, 80, 2, 0xCCCCCC, 40);
+		drawRoundedRectangle(mc, 640, 500, 30, 0x000000, 80, 2, 0xCCCCCC, 40);
 		//Studio Flag
 		mc.createEmptyMovieClip("fStudio", mc.getNextHighestDepth());
 		//Content Rating Flag
@@ -223,9 +209,8 @@ class plexNMT.as2.common.WallDetails {
 		mc.createEmptyMovieClip("fAudioCodec", mc.getNextHighestDepth());
 		//Rating
 		mc.createEmptyMovieClip("ratingMC", mc.getNextHighestDepth());
-		
 		mc.ratingMC._y = 8;
-		mc.ratingMC._x = 1120;
+		mc.ratingMC._x = 500;
 		mc.ratingMC.attachMovie("rating_0", "rating_0", mc.ratingMC.getNextHighestDepth()); 		//background
 		mc.ratingMC.attachMovie("rating_100", "rating_100", mc.ratingMC.getNextHighestDepth()); 	//overlay
 		mc.ratingMC.createEmptyMovieClip("ratingMask", mc.ratingMC.getNextHighestDepth()); 		//crop/mask of overlay
