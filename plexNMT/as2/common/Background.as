@@ -25,21 +25,24 @@ class plexNMT.as2.common.Background {
 	// Initialization:
 	public function Background(parentMC:MovieClip)
 	{
-		/*trace("Background - parentMC:"+parentMC);
-		Utils.varDump(this.parentMC);
-		trace("Background - Adding new Background...");*/
+		
 		backgroundMC = parentMC.createEmptyMovieClip("backgroundMC", parentMC.getNextHighestDepth()); //,{_x:0, _y:0, _width:1280, _height:720});
 		current = 0;
+		
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin]);
-		
-		/*trace("Background - Dumping backgroundMC...");
-		Utils.varDump(backgroundMC);*/
 		return;
 	}
 
 	// Public Methods:
+	public function _set(key:String)
+	{
+		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width=1280&height=720&url=" + escape(PlexData.oSettings.url + key)
+		UI.loadImage(url, this.backgroundMC,"imgBG2", {scaleMode:2});
+		this.current = 1;
+	}	
+	
 	public function _update(key:String)
 	{
 		//trace("Background - Updating Background with: " + key + ", " + this.current);
@@ -47,18 +50,18 @@ class plexNMT.as2.common.Background {
 		if (this.current == 0) {
 			//trace("Doing 0 with: " + url);
 			UI.loadImage(url, this.backgroundMC,"imgBG2", {scaleMode:2});
-			this.backgroundMC.imgBG2._alpha =0;
+			this.backgroundMC.imgBG2._alpha = 0;
 			this.backgroundMC.imgBG2._visible = false;
 			TweenLite.to(this.backgroundMC.imgBG2, 4, {autoAlpha:100});
-			TweenLite.to(this.backgroundMC.imgBG1, 2, {autoAlpha:0});
+			TweenLite.to(this.backgroundMC.imgBG1, 4, {autoAlpha:0});
 			this.current = 1;
 		} else {
 			//trace("Doing 1 with: " + url);
 			UI.loadImage(url, this.backgroundMC,"imgBG1", {scaleMode:2});
-			this.backgroundMC.imgBG1._alpha =0;
+			this.backgroundMC.imgBG1._alpha = 0;
 			this.backgroundMC.imgBG1._visible = false;
 			TweenLite.to(this.backgroundMC.imgBG1, 4, {autoAlpha:100});
-			TweenLite.to(this.backgroundMC.imgBG2, 2, {autoAlpha:0});
+			TweenLite.to(this.backgroundMC.imgBG2, 4, {autoAlpha:0});
 			this.current = 0;
 		}
 		//trace("Background - Dumping this.backgroundMC...");
@@ -68,8 +71,11 @@ class plexNMT.as2.common.Background {
 	
 	public function destroy():Void {
 		this.backgroundMC.imgBG1.removeMovieClip();
+		delete this.backgroundMC.imgBG1;
 		this.backgroundMC.imgBG2.removeMovieClip();
+		delete this.backgroundMC.imgBG2;
 		this.backgroundMC.removeMovieClip();
+		delete this.backgroundMC;
 		
 		return;
 	}

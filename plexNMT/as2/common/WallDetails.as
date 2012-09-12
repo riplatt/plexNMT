@@ -151,7 +151,11 @@ class plexNMT.as2.common.WallDetails {
 
 
 	public function destroy():Void {
+		//remove all clips in detailsMC
+		this.cleanMC(this.detailsMC);
+		//remove main movie cli[p holder
 		this.detailsMC.removeMovieClip();
+		delete this.detailsMC;
 	}
 	// Private Methods:
 	private function onFlagLoad(success:Boolean, o:Object)
@@ -288,23 +292,7 @@ class plexNMT.as2.common.WallDetails {
 										  lineColor:Number, 
 										  lineAlpha:Number) {
 		trace("WallDetails - Doing drawRoundedRectangle with:" + mc);
-		mc.beginFill(fillColor,fillAlpha);
-		mc.lineStyle(lineThickness,lineColor,lineAlpha);
-		mc.moveTo(cornerRadius,0);
-		mc.lineTo(rectWidth-cornerRadius,0);
-		mc.curveTo(rectWidth,0,rectWidth,cornerRadius);
-		mc.lineTo(rectWidth,cornerRadius);
-		mc.lineTo(rectWidth,rectHeight-cornerRadius);
-		mc.curveTo(rectWidth,rectHeight,rectWidth-cornerRadius,rectHeight);
-		mc.lineTo(rectWidth-cornerRadius,rectHeight);
-		mc.lineTo(cornerRadius,rectHeight);
-		mc.curveTo(0,rectHeight,0,rectHeight-cornerRadius);
-		mc.lineTo(0,rectHeight-cornerRadius);
-		mc.lineTo(0,cornerRadius);
-		mc.curveTo(0,0,cornerRadius,0);
-		mc.lineTo(cornerRadius,0);
-		mc.endFill();
-		/*with (mc) {
+		with (mc) {
 			beginFill(fillColor,fillAlpha);
 			lineStyle(lineThickness,lineColor,lineAlpha);
 			moveTo(cornerRadius,0);
@@ -321,7 +309,19 @@ class plexNMT.as2.common.WallDetails {
 			curveTo(0,0,cornerRadius,0);
 			lineTo(cornerRadius,0);
 			endFill();
-		}*/
+		}
+	}
+	
+	private function cleanMC(_obj:Object)
+	{
+		for (var i in _obj)
+		{
+			if (typeof(_obj[i]) == "movieclip"){
+				trace("Removing: " + _obj[i]);
+				_obj[i].removeMovieClip();
+				delete _obj[i];
+			}
+		}
 	}
 
 }

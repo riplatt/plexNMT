@@ -1,8 +1,9 @@
 ﻿
 class plexNMT.as2.common.Utils
 {
-	public static function varDump(_obj:Object, indent:String) 
+	public static function varDump(_obj:Object, indent:String):String
 	{
+		var strDump:String = "";
 		if (indent == undefined){
 			indent = " ";
 		}
@@ -10,11 +11,12 @@ class plexNMT.as2.common.Utils
 		var indentPlus:String = substring(indent,0,1);
 		
 		for (var i in _obj) {
-			trace(indent + i + " : " + _obj[i] + " || " + typeof(_obj[i]));
+			strDump = strDump + indent + i + " : " + _obj[i] + " || " + typeof(_obj[i]) + "\n";
 			if (typeof(_obj[i]) == "object" || typeof(_obj[i]) == "movieclip") {
-				varDump(_obj[i], indent + indentPlus);
+				strDump = strDump + varDump(_obj[i], indent + indentPlus);
 			}
 		}
+		return strDump;
 	}
 	
 	public static function clone(obj:Object):Object

@@ -48,7 +48,7 @@ import plexNMT.as2.common.Utils;
 	playing //playing, stopped
 	
 	
--- myPlex Headers
+-- Plex Headers
 
 X-Plex-Platform (Platform name, eg iOS, MacOSX, Android, LG, etc)
 X-Plex-Platform-Version (Operating system version, eg 4.3.1, 10.6.7, 3.2)
@@ -73,6 +73,8 @@ class plexNMT.as2.api.PlexAPI
 	private static var menu:String = "";
 
 	// Initialization:
+	
+	// Public Functions
 	public static function getSections(onLoad:Function, timeout:Number):Void
 	{
 		Util.loadURL(PlexData.oSettings.url + "/library/sections", Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
@@ -206,6 +208,26 @@ class plexNMT.as2.api.PlexAPI
 		strURL = strURL + "&url=" + escape(PlexData.oSettings.url + _arg.key);
 		//trace("Plex API - Returning: " + strURL);
 		return strURL;
+	}
+	
+	public static function _setProgress(key:String, time:Number, _state:String)
+	{
+		/* /:/progress?key=26147						Video key
+		*	&identifier=com.plexapp.plugins.library
+		*	&time=24688									Time ms
+		*	&state=stopped 								playing || stopped
+		*/
+		D.debug(D.lDebug,"PlexAPI - Doing _setProgress with key: " + key + ", state: " + _state);
+		if (key == "play")
+		{
+			key = "playing";
+		} 
+		var url:String = PlexData.oSettings.url + "/:/progress" +
+						 "?key=" + key +
+						 "&identifier=com.plexapp.plugins.library" +
+						 "&time=" + (time * 1000) +
+						 "&state=" + _state;
+		Util.loadURL(url);
 	}
 	
 	public static function loadData(url:String, onLoad:Function, timeout:Number):Void 

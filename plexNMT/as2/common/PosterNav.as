@@ -11,6 +11,7 @@ import com.greensock.OverwriteManager;
 import com.greensock.easing.*;
 import com.greensock.plugins.TweenPlugin;
 import com.greensock.plugins.AutoAlphaPlugin;
+import com.greensock.plugins.SetSizePlugin;
 import com.greensock.plugins.GlowFilterPlugin;
 
 import mx.utils.Delegate;
@@ -29,7 +30,9 @@ class plexNMT.as2.common.PosterNav {
 	private var holder3:MovieClip = null;
 	private var holder4:MovieClip = null;
 	private var holder5:MovieClip = null;
+	private var hiResImg:MovieClip = null;
 	private var wallData:Array = new Array();
+	private var fn:Function = null;
 	private var selectToggle:Boolean = false;
 	
 	
@@ -37,12 +40,14 @@ class plexNMT.as2.common.PosterNav {
 	private var klInterval:Number = 0;
 
 	// Initialization:
-	public function PosterNav(parentMC:MovieClip, data:Array) 
+	public function PosterNav(parentMC:MovieClip, data:Array, updateFN:Function) 
 	{
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([GlowFilterPlugin, AutoAlphaPlugin]);
 		
+		//Update function
+		fn = updateFN;
 		//Key Listener
 		this.keyListener = new Object();
 		Key.addListener(this.keyListener);
@@ -77,45 +82,47 @@ class plexNMT.as2.common.PosterNav {
 	private function buildHolders(mc:MovieClip)
 	{
 		trace("PosterNav - Doing buildHolders with: " + mc);
-		holder1 = mc.createEmptyMovieClip("holder1", 1); //, -198, 11, 156, 231);
-		holder1.pos = 1;
+		holder1 = mc.createEmptyMovieClip("holder1", 1);
 		holder1._alpha = 0;
 		holder1._visible = false;
-		var h1URL:String = PlexAPI.getImg({width:156, height:231,
+		var h1URL:String = PlexAPI.getImg({width:246, height:364,
 									  key:wallData[PlexData.GetRotation("oWallData",-2)].attributes.thumb});
 		UI.loadImage(h1URL, holder1, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder1"});
 		
-		holder2 = mc.createEmptyMovieClip("holder2", 3); //, 18, 11, 156, 231);
-		holder2.pos = 2;
+		holder2 = mc.createEmptyMovieClip("holder2", 3);
 		holder2._alpha = 0;
 		holder2._visible = false;
-		var h2URL:String = PlexAPI.getImg({width:156, height:231,
+		var h2URL:String = PlexAPI.getImg({width:246, height:364,
 									  key:wallData[PlexData.GetRotation("oWallData",-1)].attributes.thumb});
 		UI.loadImage(h2URL, holder2, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder2"});
 		
-		holder3 = mc.createEmptyMovieClip("holder3", 5); //, 156, 180, 246, 364);
-		holder3.pos = 3;
+		holder3 = mc.createEmptyMovieClip("holder3", 5);
 		holder3._alpha = 0;
 		holder3._visible = false;
-		holder3.url = PlexAPI.getImg({width:246, height:364,
+		var h3URL = PlexAPI.getImg({width:246, height:364,
 									  key:wallData[PlexData.GetRotation("oWallData",0)].attributes.thumb});
-		UI.loadImage(holder3.url, holder3, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder3"});
+		UI.loadImage(h3URL, holder3, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder3"});
 		
-		holder4 = mc.createEmptyMovieClip("holder4", 4); //, 18, 479, 156, 231);
-		holder4.pos = 4;
+		holder4 = mc.createEmptyMovieClip("holder4", 4);
 		holder4._alpha = 0;
 		holder4._visible = false;
-		var h4URL:String = PlexAPI.getImg({width:156, height:231,
+		var h4URL:String = PlexAPI.getImg({width:246, height:364,
 									  key:wallData[PlexData.GetRotation("oWallData",1)].attributes.thumb});
 		UI.loadImage(h4URL, holder4, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder4"});
 		
-		holder5 = mc.createEmptyMovieClip("holder5", 2); //, -198, 479, 156, 231);
-		holder5.pos = 5;
+		holder5 = mc.createEmptyMovieClip("holder5", 2);
 		holder5._alpha = 0;
 		holder5._visible = false;
-		var h5URL:String = PlexAPI.getImg({width:156, height:231,
+		var h5URL:String = PlexAPI.getImg({width:246, height:364,
 									  key:wallData[PlexData.GetRotation("oWallData",2)].attributes.thumb});
 		UI.loadImage(h5URL, holder5, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder5"});
+		
+		hiResImg = mc.createEmptyMovieClip("hiResImg", 10); //, -198, 479, 156, 231);
+		hiResImg._alpha = 0;
+		hiResImg._visible = false;
+		var hiResURL = PlexAPI.getImg({width:402, height:595,
+									  key:wallData[PlexData.GetRotation("oWallData",0)].attributes.thumb});
+		UI.loadImage(hiResURL, hiResImg, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"hiResImg"});
 		
 		this.holders = [holder1, holder2, holder3, holder4, holder5];
 		
@@ -145,6 +152,9 @@ class plexNMT.as2.common.PosterNav {
 			case "holder5":
 				TweenLite.to(this.holder5, 0, {autoAlpha:0, _x:-198, _y:479, _width:156, _height:231, onCompleteScope:this, onComplete:deselect});
 			break;
+			case "hiResImg":
+				TweenLite.to(this.hiResImg, 0, {autoAlpha:0, _x:-410, _y:125.04});
+			break;
 		}
 	}
 	private function deselect()
@@ -153,7 +163,7 @@ class plexNMT.as2.common.PosterNav {
 		var pos:Array = new Array();
 		pos[0] = {autoAlpha:0}; //, onCompleteScope:this, onComplete:newImg, onCompleteParams:[-2, 0]};
 		pos[1] = {autoAlpha:0};
-		pos[2] = {autoAlpha:100, _x:0, _y:125.04, _width:402, _height:595};
+		pos[2] = {autoAlpha:100, _x:0, _y:125.04, _width:402, _height:595, onCompleteScope:this, onComplete:reloadImg};
 		pos[3] = {autoAlpha:0};
 		pos[4] = {autoAlpha:0}; //, onCompleteScope:this, onComplete:newImg, onCompleteParams:[2, 4]};
 		//Move Posters
@@ -162,6 +172,9 @@ class plexNMT.as2.common.PosterNav {
 		TweenLite.to(this.holders[2], 0.4, pos[2]);
 		TweenLite.to(this.holders[3], 0.4, pos[3]);
 		TweenLite.to(this.holders[4], 0.4, pos[4]);
+		//Utils.varDump(this.holders);
+		
+		//this.reloadImg();
 	}
 	
 	private function _position()
@@ -177,37 +190,44 @@ class plexNMT.as2.common.PosterNav {
 		TweenLite.to(this.holders[0], 0.4, pos[0]);
 		this.holders[0].swapDepths(1);
 		TweenLite.to(this.holders[1], 0.4, pos[1]);
-		this.holders[0].swapDepths(3);
+		this.holders[1].swapDepths(3);
 		TweenLite.to(this.holders[2], 0.4, pos[2]);
-		this.holders[0].swapDepths(5);
+		this.holders[2].swapDepths(5);
 		//TweenLite.to(this.holders[2].img, 1.4, {glowFilter:{color:0x0000ff, alpha:1, blurX:15, blurY:15, strength:1}});
 		TweenLite.to(this.holders[3], 0.4, pos[3]);
-		this.holders[0].swapDepths(4);
+		this.holders[3].swapDepths(4);
 		TweenLite.to(this.holders[4], 0.4, pos[4]);
-		this.holders[0].swapDepths(2);
+		this.holders[4].swapDepths(2);
+		
+		//Hi Res Image
+		TweenLite.to(this.hiResImg, 0, {autoAlpha:0, _x:-410})
 	}
 	
 	private function newImg(intImg:Number, intHolder:Number)
 	{
+
 		trace("PosterNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
 		trace("PosterNav - PlexData.oWallData.intPos: " + PlexData.oWallData.intPos);
-		var url:String = PlexAPI.getImg({width:246, height:364,
-									  key:wallData[PlexData.GetRotation("oWallData", intImg)].attributes.thumb});
+		var url:String = PlexAPI.getImg({width:246, height:364, key:wallData[PlexData.GetRotation("oWallData", intImg)].attributes.thumb});
 		UI.loadImage(url, holders[intHolder], "img");
+		
+		
 	}
 	
-	private function reloadImg(holder:String, url:String)
-	{
-		trace("PosterNav - holder3._width: " + this.holder3._width);
-		trace("PosterNav - holder3._height: " + this.holder3._height);
-		trace("PosterNav - holder3._xscale: " + this.holder3._xscale);
-		trace("PosterNav - holder3._yscale: " + this.holder3._yscale);
+	private function reloadImg()
+	{/*
+		this.holders[2]._xscale = 100;
+		this.holders[2]._yscale = 100;*/
+		var url:String = PlexAPI.getImg({width:402, height:595, key:wallData[PlexData.GetRotation("oWallData", 0)].attributes.thumb});
+		UI.loadImage(url, hiResImg, "img",{doneCB:Delegate.create(this, this.onImgLoad)});
 		
-		this.holder3._xscale = 100;
-		this.holder3._yscale = 100;
-		this.holder3.url = PlexAPI.getImg({width:402, height:595,
-									  key:wallData[PlexData.GetRotation("oWallData", 0)].attributes.thumb});
-		UI.loadImage(this.holder3.url, this.holder3, "img", {scaleMode:1});
+	}
+	
+	private function onImgLoad()
+	{
+		this.hiResImg._x = 0;
+		TweenLite.to(this.hiResImg, 0, {_width:402, _height:595});
+		TweenLite.to(this.hiResImg, 0.4, {autoAlpha:100});
 	}
 	
 	private function enableKeyListener():Void
@@ -249,6 +269,8 @@ class plexNMT.as2.common.PosterNav {
 				}
 				this.newImg(-2, 0);
 				this._position();
+				trace("PosterNav - Calling fastUpdate...");
+				this.fn();
 			break;
 			case Key.DOWN:
 				this.holders.push(this.holders.shift());
@@ -259,6 +281,7 @@ class plexNMT.as2.common.PosterNav {
 				}
 				this.newImg(2, 4);
 				this._position();
+				this.fn();
 			break;
 		}
 	}

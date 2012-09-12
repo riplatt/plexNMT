@@ -19,6 +19,7 @@ class plexNMT.as2.common.PlexData {
 	public static var oWallData:Object = {};
 	public static var oMovieData:Object = {};
 	public static var oHeaders:Object = {};
+	public static var oCurrentTime:Object = {};
 	
 	
 	public static var iBob:Number = 0;
