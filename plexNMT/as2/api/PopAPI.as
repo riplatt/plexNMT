@@ -35,7 +35,7 @@ class plexNMT.as2.api.PopAPI {
 					 "&arg4=" + resume + 
 					 "&arg5=" + PlexData.oSettings.buffer + 
 					 "&arg6=enable");
-		playingInterval = setInterval(Delegate.create(this,getCurrentTime), 5000);
+		playingInterval = setInterval(Delegate.create(this,getCurrentTime), 3000);
 	}
 	
 	public function stopUpdates()
@@ -73,11 +73,11 @@ class plexNMT.as2.api.PopAPI {
 		D.debug(D.lDev, "PopAPI - PlexData.oCurrentTime.theDavidBox[0].response[0]: ");
 		D.debug(D.lDev, Utils.varDump(PlexData.oCurrentTime.theDavidBox[0].response[0]));
 		//var key:Number = PlexData.oCurrentTime.theDavidBox[0].response[0].Data.time;
-		/*if (PlexData.oCurrentTime.theDavidBox[0].response[0].Data.currentTime != undefined)
+		/*if (PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0] != undefined)
 		{*/
 			var key:String = this.videoKey;
-			var time:Number = int(PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime.data);
-			var _state:String = PlexData.oCurrentTime.theDavidBox[0].response[0].currentStatus.data;
+			var time:Number = int(PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0].data);
+			var _state:String = PlexData.oCurrentTime.theDavidBox[0].response[0].currentStatus[0].data;
 			PlexAPI._setProgress(key, time, _state);
 		/*} else {
 			clearInterval(playingInterval);

@@ -23,7 +23,7 @@ class plexNMT.as2.common.PosterNav {
 	
 	// Public Properties:
 	// Private Properties:
-	private var poster:MovieClip = null;
+	private var posters:MovieClip = null;
 	private var holders:Array = new Array();
 	private var holder1:MovieClip = null;
 	private var holder2:MovieClip = null;
@@ -53,8 +53,8 @@ class plexNMT.as2.common.PosterNav {
 		Key.addListener(this.keyListener);
 		
 		wallData = data;
-		parentMC.createEmptyMovieClip("posters", parentMC.getNextHighestDepth());
-		buildHolders(parentMC.posters)
+		posters = parentMC.createEmptyMovieClip("posters", parentMC.getNextHighestDepth());
+		buildHolders(posters)
 	}
 	
 	public function _select()
@@ -74,6 +74,8 @@ class plexNMT.as2.common.PosterNav {
 	// Public Methods:
 	public function destroy()
 	{
+		this.posters.removeMovieClip();
+		delete this.posters
 		//Remove Listener
 		Key.removeListener(this.keyListener);
 		delete keyListener;
