@@ -240,28 +240,51 @@ class plexNMT.as2.common.PlexData {
 	public static function setWall():Void
 	{
 		//Set defulats if not set
-		oWall.rows = (oWall.rows == null) ? 3 : oWall.rows;
+		oWall.rows = (oWall.rows == null) ? 2 : oWall.rows;
 		oWall.rows = (oWall.rows == 0) ? 1 : oWall.rows;
 		
-		oWall.columns = (oWall.columns == null) ? 9 : oWall.columns;
+		oWall.columns = (oWall.columns == null) ? 7 : oWall.columns;
 		oWall.columns = (oWall.columns == 0) ? 1 : oWall.columns;
 		
 		var wallWidth = 1120;
-		var wallHeight = 500;
+		var wallHeight = 425;
 		
 		var thumbWidth = wallWidth / oWall.columns;
-		var thumbHeight = wallHeight/ oWall.rows;
+		var thumbHeight = wallHeight / oWall.rows;
 		
-		if (thumbWidth*1.49 < thumbHeight)
-		{
-			oWall.thumb.width = 0.921259843*thumbWidth;
-			oWall.thumb.height = oWall.thumb.width*1.49;
-			oWall.vgap = oWall.hgap = 0.078740157*thumbWidth;
-		} else {
-			oWall.thumb.height = 0.945652174*thumbHeight;
-			oWall.thumb.width = 0.672*thumbHeight;
-			oWall.vgap = oWall.hgap = 0.054347826*thumbWidth;
-		}
+		//Check for Music or Video
+		var type:String = oWallData.MediaContainer[0].attributes.viewGroup;
+		switch (type)
+			{
+				case "artist":
+				case "album":
+					//Music
+					if (thumbWidth < thumbHeight)
+					{
+						oWall.thumb.width = thumbWidth;
+						oWall.thumb.height = thumbWidth;
+						oWall.vgap = oWall.hgap = 0.078740157*thumbWidth;
+					} else {
+						oWall.thumb.height = thumbHeight;
+						oWall.thumb.width = thumbHeight;
+						oWall.vgap = oWall.hgap = 0.054347826*thumbWidth;
+					}
+				break;
+				default :
+					//Video
+					if (thumbWidth*1.49 < thumbHeight)
+					{
+						oWall.thumb.width = 0.921259843*thumbWidth;
+						oWall.thumb.height = oWall.thumb.width*1.49;
+						oWall.vgap = oWall.hgap = 0.078740157*thumbWidth;
+					} else {
+						oWall.thumb.height = 0.945652174*thumbHeight;
+						oWall.thumb.width = 0.672*thumbHeight;
+						oWall.vgap = oWall.hgap = 0.054347826*thumbWidth;
+					}
+				break;
+			}
+		
 		oWall.thumb.size = Math.ceil(oWall.thumb.height);
 		
 		//center grid

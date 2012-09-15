@@ -136,6 +136,7 @@ class plexNMT.as2.pages.Wall
 		delete this.preloadMC;
 		this.preloadMC = null;*/
 		this.updateBackground();
+		PlexData.setWall();
 		
 		this.createGridLite();
 

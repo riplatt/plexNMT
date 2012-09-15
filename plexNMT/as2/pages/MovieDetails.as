@@ -18,6 +18,7 @@ import plexNMT.as2.common.Background;
 import plexNMT.as2.common.MovieDetailsPane;
 import plexNMT.as2.common.MenuTop;
 import plexNMT.as2.common.PosterNav;
+import plexNMT.as2.common.ResumePopUp;
 
 class plexNMT.as2.pages.MovieDetails
 {
@@ -54,6 +55,7 @@ class plexNMT.as2.pages.MovieDetails
 		//Remove PopAPI
 		popAPI = null;
 		//Remove Listener
+		this.disableKeyListener();
 		Key.removeListener(this.keyListener);
 		delete keyListener;
 
@@ -137,6 +139,7 @@ class plexNMT.as2.pages.MovieDetails
 	
 	private function enableKeyListener():Void
 	{
+		D.debug(D.lDev, "Moveie Details - Doing enableKeyListener...");
 		if (this.keyListener.onKeyDown != null)
 			return;
 		clearInterval(this.klInterval);
@@ -199,6 +202,7 @@ class plexNMT.as2.pages.MovieDetails
 				popAPI.stopUpdates();
 			break;
 			case Remote.PLAY:
+			case Remote.ENTER:
 				D.debug(D.lDev, "MovieDetails - PLAY Button Pressed...");
 				var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.ratingKey;
 				var partKey:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].Media[0].Part[0].attributes.key;
@@ -207,13 +211,15 @@ class plexNMT.as2.pages.MovieDetails
 				if (PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.viewOffset != undefined)
 				{
 					resume = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.viewOffset / 1000;
-				};
-				D.debug(D.lDev, "MovieDetails - Calling playVOD with: key => " + key);
-				D.debug(D.lDev, "MovieDetails - partKey => " + partKey);
-				D.debug(D.lDev, "MovieDetails - resume => " + resume);
-				popAPI.playVOD(key, partKey, resume);
-				//this.disableKeyListener();
-				//Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + this.title + "&arg2=" + this.videoURL + "&arg3=show&arg4=0&arg5=" + PlexData.oSettings.buffer + "&arg6=enable"); // Direct Play.
+					this.disableKeyListener();
+					var popUp:ResumePopUp = new ResumePopUp(this.mainMC, Delegate.create(this, this.onEnableKeyListener));
+					
+				} else {
+					D.debug(D.lDev, "MovieDetails - Calling playVOD with: key => " + key);
+					D.debug(D.lDev, "MovieDetails - partKey => " + partKey);
+					D.debug(D.lDev, "MovieDetails - resume => " + resume);
+					popAPI.playVOD(key, partKey, resume);
+				}
 			break;
 		}
 	}
