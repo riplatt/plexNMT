@@ -18,6 +18,8 @@ class plexNMT.as2.common.PlexData {
 	public static var oFilters:Object = {};
 	public static var oWallData:Object = {};
 	public static var oMovieData:Object = {};
+	public static var oSeasonData:Object = {};
+	public static var oEpisodeData:Object = {};
 	public static var oHeaders:Object = {};
 	public static var oCurrentTime:Object = {};
 	
@@ -174,6 +176,24 @@ class plexNMT.as2.common.PlexData {
 	{
 		oWallData.intPos = 0;
 		oWallData.intLength = oWallData.MediaContainer[0].attributes.size - 1;
+	}
+	
+	public static function setMovieData()
+	{
+		oMovieData.intPos = 0;
+		oMovieData.intLength = oMovieData.MediaContainer[0].attributes.size - 1;
+	}
+	
+	public static function setSeasonData()
+	{
+		oSeasonData.intPos = 0;
+		oSeasonData.intLength = oSeasonData.MediaContainer[0].attributes.size - 1;
+	}
+	
+	public static function setEpisodeData()
+	{
+		oEpisodeData.intPos = 0;
+		oEpisodeData.intLength = oEpisodeData.MediaContainer[0].attributes.size - 1;
 	}
 	
 	public static function GetRotation(_objItem:String, menuRotation:Number):Number

@@ -25,8 +25,10 @@ class plexNMT.as2.common.Background {
 	// Initialization:
 	public function Background(parentMC:MovieClip)
 	{
-		
-		backgroundMC = parentMC.createEmptyMovieClip("backgroundMC", parentMC.getNextHighestDepth()); //,{_x:0, _y:0, _width:1280, _height:720});
+		trace("Background - Doing Initialization...");
+		backgroundMC = parentMC.createEmptyMovieClip("backgroundMC", parentMC.getNextHighestDepth());
+		trace("Background - Got a depth of " + backgroundMC.getDepth());
+		backgroundMC.swapDepths(0)
 		current = 0;
 		
 		//GreenSock Tween Control

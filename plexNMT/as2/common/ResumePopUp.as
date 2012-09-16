@@ -4,6 +4,7 @@ import plexNMT.as2.api.PlexAPI;
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Utils;
 import plexNMT.as2.common.Remote;
+import plexNMT.as2.api.PopAPI;
 
 import com.syabas.as2.common.UI;
 import com.syabas.as2.common.D;
@@ -35,6 +36,8 @@ class plexNMT.as2.common.ResumePopUp {
 	private var buttons:Array = new Array();
 	//Calling Page Callbackfunction
 	private var fn:Function = null;
+	//PopAPI Interface
+	private var popAPI:PopAPI = null;
 
 	// Initialization:
 	public function ResumePopUp(parentMC:MovieClip, cb:Function)
@@ -51,6 +54,9 @@ class plexNMT.as2.common.ResumePopUp {
 		this.keyListener = new Object();
 		Key.addListener(this.keyListener);
 		
+		//PopAPI interface
+		popAPI= new PopAPI();
+		
 		//Build PopUp
 		this.build();
 		
@@ -60,6 +66,8 @@ class plexNMT.as2.common.ResumePopUp {
 	// Public Methods:
 	public function destroy():Void 
 	{
+		//Delete popAPI interface
+		this.popAPI = null;
 		//Remove Listener
 		this.disableKeyListener();
 		Key.removeListener(this.keyListener);
@@ -108,7 +116,8 @@ class plexNMT.as2.common.ResumePopUp {
 		_play = this.popUpMC._menu.createTextField("_play", popUpMC._menu.getNextHighestDepth(), 0, 0, 350, 40);
 		this.popUpMC._menu._play.autoSize = true;
 		this.popUpMC._menu._play.setNewTextFormat(myFormat);
-		this.popUpMC._menu._play.text = "Play";
+		this.popUpMC._menu._play.text = "Play From The Start";
+		this.popUpMC._menu._play._time = 0;
 		this.popUpMC._menu._play._x = 175 - (this.popUpMC._menu._play._width/2);
 		trace("ResumePopUp - Text Hight: " + this.popUpMC._menu._play._height);
 		//Resume Button
@@ -116,6 +125,7 @@ class plexNMT.as2.common.ResumePopUp {
 		this.popUpMC._menu._resume.autoSize = true;
 		this.popUpMC._menu._resume.setNewTextFormat(myFormat);
 		this.popUpMC._menu._resume.text = "Resume @ " + Utils.formatTime( PlexData.oMovieData.MediaContainer[0].Video[0].attributes.duration);
+		this.popUpMC._menu._resume._time = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.duration;
 		this.popUpMC._menu._resume._x = 175 - (this.popUpMC._menu._resume._width/2);
 		trace("ResumePopUp - Text width: " + this.popUpMC._menu._play._width);
 		
@@ -202,7 +212,13 @@ class plexNMT.as2.common.ResumePopUp {
 			break;
 			case Remote.ENTER:
 			case Remote.PLAY:
-
+				var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.ratingKey;
+				var partKey:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].Media[0].Part[0].attributes.key;
+				var resume:Number = this.buttons[0]._time / 1000;
+				popAPI.playVOD(key, partKey, resume);
+				//Return to page
+				this.destroy();
+				this.fn();
 			break;
 		}
 	}

@@ -63,25 +63,18 @@ class plexNMT.as2.api.PopAPI {
 	
 	private function onCurrentTime()
 	{
-		//D.debug(D.lDev, "PopAPI - Doing onCurrentTime...");
-		//xml : theDavidBox/returnValue = 0 then PlexAPI._setProgress(key, time, state)
-		/*
-		*	key = xml(theDavidBox/response/title)
-		*	time = xml(theDavidBox/currentTime/title)
-		*	state = "playing"
-		*/
 		D.debug(D.lDev, "PopAPI - PlexData.oCurrentTime.theDavidBox[0].response[0]: ");
 		D.debug(D.lDev, Utils.varDump(PlexData.oCurrentTime.theDavidBox[0].response[0]));
 		//var key:Number = PlexData.oCurrentTime.theDavidBox[0].response[0].Data.time;
-		/*if (PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0] != undefined)
-		{*/
+		if (PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0] != undefined)
+		{
 			var key:String = this.videoKey;
 			var time:Number = int(PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0].data);
 			var _state:String = PlexData.oCurrentTime.theDavidBox[0].response[0].currentStatus[0].data;
 			PlexAPI._setProgress(key, time, _state);
-		/*} else {
+		} else {
 			clearInterval(playingInterval);
-		}*/
+		}
 		
 	}
 	
