@@ -84,7 +84,8 @@ class plexNMT.as2.common.PlexData {
 			//Settings
 			oSettings.url = null;
 			oSettings.ip = "192.168.1.3";
-			oSettings.port = "32400";
+			oSettings.port = 32400;
+			oSettings.timeout = 5000;
 			oSettings.curLevel = null;
 			oSettings.init = true;
 			oSettings.previous = null;

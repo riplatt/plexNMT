@@ -166,6 +166,7 @@ class plexNMT.as2.pages.MovieDetails
 		var keyCode:Number = Key.getCode();
 		var asciiCode:Number = Key.getAscii();
 		D.debug(D.lDev, "Moveie Details - keyDownCB.keyCode: " + keyCode);
+		trace("Moveie Details - fscommand2 GetFreePlayerMemory: " + fscommand2("GetFreePlayerMemory"));
 		
 		switch (keyCode)
 		{

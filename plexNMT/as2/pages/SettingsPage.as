@@ -1,372 +1,252 @@
-﻿
-import com.syabas.as2.common.VKMain;
-import com.syabas.as2.common.Util;
-import com.syabas.as2.common.JSONUtil;
-import com.syabas.as2.common.D;
+﻿import mx.utils.Delegate;
 
-import mx.utils.Delegate;
+import com.syabas.as2.common.D;
+import com.syabas.as2.common.VKMain;
 
 import plexNMT.as2.common.Remote;
+import plexNMT.as2.common.Utils;
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.popSharedObjects;
 
 class plexNMT.as2.pages.SettingsPage {
 	
-	private var parentMC:MovieClip = null;
-	private var mainMC:MovieClip = null;
+	// Constants:
+	public static var CLASS_REF = plexNMT.as2.pages.SettingsPage;
+	
+	// Public Properties:
+	// Private Properties:
+	private var _settings:MovieClip = null
+	//key Listener
+	private var keyListener:Object = null;
+	private var klInterval:Number = 0;
+	//TAB Control
+	private var select:Array = new Array();
+	//Key Board
 	private var vkMC:MovieClip = null;
-
 	private var vkMain:VKMain = null;
 	private var kbData:Object = null;
 	private var kbData2:Object = null;
-	private var keyListener:Object = null;
-	private var index:Number = null;
-	private var lastSuggString:String = null;
+	//Text fields
+	private var txtIP:TextField = null;
+	private var txtPort:TextField = null;
+	private var txtHTTPTimeout:TextField = null;
 
-	private var fn:Object = null;
-	
-	//private var plexSO:MobileSharedObject = null;
-	private var plexIP:String = null;
-	private var plexPort:String = null;
-	private var wallCol:String = null;
-	private var wallRow:String = null;
-
-	public function SettingsPage(parentMC:MovieClip)
+	// Initialization:
+	public function SettingsPage(parentMC:MovieClip) 
 	{
-		trace("Doing Settings Page with: "+parentMC);
-		this.parentMC = parentMC;
-		this.mainMC = parentMC.attachMovie("settingsMC", "settingsMC" , parentMC.getNextHighestDepth(), {_x:0, _y:0});
-		this.vkMC = mainMC.createEmptyMovieClip("vk", mainMC.getNextHighestDepth());
-
-		//plexSO = new MobileSharedObject(mainMC.out_0);
-		//testFSCommands();
-		
-		fn = {
-			onKeyDown : Delegate.create(this, this.onKeyDown),
-			onDoneCB : Delegate.create(this, this.onDoneCB),
-			suggUpdateCB : Delegate.create(this, this.suggUpdateCB),
-			onSuggLoad : Delegate.create(this, this.onSuggLoad)
-		};
-		//var bob = Delegate.create(this, this.onloadPlexSO)
-		Util.loadURL("json/vk3_data.json", Delegate.create(this, this.loadAlphanum));
-		
-
-	}
-	
-	private function onloadPlexSO(){
-		Util.loadURL("json/vk3_data.json", Delegate.create(this, this.loadAlphanum));
+		_settings = parentMC.createEmptyMovieClip("plex", parentMC.getNextHighestDepth());
+		build(_settings);
+		showSavedData();
 	}
 
+	// Public Methods:
 	public function destroy():Void
 	{
-		cleanUp(this.parentMC);
+		_settings.removeMovieClip();
+		delete _settings;
 		
-		delete vkMain;
-		delete kbData;
-		delete kbData2;
-		Key.removeListener(this.keyListener);
-		delete keyListener;
-		delete fn;
-		//delete plexSO;
+	}
+	// Private Methods:
+	private function showSavedData()
+	{
+		txtIP.text = PlexData.oSettings.ip;
+		txtPort.text = PlexData.oSettings.port;
+		txtHTTPTimeout.text = PlexData.oSettings.timeout;
+	}
+	private function build(mc:MovieClip)
+	{
+		//Text Format
+		var myFormat:TextFormat = new TextFormat();
+		myFormat.align = "center";
+		myFormat.font = "Arial";
+		myFormat.color = 0xFFFFFF;
+		myFormat.size = 18;
+		//Menu MoveClip
+		mc.createEmptyMovieClip("_nav", mc.getNextHighestDepth());
+		//Plex Menu Item 
+		mc._nav.createTextField("txt_0", mc._nav.getNextHighestDepth(), 30, 30, 150, 30);
+		mc._nav.txt_0.autoSize = true;
+		mc._nav.txt_0.setNewTextFormat(myFormat);
+		mc._nav.txt_0.text = "Plex";
+		//Wall Menu Item
+		mc._nav.createTextField("txt_1", mc._nav.getNextHighestDepth(), 30, 60, 150, 30);
+		mc._nav.txt_1.autoSize = true;
+		mc._nav.txt_1.setNewTextFormat(myFormat);
+		mc._nav.txt_1.text = "Wall";
+		//plexNMT Menu Item
+		mc._nav.createTextField("txt_2", mc._nav.getNextHighestDepth(), 30, 90, 150, 30);
+		mc._nav.txt_2.autoSize = true;
+		mc._nav.txt_2.setNewTextFormat(myFormat);
+		mc._nav.txt_2.text = "plexNMT";
 		
-		this.index = null;
-		this.lastSuggString = null;
-		this.plexIP = null;
-		this.plexPort = null;
-		this.wallCol = null;
-		this.wallRow = null;
+		var offColor:Number = 0x6E7B8B;
+		//Plex Pane
+		//Plex Settings
+		mc.createEmptyMovieClip("_plex", mc.getNextHighestDepth());
+		//IP
+		//lable
+		mc._plex.createTextField("lab_0", mc._plex.getNextHighestDepth(), 33, 30, 150, 26);
+		mc._plex.lab_0.autoSize = true;
+		mc._plex.lab_0.setNewTextFormat(myFormat);
+		mc._plex.lab_0.text = "IP Address:";
+		//Input
+		txtIP = mc._plex.createTextField("txt_0", mc._plex.getNextHighestDepth(), 128, 30, 150, 26);
+		//mc._plex.txt_0.autoSize = true;
+		mc._plex.txt_0.setNewTextFormat(myFormat);
+		mc._plex.txt_0.border = true;
+		mc._plex.txt_0.background = true;
+		mc._plex.txt_0.backgroundColor = offColor;
+		mc._plex.txt_0.maxChars = 16
+		mc._plex.txt_0.type = "input";
+		mc._plex.txt_0.text = "555.555.555.555";
+		//Port
+		//lable
+		mc._plex.createTextField("lab_1", mc._plex.getNextHighestDepth(), 86, 60, 150, 26);
+		mc._plex.lab_1.autoSize = true;
+		mc._plex.lab_1.setNewTextFormat(myFormat);
+		mc._plex.lab_1.text = "Port:";
+		//Input
+		txtPort = mc._plex.createTextField("txt_1", mc._plex.getNextHighestDepth(), 128, 60, 150, 26);
+		//mc._plex.txt_1.autoSize = true;
+		mc._plex.txt_1.setNewTextFormat(myFormat);
+		mc._plex.txt_1.border = true;
+		mc._plex.txt_1.background = true;
+		mc._plex.txt_1.backgroundColor = offColor;
+		mc._plex.txt_1.maxChars = 16
+		mc._plex.txt_1.type = "input";
+		mc._plex.txt_1.text = "Port";
+		//Timeout
+		//lable
+		mc._plex.createTextField("lab_2", mc._plex.getNextHighestDepth(), 0, 90, 150, 26);
+		mc._plex.lab_2.autoSize = true;
+		mc._plex.lab_2.setNewTextFormat(myFormat);
+		mc._plex.lab_2.text = "HTTP Timeout:";
+		//Input
+		txtHTTPTimeout = mc._plex.createTextField("txt_2", mc._plex.getNextHighestDepth(), 128, 90, 150, 26);
+		//mc._plex.txt_2.autoSize = true;
+		mc._plex.txt_2.setNewTextFormat(myFormat);
+		mc._plex.txt_2.border = true;
+		mc._plex.txt_2.background = true;
+		mc._plex.txt_2.backgroundColor = offColor;
+		mc._plex.txt_2.maxChars = 16
+		mc._plex.txt_2.type = "input";
+		mc._plex.txt_2.text = "HTTP Timeout";
+		
+		//Positioning
+		mc._plex._x = 200;
+		//trace(Utils.varDump(mc));
+		
 		
 	}
 	
-	private function loadAlphanum(success:Boolean, data:String, o:Object):Void
+	private function enableKeyListener():Void
 	{
-		this.kbData = JSONUtil.parseJSON(data).keyboard_data;
-
-		Util.loadURL("json/vk3_data_alphanum.json", Delegate.create(this, this.onloadAlphanum));
+		D.debug(D.lDev, "Setting Page - Doing enableKeyListener...");
+		if (this.keyListener.onKeyDown != null)
+			return;
+		clearInterval(this.klInterval);
+		this.klInterval = null;
+		this.klInterval = _global["setInterval"](Delegate.create(this, this.onEnableKeyListener), 100); // delay abit to prevent getting the previously press key.
 	}
 
-	private function onloadAlphanum(success:Boolean, data:String, o:Object):Void
+	private function onEnableKeyListener():Void
 	{
-		this.kbData2 = JSONUtil.parseJSON(data).keyboard_data;
+		clearInterval(this.klInterval);
+		this.klInterval = null;
+		this.keyListener.onKeyDown = Delegate.create(this, this.keyDownCB);
+	}
 
-		this.keyListener = new Object();
-		this.keyListener.onKeyDown = this.fn.onKeyDown;
-
-		Key.addListener(this.keyListener);
-		
-		if (PlexData.oSettings.ip == null)
-		{
-			this.mainMC.txt_0.text = "192.168.1.3";
-		} else {
-			this.mainMC.txt_0.text = PlexData.oSettings.ip;
-		}
-		// set txt_1 equal to SO data 'plexPort'
-		if (PlexData.oSettings.port == null)
-		{
-			this.mainMC.txt_1.text = "32400";
-		} else {
-			this.mainMC.txt_1.text = PlexData.oSettings.port;
-		}
-		// set txt_2 equal to SO data 'wallCol'
-		if (PlexData.oWall.columns == null)
-		{
-			this.mainMC.txt_2.text = "3";
-		} else {
-			this.mainMC.txt_2.text = PlexData.oWall.rows;
-		}
-		// set txt_3 equal to SO data 'wallRow'
-		if (PlexData.oWall.rows == null)
-		{
-			this.mainMC.txt_3.text = "9";
-		} else {
-			this.mainMC.txt_3.text = PlexData.oWall.columns;
-		}
-		// set txt_4 equal to defualt debug level
-		this.mainMC.txt_4.text = PlexData.oSettings.debugLevel;
-		this.mainMC.txt_4.text = PlexData.oSettings.buffer;
-				
-		this.index = 0;
-		trace("Settings plexData.oSettings.url:" + PlexData.oSettings.url);
-		this.focusTextField();
+	private function disableKeyListener():Void
+	{
+		clearInterval(this.klInterval);
+		this.klInterval = null;
+		this.keyListener.onKeyDown = null;
 	}
 	
-	private function onLoadPlexIP(success:Boolean, data:String, o:Object):Void {
-		this.mainMC.txt_0.text = data
-	}
-
-	private function onKeyDown():Void
+	private function keyDownCB():Void
 	{
 		var keyCode:Number = Key.getCode();
-		//trace("Doing Key With: "+keyCode+" and index: "+this.index);
-
+		var asciiCode:Number = Key.getAscii();
+		D.debug(D.lDev, "Setting Page - keyDownCB.keyCode: " + keyCode);
+		
 		switch (keyCode)
 		{
-			case Key.UP:
-				this.index --;
-				if (this.index < 0)
-				{
-					this.index =5;
-				}
-				this.focusTextField();
-			break;
-			case Key.DOWN:
-				this.index ++;
-				if (this.index > 5)
-				{
-					this.index = 0;
-				}
-				this.focusTextField();
-			break;
-			case Key.ENTER:
-				this.startInput();
-			break;
-			case "soft1":  //for testing on pc
 			case Remote.BACK:
-				this.setSettingsData();
-				popSharedObjects.savePlexData();
+			case "soft1":
+			case 81:
+				//this.disableKeyListener();
 				this.destroy();
-				gotoAndPlay("main");
-				break;
-			case Remote.HOME:
-				this.setSettingsData();
-				popSharedObjects.savePlexData();
-				this.destroy();
-				gotoAndPlay("main");
+				gotoAndPlay("wall");
 			break;
 			case Remote.YELLOW:
-				this.setSettingsData();
-				popSharedObjects.savePlexData();
 				this.destroy();
 				gotoAndPlay("settings");
 			break;
+			case Remote.RED:
+			case 79:
+				//TAB Toggle select's
+				this.select[0]._unselect();
+				this.select.push(this.select.shift());
+				this.select[0]._select();
+			break;
+			case Remote.BLUE:
+			case 80:
+				//SHIFT+TAB Toggle select's
+				this.select[0]._unselect();
+				this.select.unshift(this.select.pop());
+				this.select[0]._select();
+			break;
+			case Remote.HOME:
+				this.destroy();
+				gotoAndPlay("main");
+			break;
+		}
+	}
+	
+	private function drawPane(mc:MovieClip, 
+							  rectWidth:Number, 
+							  rectHeight:Number, 
+							  cornerRadius:Number, 
+							  tabHeight:Number,
+							  tabWidth:Number,
+							  tabNumber:Number,
+							  tabName:String,
+							  fillColor:Number, 
+							  fillAlpha:Number, 
+							  lineThickness:Number, 
+							  lineColor:Number, 
+							  lineAlpha:Number) {
+		trace("Setting Page - Doing drawPane with:" + mc);
+		
+		var x1:Number = cornerRadius;
+		var y1:Number = tabHeight*(tabNumber-1);
+		
+		with (mc) {
+			beginFill(fillColor,fillAlpha);
+			lineStyle(lineThickness,lineColor,lineAlpha);
 			
-		}
-		
-	}
-	
-	private function setSettingsData()
-	{
-		PlexData.oSettings.ip = this.mainMC.txt_0.text;
-		PlexData.oSettings.port = this.mainMC.txt_1.text;
-		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port
-		
-		PlexData.oWall.rows = this.mainMC.txt_2.text;
-		PlexData.oWall.columns = this.mainMC.txt_3.text;
-		PlexData.oSettings.buffer = this.mainMC.txt_4.text;
-		
-		PlexData.setWall();
-	}
-	private function focusTextField():Void
-	{
-		var offColor:Number = 0x6E7B8B;
-		var onColor:Number = 0xFFFFFF;
-		trace("Setting pointer with index: "+this.index);
-		this.mainMC["txt_0"].background = true;
-		this.mainMC["txt_0"].backgroundColor = offColor;
-		this.mainMC["txt_1"].background = true;
-		this.mainMC["txt_1"].backgroundColor = offColor;
-		this.mainMC["txt_2"].background = true;
-		this.mainMC["txt_2"].backgroundColor = offColor;
-		this.mainMC["txt_3"].background = true;
-		this.mainMC["txt_3"].backgroundColor = offColor;
-		this.mainMC["txt_4"].background = true;
-		this.mainMC["txt_4"].backgroundColor = offColor;
-		this.mainMC["txt_5"].background = true;
-		this.mainMC["txt_5"].backgroundColor = offColor;
-		
-		this.mainMC["txt_" + this.index].backgroundColor = onColor;
-		//this.mainMC.mc_pointer._y = this.mainMC["txt_" + this.index]._y; // move red pointer
-	}
-	
-	private function startInput():Void
-	{
-		var vkObj:Object = new Object();
-		vkObj.onDoneCB = this.fn.onDoneCB;
-		vkObj.onCancelCB = this.fn.onDoneCB;
-		vkObj.onSuggUpdateCB = null 									//(this.index == 2 ? this.fn.suggUpdateCB : null);
-		vkObj.keyboard_data = (this.index == 4 ? this.kbData2 : this.kbData);
-		vkObj.initValue = this.mainMC["txt_" + this.index].text;
-		vkObj.parentPath = this.mainMC._url;
-		vkObj.title = this.mainMC["lable_" + this.index].text;
-		vkObj.showPassword = false //(this.index == 1);
-		vkObj.disableSpace = false //(this.index == 3);
-
-		if (this.vkMain == null)
-		{
-			this.vkMain = new VKMain();
-			this.vkMain.startVK(this.vkMC, vkObj);
-		}
-		else
-		{
-			this.vkMain.restartVK(vkObj);
-		}
-
-		this.keyListener.onKeyDown = null;
-	}
-
-	private function onDoneCB(s:String):Void
-	{
-		//Write sharedObjects
-		switch (this.index)
-		{
-			case 0:
-				PlexData.oSettings.ip = s;
-			break;
-			case 1:
-				PlexData.oSettings.port = s;
-			break;
-			case 2:
-				PlexData.oWall.rows = s;
-				PlexData.setWall();
-			break;
-			case 3:
-				PlexData.oWall.columns = s;
-				PlexData.setWall();
-			break;
-			case 4:
-				D.level = int(s);
-				PlexData.oSettings.debugLevel = int(s);
-				D.debug(D.lDebug,"Settings - Debug level on...");
-				D.debug(D.lInfo,"Settings - Info level on...");
-				D.debug(D.lError,"Settings - Error level on...");
-				if(s == 0){
-					D.debug(D.lInfo,"Settings - Logging off...");
-					D.mc._visible = false;
-					D.destroy();
-				} else {
-					if (D.loaded != true)
-					{
-						D.init({mc:{level:100, showHideKC:16777250, upKC:Key.UP, downKC:40
-							, mcProps:{_x:725, _y:50, _width:500, _height:600}}, remote:{ip:"127.0.0.1"}
-						});
-						
-					}
-				}
-			break;
-			case 5:
-				PlexData.oSettings.buffer = s;
-			break;
-		}
-		this.mainMC["txt_" + this.index].text = s;
-		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port
-		//PlexData.writeSO();
-		this.lastSuggString = null;
-		this.vkMain.hideVK();
-		this.keyListener.onKeyDown = this.fn.onKeyDown;
-		fn.onKeyDown;
-	}
-
-	private function onCancelCB(s:String):Void
-	{
-		this.lastSuggString = null;
-		this.vkMain.hideVK();
-		this.keyListener.onKeyDown = this.fn.onKeyDown;
-	}
-
-	/*
-	* Suggestion list update callback from virtual keyboard
-	*
-	* text	- The current text in the input textfield
-	*/
-	private function suggUpdateCB(text:String):Void
-	{
-		var pos:Number = this.vkMain.getCaretPosition();
-		var searchText:String = text.substring(0, pos);
-		var url:String = "http://suggestqueries.google.com/complete/search?hl=en&client=products&ds=yt&json=t&cp=1&q=" + escape(searchText);
-
-		Util.loadURL(url, this.fn.onSuggLoad, { id:searchText } );
-		this.lastSuggString = searchText;
-	}
-
-	private function onSuggLoad(success:Boolean, data:String, o:Object):Void
-	{
-		var result:Object = JSONUtil.parseJSON(data);
-
-		if (o.o.id == this.lastSuggString)
-		{
-			this.vkMain.updateSuggestion(Util.isBlank(result[1].toString()) ? [] : result[1], this.lastSuggString);
-		}
-
-		result = null;
-	}
-	
-	private function testFSCommands(){
-		D.debug(D.lDebug,"Splash - fscommand2 GetMaxSignalLevel: " + fscommand2("GetMaxSignalLevel"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetSignalLevel: " + fscommand2("GetSignalLevel"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetNetworkConnectionName: " + fscommand2("GetNetworkConnectionName"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetNetworkConnectStatus: " + fscommand2("GetNetworkConnectStatus"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetNetworkGeneration: " + fscommand2("GetNetworkGeneration"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetNetworkName: " + fscommand2("GetNetworkName"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetNetworkRequestStatus: " + fscommand2("GetNetworkRequestStatus"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetNetworkStatus: " + fscommand2("GetNetworkStatus"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetBatteryLevel: " + fscommand2("GetBatteryLevel"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetMaxBatteryLevel: " + fscommand2("GetMaxBatteryLevel"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetPowerSource: " + fscommand2("GetPowerSource"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetPlatform: " + fscommand2("GetPlatform"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetDevice: " + fscommand2("GetDevice"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetDeviceID: " + fscommand2("GetDeviceID"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetTotalPlayerMemory: " + fscommand2("GetTotalPlayerMemory"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetFreePlayerMemory: " + fscommand2("GetFreePlayerMemory"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetMaxVolumeLevel: " + fscommand2("GetMaxVolumeLevel"));
-		D.debug(D.lDebug,"Splash - fscommand2 GetVolumeLevel: " + fscommand2("GetVolumeLevel"));
-	}
-	
-	private function cleanUp(_obj:Object)
-	{
-		for (var i in _obj)
-		{
-			trace("i: " + i);
-			if (i != "plex"){
-				trace("i: " + i + ", type: " + typeof(_obj[i]));
-				if (typeof(_obj[i]) == "object"){
-					cleanUp(_obj[i]);
-				}
-				if (typeof(_obj[i]) == "movieclip"){
-					trace("Removing: " + _obj[i]);
-					_obj[i].removeMovieClip();
-					delete _obj[i];
-				}
-			}
+			moveTo(0, tabHeight*(tabNumber-1));
+			lineTo(tabWidth, tabHeight*(tabNumber-1));
+			lineTo(tabWidth, 0);
+			lineTo(tabWidth+rectWidth, 0);
+			lineTo(tabWidth+rectWidth, rectHeight);
+			lineTo(tabWidth, rectHeight);
+			lineTo(tabWidth, tabHeight*tabNumber);
+			lineTo(0, tabHeight*tabNumber);
+			
+			/*curveTo(rectWidth, 0, rectWidth, cornerRadius);
+			lineTo(rectWidth,cornerRadius);
+			lineTo(rectWidth,rectHeight-cornerRadius);
+			curveTo(rectWidth,rectHeight,rectWidth-cornerRadius,rectHeight);
+			lineTo(rectWidth-cornerRadius,rectHeight);
+			lineTo(cornerRadius,rectHeight);
+			curveTo(0,rectHeight,0,rectHeight-cornerRadius);
+			lineTo(0,rectHeight-cornerRadius);
+			lineTo(0,cornerRadius);
+			curveTo(0,0,cornerRadius,0);
+			lineTo(cornerRadius,0);*/
+			endFill();
 		}
 	}
+
 }
