@@ -67,8 +67,12 @@ class plexNMT.as2.common.PlexData {
 			//Wall
 			oWall.items = new Array();
 			oWall.current = new Object();
-			oWall.rows = 3;
-			oWall.columns = 9;
+			oWall.movies.rows = 3;
+			oWall.movies.columns = 9;
+			oWall.shows.rows = 3;
+			oWall.shows.columns = 9;
+			oWall.music.rows = 3;
+			oWall.music.columns = 9;
 			oWall.vgap = null;
 			oWall.hgap = null;
 			oWall.thumb = {};
@@ -82,10 +86,20 @@ class plexNMT.as2.common.PlexData {
 			setWall();
 			
 			//Settings
-			oSettings.url = null;
+			oSettings.url = "HTTP://192.168.1.3:32400";
 			oSettings.ip = "192.168.1.3";
 			oSettings.port = 32400;
 			oSettings.timeout = 5000;
+			oSettings.wall = new Object();
+			oSettings.wall.movies = new Object();
+			oSettings.wall.movies.rows = 3;
+			oSettings.wall.movies.columns = 9;
+			oSettings.wall.shows = new Object();
+			oSettings.wall.shows.rows = 3;
+			oSettings.wall.shows.columns = 9;
+			oSettings.wall.music = new Object();
+			oSettings.wall.music.rows = 3;
+			oSettings.wall.music.columns = 9;
 			oSettings.curLevel = null;
 			oSettings.init = true;
 			oSettings.previous = null;
@@ -98,7 +112,7 @@ class plexNMT.as2.common.PlexData {
 			oSettings.overscanx = 1;
 			oSettings.overscany = 1;
 			oSettings.language = "en";
-			oSettings.backgroundKey = "/library/sections/2/recentlyAdded?X-Plex-Container-Start=0&X-Plex-Container-Size=50"
+			//oSettings.backgroundKey = "/library/sections/2/recentlyAdded?X-Plex-Container-Start=0&X-Plex-Container-Size=50"
 			
 			//Language
 			oLanguage = new Object();

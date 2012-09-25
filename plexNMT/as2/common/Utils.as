@@ -19,6 +19,23 @@ class plexNMT.as2.common.Utils
 		return strDump;
 	}
 	
+	public static function traceVar(_obj:Object, indent:String):Void
+	{
+		var strDump:String = "";
+		if (indent == undefined){
+			indent = " ";
+		}
+		
+		var indentPlus:String = substring(indent,0,1);
+		
+		for (var i in _obj) {
+			trace(indent + i + " : " + _obj[i] + " || " + typeof(_obj[i]));
+			if (typeof(_obj[i]) == "object" || typeof(_obj[i]) == "movieclip") {
+				varDump(_obj[i], indent + indentPlus);
+			}
+		}
+	}
+	
 	public static function clone(obj:Object):Object
 	{
 		var i;

@@ -1,5 +1,7 @@
 ﻿import com.syabas.as2.common.D;
 
+import com.designvox.tranniec.JSON;
+
 import plexNMT.as2.common.PlexData;
 
 class plexNMT.as2.common.popSharedObjects {
@@ -37,13 +39,8 @@ class plexNMT.as2.common.popSharedObjects {
 	public static function savePlexData() {
 		
 		D.debug(D.lInfo,"SharedObjects - Saving Data to Shared Objects...");
-		
-		writeToSO("plexIP", PlexData.oSettings.ip);
-		writeToSO("plexPort", PlexData.oSettings.port);
-		writeToSO("debugLevel", PlexData.oSettings.debugLevel);
-		writeToSO("wallCol", PlexData.oWall.columns);
-		writeToSO("wallRow", PlexData.oWall.rows);
-		writeToSO("currentPage", PlexData.oPage.current);
+		clearSO();
+		writeToSO("plexSettings", JSON.stringify(PlexData.oSettings));
 		
 	}
 	
@@ -66,14 +63,18 @@ class plexNMT.as2.common.popSharedObjects {
 	private static function getPlexData() {
 		
 		D.debug(D.lDebug,"SharedObjects - plexIP: " + readFromSO("plexIP"));
-		
-		PlexData.oSettings.ip = readFromSO("plexIP");
+		var objSettings:Object = JSON.parse(readFromSO("plexSettings"));
+		if(objSettings.ip != undefined)
+		{
+			PlexData.oSettings = objSettings;
+		}
+		/*PlexData.oSettings.ip = readFromSO("plexIP");
 		PlexData.oSettings.port = readFromSO("plexPort");
 		PlexData.oSettings.debugLevel = (readFromSO("debugLevel") == undefined ? PlexData.oSettings.debugLevel : readFromSO("debugLevel"));
 		PlexData.oSettings.url = (readFromSO("plexIP") == undefined ? PlexData.oSettings.url : "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port+"/");
-		PlexData.oWall.columns = (readFromSO("wallCol") == undefined ? PlexData.oWall.columns : readFromSO("wallCol"));
-		PlexData.oWall.rows = (readFromSO("wallRow") == undefined ? PlexData.oWall.rows : readFromSO("wallRow"));
-		PlexData.oPage.current = (readFromSO("currentPage") == undefined ? PlexData.oPage.curren : readFromSO("currentPage"));
+		PlexData.oWall.movies.columns = (readFromSO("wallCol") == undefined ? PlexData.oWall.movies.columns : readFromSO("wallCol"));
+		PlexData.oWall.movies.rows = (readFromSO("wallRow") == undefined ? PlexData.oWall.movies.rows : readFromSO("wallRow"));
+		PlexData.oPage.current = (readFromSO("currentPage") == undefined ? PlexData.oPage.curren : readFromSO("currentPage"));*/
 		
 		
 		strSharedObjectState = "retrieved"
@@ -107,5 +108,10 @@ class plexNMT.as2.common.popSharedObjects {
 	  		} else if (status == false) {									// if flush() failed
 	  			return false;	
 	  		}
+  	}
+	
+	public static function clearSO():Void {
+
+  			oShdObj.clear();
   	}
 }
