@@ -73,22 +73,22 @@ class plexNMT.as2.common.popSharedObjects {
 		//var objSettings:Object = JSON.parse(readFromSO("plexSettings"));
 		D.debug(D.lDebug,Utils.varDump(objSettings));
 		
-		/*if(objSettings.ip != undefined)
+		if(objSettings.ip != undefined)
 		{
 			PlexData.oSettings = objSettings;
 			strSharedObjectState = "retrieved"
 		} else {
 			strSharedObjectState = "new"
-		}*/
+		}
 		
-		PlexData.oSettings.ip = readFromSO("plexIP");
+		/*PlexData.oSettings.ip = readFromSO("plexIP");
 		PlexData.oSettings.port = readFromSO("plexPort");
 		PlexData.oSettings.debugLevel = (readFromSO("debugLevel") == undefined ? PlexData.oSettings.debugLevel : readFromSO("debugLevel"));
 		PlexData.oSettings.url = (readFromSO("plexIP") == undefined ? PlexData.oSettings.url : "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port+"/");
 		PlexData.oWall.movies.columns = (readFromSO("wallCol") == undefined ? PlexData.oWall.movies.columns : readFromSO("wallCol"));
 		PlexData.oWall.movies.rows = (readFromSO("wallRow") == undefined ? PlexData.oWall.movies.rows : readFromSO("wallRow"));
 		PlexData.oPage.current = (readFromSO("currentPage") == undefined ? PlexData.oPage.curren : readFromSO("currentPage"));
-		strSharedObjectState = "new"
+		strSharedObjectState = "new"*/
 		
 		
 	}

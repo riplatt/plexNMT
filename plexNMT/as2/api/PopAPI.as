@@ -35,7 +35,7 @@ class plexNMT.as2.api.PopAPI {
 					 "&arg4=" + resume + 
 					 "&arg5=" + PlexData.oSettings.buffer + 
 					 "&arg6=enable");
-		playingInterval = setInterval(Delegate.create(this,getCurrentTime), 3000);
+		playingInterval = setInterval(Delegate.create(this,getCurrentTime), PlexData.oSettings.timeout);
 	}
 	
 	public function stopUpdates()
@@ -58,7 +58,7 @@ class plexNMT.as2.api.PopAPI {
 				D.debug(D.lDebug, "PopAPI - Faled to get Current Time...");
 			}
 			this.onCurrentTime();
-		}), {target:"xml", timeout:5000});
+		}), {target:"xml", timeout:PlexData.oSettings.timeout});
 	}
 	
 	private function onCurrentTime()

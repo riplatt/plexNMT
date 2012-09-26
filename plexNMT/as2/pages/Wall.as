@@ -71,16 +71,10 @@ class plexNMT.as2.pages.Wall
 	public function Wall(parentMC:MovieClip)
 	{
 		trace("Wall - Doing Wall...");
-		Utils.traceVar(parentMC);
-		var i:Number = PlexData.oSettings.curLevel;
-		D.debug(D.lDebug,"Wall - PlexData.oSettings.curLevel: " + i);
-		D.debug(D.lInfo,"Wall - Current URL: " + PlexData.oData["level"+i].current.url);
+		Utils.traceVar(_level0);
+		trace("MovieDetails - PlexData.oSettings");
+		Utils.traceVar(PlexData.oSettings);
 		D.debug(D.lDebug, "Wall - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
-		var l1:String = "";
-		if(i == 1)
-		{
-			var l1 = "/all";
-		}
 		
 		_background = new Background(parentMC);
 
@@ -90,12 +84,10 @@ class plexNMT.as2.pages.Wall
 
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
-
-		this.titleMarquee = new Marquee();
 		
 		if (PlexData.oWallData.MediaContainer[0] != undefined)
 		{	
-			trace("Wall - Already have wall data at pos: " + PlexData.oWallData.intPos);
+			D.debug(D.lInfo, "Wall - Already have wall data at pos: " + PlexData.oWallData.intPos);
 			this.onLoadData();
 		} else {
 			var key:String = "/library/sections/";
@@ -110,8 +102,8 @@ class plexNMT.as2.pages.Wall
 			{
 				key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
 			}
-			trace("Wall - Calling getWallData with: " + key);
-			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), 5000);
+			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
+			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
 		}
 
 		_details = new WallDetails(parentMC);
@@ -449,7 +441,7 @@ class plexNMT.as2.pages.Wall
 					cleanUp(_obj[i]);
 				}
 				if (typeof(_obj[i]) == "movieclip"){
-					trace("Removing: " + _obj[i]);
+					trace("Wall - Removing: " + _obj[i]);
 					_obj[i].removeMovieClip();
 					delete _obj[i];
 				}

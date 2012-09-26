@@ -2,6 +2,8 @@
 
 import com.syabas.as2.common.D;
 import com.syabas.as2.common.VKMain;
+import com.syabas.as2.common.Util;
+import com.syabas.as2.common.JSONUtil;
 
 import com.designvox.tranniec.JSON;
 
@@ -40,6 +42,7 @@ class plexNMT.as2.pages.SettingsPage {
 	private var vkMain:VKMain = null;
 	private var kbData:Object = null;
 	private var kbData2:Object = null;
+	private var fn:Object = null;
 	//Text fields
 	private var txtIP:TextField = null;
 	private var txtPort:TextField = null;
@@ -69,16 +72,47 @@ class plexNMT.as2.pages.SettingsPage {
 		_settings = parentMC.createEmptyMovieClip("_settings", parentMC.getNextHighestDepth());
 		build(_settings);
 		showData();
+		
+		this.vkMC = _settings.createEmptyMovieClip("vkMC", 999);
+
+		fn = {
+			onKeyDown : Delegate.create(this, this.keyDownCB),
+			onDoneCB : Delegate.create(this, this.onDoneCB)
+		};
+		
+		Util.loadURL("json/vk3_data.json", Delegate.create(this, this.loadAlphanum));
 	}
 
 	// Public Methods:
 	public function destroy():Void
 	{
+		//Keyboard
+		vkMC.removeMovieClip();
+		delete vkMC;
+		fn = null;
+		//
 		_settings.removeMovieClip();
 		delete _settings;
 		
+		//Remove Listener
+		this.disableKeyListener();
+		Key.removeListener(this.keyListener);
+		delete keyListener;
+		
 	}
 	// Private Methods:
+	private function loadAlphanum(success:Boolean, data:String, o:Object):Void
+	{
+		this.kbData = JSONUtil.parseJSON(data).keyboard_data;
+
+		Util.loadURL("json/vk3_data_alphanum.json", Delegate.create(this, this.onloadAlphanum));
+	}
+
+	private function onloadAlphanum(success:Boolean, data:String, o:Object):Void
+	{
+		this.kbData2 = JSONUtil.parseJSON(data).keyboard_data;
+	}
+	
 	private function showData()
 	{
 		txtIP.text = PlexData.oSettings.ip;
@@ -103,6 +137,7 @@ class plexNMT.as2.pages.SettingsPage {
 		PlexData.oSettings.ip = txtIP.text;
 		PlexData.oSettings.port = txtPort.text;
 		PlexData.oSettings.timeout = txtHTTPTimeout.text;
+		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port
 		//Wall
 		PlexData.oSettings.wall.movies.rows = txtWallMovRow.text;
 		PlexData.oSettings.wall.movies.columns = txtWallMovCol.text;
@@ -135,6 +170,7 @@ class plexNMT.as2.pages.SettingsPage {
 	private function hlSettings()
 	{
 		this.unHlSettings();
+		trace("Setting - Hilighting:" + objNav[arrMenu[0].text][navY][navX]);
 		objNav[arrMenu[0].text][navY][navX].backgroundColor = 0xFFFFFF;
 		objNav[arrMenu[0].text][navY][navX].textColor = 0x000000;
 	}
@@ -148,7 +184,8 @@ class plexNMT.as2.pages.SettingsPage {
 		var i:Number = 0;
 		var j:Number = 0;
 		for(i = 0; i<lenX; i++){
-			for(j = 0; j<lenX; j++){
+			for(j = 0; j<lenY; j++){
+				trace("Setting - Dimming:" + objNav[arrMenu[0].text][j][i]);
 				objNav[arrMenu[0].text][j][i].backgroundColor = 0x6E7B8B;
 				objNav[arrMenu[0].text][j][i].textColor = 0xFFFFFF;
 			}
@@ -357,14 +394,14 @@ class plexNMT.as2.pages.SettingsPage {
 		mc.createEmptyMovieClip("_plexnmt", mc.getNextHighestDepth());
 		mc._plexnmt._alpha = 0;
 		mc._plexnmt._visible = false;
-		//Music Wall Number of Columns
+		//Video Buffer
 		//Lable
-		mc._plexnmt.createTextField("lab_0", mc._plexnmt.getNextHighestDepth(), 0, 30, 150, 26);
+		mc._plexnmt.createTextField("lab_0", mc._plexnmt.getNextHighestDepth(), 32, 30, 150, 26);
 		mc._plexnmt.lab_0.autoSize = true;
 		mc._plexnmt.lab_0.setNewTextFormat(myFormat);
-		mc._plexnmt.lab_0.text = "Video Buffer:";
+		mc._plexnmt.lab_0.text = "Play Buffer:";
 		//Input
-		txtBuffer = mc._plexnmt.createTextField("txt_0", mc._plexnmt.getNextHighestDepth(), 107, 30, 150, 26);
+		txtBuffer = mc._plexnmt.createTextField("txt_0", mc._plexnmt.getNextHighestDepth(), 128, 30, 150, 26);
 		mc._plexnmt.txt_0.setNewTextFormat(myFormat);
 		mc._plexnmt.txt_0.border = true;
 		mc._plexnmt.txt_0.background = true;
@@ -372,6 +409,36 @@ class plexNMT.as2.pages.SettingsPage {
 		mc._plexnmt.txt_0.maxChars = 6
 		mc._plexnmt.txt_0.text = "Buffer";
 		mc._plexnmt.txt_0.kbLable = "Enter the Video Stream Buffer in milliseconds:";
+		//Debug Level
+		//Lable
+		mc._plexnmt.createTextField("lab_1", mc._plexnmt.getNextHighestDepth(), 20, 60, 150, 26);
+		mc._plexnmt.lab_1.autoSize = true;
+		mc._plexnmt.lab_1.setNewTextFormat(myFormat);
+		mc._plexnmt.lab_1.text = "Debug Level:";
+		//Input
+		txtDebugLvl = mc._plexnmt.createTextField("txt_1", mc._plexnmt.getNextHighestDepth(), 128, 60, 150, 26);
+		mc._plexnmt.txt_1.setNewTextFormat(myFormat);
+		mc._plexnmt.txt_1.border = true;
+		mc._plexnmt.txt_1.background = true;
+		mc._plexnmt.txt_1.backgroundColor = offColor;
+		mc._plexnmt.txt_1.maxChars = 6
+		mc._plexnmt.txt_1.text = "Debug Level";
+		mc._plexnmt.txt_1.kbLable = "Enter Debug Level (0-4), 0 to Turn Off:";
+		//Debug Remote
+		//Lable
+		mc._plexnmt.createTextField("lab_2", mc._plexnmt.getNextHighestDepth(), 0, 90, 150, 26);
+		mc._plexnmt.lab_2.autoSize = true;
+		mc._plexnmt.lab_2.setNewTextFormat(myFormat);
+		mc._plexnmt.lab_2.text = "Debug Remote:";
+		//Input
+		txtDebugRmt = mc._plexnmt.createTextField("txt_2", mc._plexnmt.getNextHighestDepth(), 128, 90, 150, 26);
+		mc._plexnmt.txt_2.setNewTextFormat(myFormat);
+		mc._plexnmt.txt_2.border = true;
+		mc._plexnmt.txt_2.background = true;
+		mc._plexnmt.txt_2.backgroundColor = offColor;
+		mc._plexnmt.txt_2.maxChars = 16
+		mc._plexnmt.txt_2.text = "Debug Remote";
+		mc._plexnmt.txt_2.kbLable = "Enter IP of Debug Remote Server:";
 		
 		//Positioning
 		mc._plex._x = 200;
@@ -406,7 +473,7 @@ class plexNMT.as2.pages.SettingsPage {
 		i = 0;
 		for(y=0; y<3; y++){
 			arrNMT[y] = new Array();
-			for(x=0; x<2; x++){
+			for(x=0; x<1; x++){
 				arrNMT[y][x] = mc._plexnmt["txt_"+i];
 				trace("arrNMT["+y+"]["+x+"]:"+arrNMT[y][x]+" || mc._wall[\"txt_"+i+"\"]:"+mc._plexnmt["txt_"+i]);
 				i++;
@@ -470,12 +537,14 @@ class plexNMT.as2.pages.SettingsPage {
 				gotoAndPlay("settings");
 			break;
 			case Key.ENTER:
-				
+				if (!navMenu) {
+					this.startInput();
+				}
 			break;
 			case Key.UP:
 				if (navMenu) {
 					this.arrMenu.unshift(this.arrMenu.pop());				
-					this.hlMenu();
+					hlMenu();
 				} else {
 					navY--;
 					if (navY < 0){
@@ -489,7 +558,7 @@ class plexNMT.as2.pages.SettingsPage {
 			case Key.DOWN:
 				if (navMenu) {
 					this.arrMenu.push(this.arrMenu.shift());
-					this.hlMenu();
+					hlMenu();
 				} else {
 					navY++;
 					var lenY:Number = objNav[arrMenu[0].text].length;
@@ -502,6 +571,7 @@ class plexNMT.as2.pages.SettingsPage {
 					navMenu = false
 					navX = 0;
 					navY = 0;
+					dimMenu();
 					hlSettings();
 				} else {
 					navX++;
@@ -517,6 +587,7 @@ class plexNMT.as2.pages.SettingsPage {
 						trace("navX < 0...");
 						navX = 0;
 						navMenu = true;
+						hlMenu();
 						unHlSettings();
 					} else {
 						hlSettings();
@@ -524,5 +595,44 @@ class plexNMT.as2.pages.SettingsPage {
 				}			
 			break;
 		}
+	}
+	
+	private function startInput():Void
+	{
+		var vkObj:Object = new Object();
+		vkObj.onDoneCB = this.fn.onDoneCB;
+		vkObj.onCancelCB = this.fn.onDoneCB;
+		vkObj.onSuggUpdateCB = null 						
+		vkObj.keyboard_data = this.kbData;
+		vkObj.initValue = this.objNav[arrMenu[0].text][navY][navX].text;
+		vkObj.parentPath = this._settings._url;
+		vkObj.title = objNav[arrMenu[0].text][navY][navX].kbLable;
+		vkObj.showPassword = false //(this.index == 1);
+		vkObj.disableSpace = false //(this.index == 3);
+
+		if (this.vkMain == null)
+		{
+			this.vkMain = new VKMain();
+			this.vkMain.startVK(this.vkMC, vkObj);
+		}
+		else
+		{
+			this.vkMain.restartVK(vkObj);
+		}
+
+		this.disableKeyListener();
+	}
+
+	private function onDoneCB(s:String):Void
+	{
+		this.objNav[arrMenu[0].text][navY][navX].text = s;
+		this.vkMain.hideVK();
+		this.enableKeyListener();
+	}
+
+	private function onCancelCB(s:String):Void
+	{
+		this.vkMain.hideVK();
+		this.enableKeyListener();
 	}
 }

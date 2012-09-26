@@ -66,7 +66,9 @@ class plexNMT.as2.pages.MovieDetails
 		D.debug(D.lInfo, "MovieDetails - Doing plexNMT.movieDetails...");
 		D.debug(D.lDebug, "MovieDetails - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		trace("MovieDetails - Doing plexNMT.movieDetails...");
-		Utils.traceVar(parentMC);
+		Utils.traceVar(_level0);
+		/*trace("MovieDetails - PlexData.oSettings");
+		Utils.traceVar(PlexData.oSettings);*/
 		this.mainMC = parentMC;
 		/*trace("MovieDetails - Dumpping mainMC:");
 		Utils.varDump(parentMC);*/
@@ -83,7 +85,7 @@ class plexNMT.as2.pages.MovieDetails
 		trace("oWallData.intPos: " + PlexData.oWallData.intPos);
 		//trace("Calling getMovieData With: " + key);
 		D.debug(D.lDev, "MovieDetails - Calling getMovieData With: " + key);
-		PlexAPI.getMovieData(key, Delegate.create(this, this.onDataLoad), 5000);
+		PlexAPI.getMovieData(key, Delegate.create(this, this.onDataLoad), PlexData.oSettings.timeout);
 	}
 	
 	public function fastUpdate(arg:Object)
@@ -105,7 +107,7 @@ class plexNMT.as2.pages.MovieDetails
 		D.debug(D.lDev, "MovieDetails - Doing slowUpdate...");
 		clearInterval(slowUpdateInterval);
 		var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.key
-		PlexAPI.getMovieData(key, Delegate.create(this, this.onUpdateLoad), 5000);
+		PlexAPI.getMovieData(key, Delegate.create(this, this.onUpdateLoad), PlexData.oSettings.timeout);
 	}
 	
 	private function onUpdateLoad()
@@ -218,9 +220,10 @@ class plexNMT.as2.pages.MovieDetails
 					var popUp:ResumePopUp = new ResumePopUp(this.mainMC, Delegate.create(this, this.onEnableKeyListener));
 					
 				} else {
-					D.debug(D.lDev, "MovieDetails - Calling playVOD with: key => " + key);
-					D.debug(D.lDev, "MovieDetails - partKey => " + partKey);
-					D.debug(D.lDev, "MovieDetails - resume => " + resume);
+					D.debug(D.lDev, "MovieDetails - Calling playVOD with:");
+					D.debug(D.lDev, "MovieDetails - 	key => " + key);
+					D.debug(D.lDev, "MovieDetails - 	partKey => " + partKey);
+					D.debug(D.lDev, "MovieDetails - 	resume => " + resume);
 					popAPI.playVOD(key, partKey, resume);
 				}
 			break;
