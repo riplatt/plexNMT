@@ -30,7 +30,8 @@ class plexNMT.as2.pages.Splash {
 		
 		this.keyListener = new Object();
 		this.keyListener.onKeyDown = Delegate.create(this, this.onKeyDown);
-
+		
+		D.level = 4;
 		D.debug(D.lInfo,"Splash - Press The Blue Key to Turn This Debug Window Off...");
 	}
 
@@ -52,7 +53,7 @@ class plexNMT.as2.pages.Splash {
 		switch (popSharedObjects.strSharedObjectState) {
 			case "new":
 				clearInterval(IntervalID);
-				D.debug(D.lInfo,"Splash - First Run, no Saved Settings Going to Settings Page...");
+				D.debug(D.lInfo,"Splash - First Run, no Saved Settings, Going to Settings Page...");
 				this.loadPage("settings");
 				break;
 			case "retrieved":
@@ -62,7 +63,8 @@ class plexNMT.as2.pages.Splash {
 					this.loadPage("settings");
 				} else {
 					D.debug(D.lInfo,"Splash - Useing PLEX Server:" + PlexData.oSettings.url + " and Going to " + PlexData.oPage.current + " Page..");
-					this.loadPage(PlexData.oPage.current);
+					this.loadPage(PlexData.oSettings.lastPage);
+					//this.loadPage("settings");
 				}
 				break;
 			default:

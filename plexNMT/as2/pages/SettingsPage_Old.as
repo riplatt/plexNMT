@@ -265,7 +265,7 @@ class plexNMT.as2.pages.SettingsPage {
 			break;
 			case 4:
 				D.level = int(s);
-				PlexData.oSettings.debugLevel = int(s);
+				PlexData.oSettings.debug.level = int(s);
 				D.debug(D.lDebug,"Settings - Debug level on...");
 				D.debug(D.lInfo,"Settings - Info level on...");
 				D.debug(D.lError,"Settings - Error level on...");
@@ -277,7 +277,7 @@ class plexNMT.as2.pages.SettingsPage {
 					if (D.loaded != true)
 					{
 						D.init({mc:{level:100, showHideKC:16777250, upKC:Key.UP, downKC:40
-							, mcProps:{_x:725, _y:50, _width:500, _height:600}}, remote:{ip:"127.0.0.1"}
+							, mcProps:{_x:725, _y:50, _width:500, _height:600}}, remote:{ip:PlexData.oSettings.debug.remote}
 						});
 						
 					}

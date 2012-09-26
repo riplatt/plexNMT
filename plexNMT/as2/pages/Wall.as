@@ -48,7 +48,7 @@ class plexNMT.as2.pages.Wall
 		_details.destroy();
 		_menu.destroy();
 		
-		cleanUp(this.parentMC);
+		//cleanUp(this.parentMC);
 		
 		this.g.destroy();
 		delete this.g;
@@ -62,6 +62,8 @@ class plexNMT.as2.pages.Wall
 		delete this.titleMarquee;
 		this.titleMarquee = null;
 		
+		Utils.cleanUp(this.parentMC);
+		
 		trace("Wall - Done Wall.Clean Up...");
 		Utils.varDump(_level0);
 	}
@@ -69,7 +71,7 @@ class plexNMT.as2.pages.Wall
 	public function Wall(parentMC:MovieClip)
 	{
 		trace("Wall - Doing Wall...");
-		trace(Utils.varDump(parentMC));
+		Utils.traceVar(parentMC);
 		var i:Number = PlexData.oSettings.curLevel;
 		D.debug(D.lDebug,"Wall - PlexData.oSettings.curLevel: " + i);
 		D.debug(D.lInfo,"Wall - Current URL: " + PlexData.oData["level"+i].current.url);

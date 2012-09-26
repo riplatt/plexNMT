@@ -170,7 +170,10 @@ class plexNMT.as2.common.MovieDetailsPane {
 
 
 	public function destroy():Void {
+		//this.movieDetailsMC.removeMovieClip();
+		Utils.cleanUp(this.movieDetailsMC);
 		this.movieDetailsMC.removeMovieClip();
+		delete movieDetailsMC.removeMovieClip();
 	}
 	// Private Methods:
 	private function onFlagLoad(success:Boolean, o:Object)

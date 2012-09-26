@@ -63,8 +63,10 @@ class plexNMT.as2.pages.MovieDetails
 	
 	public function MovieDetails(parentMC:MovieClip)
 	{
-		D.debug(D.lDev, "MovieDetails - Doing plexNMT.movieDetails...");
-		
+		D.debug(D.lInfo, "MovieDetails - Doing plexNMT.movieDetails...");
+		D.debug(D.lDebug, "MovieDetails - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
+		trace("MovieDetails - Doing plexNMT.movieDetails...");
+		Utils.traceVar(parentMC);
 		this.mainMC = parentMC;
 		/*trace("MovieDetails - Dumpping mainMC:");
 		Utils.varDump(parentMC);*/

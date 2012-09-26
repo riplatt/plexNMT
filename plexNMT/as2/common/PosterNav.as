@@ -207,13 +207,10 @@ class plexNMT.as2.common.PosterNav {
 	
 	private function newImg(intImg:Number, intHolder:Number)
 	{
-
 		trace("PosterNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
 		trace("PosterNav - PlexData.oWallData.intPos: " + PlexData.oWallData.intPos);
 		var url:String = PlexAPI.getImg({width:246, height:364, key:wallData[PlexData.GetRotation("oWallData", intImg)].attributes.thumb});
 		UI.loadImage(url, holders[intHolder], "img");
-		
-		
 	}
 	
 	private function reloadImg()

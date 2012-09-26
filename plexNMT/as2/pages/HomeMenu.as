@@ -73,9 +73,9 @@ class plexNMT.as2.pages.HomeMenu {
 	public function HomeMenu(parentMC:MovieClip) {
 		
 		D.debug(D.lInfo,"Home - Plex Server URL: " + PlexData.oSettings.url);
-		D.debug(D.lDev, "Home - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
+		D.debug(D.lDebug, "Home - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		trace("Home - parentMC:" + parentMC);
-		//Utils.varDump(this.parentMC);
+		Utils.traceVar(_level0);
 		
 		//PlexData.oPage.curret = "main"
 		
