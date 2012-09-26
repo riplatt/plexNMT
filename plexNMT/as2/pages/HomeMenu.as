@@ -73,9 +73,11 @@ class plexNMT.as2.pages.HomeMenu {
 	public function HomeMenu(parentMC:MovieClip) {
 		
 		D.debug(D.lInfo,"Home - Plex Server URL: " + PlexData.oSettings.url);
-		D.debug(D.lDev, "Home - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
+		D.debug(D.lDebug, "Home - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		trace("Home - parentMC:" + parentMC);
-		//Utils.varDump(this.parentMC);
+		Utils.traceVar(_level0);
+		trace("Home - PlexData.oSettings");
+		Utils.traceVar(PlexData.oSettings);
 		
 		//PlexData.oPage.curret = "main"
 		
@@ -125,27 +127,6 @@ class plexNMT.as2.pages.HomeMenu {
 		Key.removeListener(this.keyListener);
 		delete keyListener;
 		
-		//Var
-		this.plex = null;
-		this.history = null;
-		this.backgroundData = null;
-		
-		//Arrays
-		//firstHistory.splice(0);
-		delete firstHistory;
-		//firstData.splice(0);
-		delete firstData;
-		
-		//secondHistory.splice(0);
-		delete secondHistory;
-		//secondData.splice(0);
-		delete secondData;
-		
-		//thirdHistory.splice(0);
-		delete thirdHistory;
-		//thirdData.splice(0);
-		delete thirdData;
-		
 		//delete plexSO;
 		//Timers
 		clearInterval(crossfadeInterval);
@@ -185,7 +166,7 @@ class plexNMT.as2.pages.HomeMenu {
 					key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
 				}
 				trace("Home - KeyDown: Calling getViewGroup with: " + key);
-				PlexAPI.getViewGroup(key, Delegate.create(this, this.onLevelCheck), 5000);
+				PlexAPI.getViewGroup(key, Delegate.create(this, this.onLevelCheck), PlexData.oSettings.timeout);
 				
 			break;
 			case Key.DOWN:
@@ -377,7 +358,7 @@ class plexNMT.as2.pages.HomeMenu {
 		{	
 			this.updateMenu(PlexData.oSettings.curLevel);
 		} else {
-			PlexAPI.getSections(Delegate.create(this, this.onLoadLevel), 5000);
+			PlexAPI.getSections(Delegate.create(this, this.onLoadLevel), PlexData.oSettings.timeout);
 		}		
 	}
 
@@ -394,7 +375,7 @@ class plexNMT.as2.pages.HomeMenu {
 		{	
 			this.updateMenu(PlexData.oSettings.curLevel);
 		} else {
-			PlexAPI.getCategories(sectionKey, Delegate.create(this, this.onLoadLevel), 5000);
+			PlexAPI.getCategories(sectionKey, Delegate.create(this, this.onLoadLevel), PlexData.oSettings.timeout);
 		}
 	}
 	
@@ -410,7 +391,7 @@ class plexNMT.as2.pages.HomeMenu {
 		{	
 			this.updateMenu(PlexData.oSettings.curLevel);
 		} else {
-			PlexAPI.getFilters(sectionKey+"/"+categoryKey, Delegate.create(this, this.onLoadLevel), 5000);
+			PlexAPI.getFilters(sectionKey+"/"+categoryKey, Delegate.create(this, this.onLoadLevel), PlexData.oSettings.timeout);
 		}
 	}
 
@@ -430,7 +411,7 @@ class plexNMT.as2.pages.HomeMenu {
 		if (PlexData.oCategories.MediaContainer[0] == undefined && PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key != undefined)
 		{
 			var sectionKey:String = PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key;
-			PlexAPI.getCategories(sectionKey, Delegate.create(this, this.loadPage), 5000);
+			PlexAPI.getCategories(sectionKey, Delegate.create(this, this.loadPage), PlexData.oSettings.timeout);
 			PlexData.oSettings.curLevel ++;
 			return;
 		} else {
@@ -442,7 +423,7 @@ class plexNMT.as2.pages.HomeMenu {
 			key = key + "/" + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
 		}
 		trace("Calling getViewGroup with: " + key);
-		PlexAPI.getViewGroup(key, Delegate.create(this, this.onLoadPage), 5000);
+		PlexAPI.getViewGroup(key, Delegate.create(this, this.onLoadPage), PlexData.oSettings.timeout);
 	}
 	
 	private function onLoadPage(strViewGrouop:String):Void {
@@ -494,11 +475,11 @@ class plexNMT.as2.pages.HomeMenu {
 	private function loadBackground():Void{
 		//Temp till i put it into the setting on what to show in the background
 		var key:String = PlexData.oSettings.backgroundKey;
-		//PlexAPI.loadData(PlexData.oSettings.url+"library/sections/1/recentlyAdded",Delegate.create(this, this.onLoadRecentlyAdded),5000);
+		//PlexAPI.loadData(PlexData.oSettings.url+"library/sections/1/recentlyAdded",Delegate.create(this, this.onLoadRecentlyAdded),PlexData.oSettings.timeout);
 		
 		if (PlexData.oBackground.MediaContainer[0] == undefined)
 		{	
-			PlexAPI.getBackground(key, Delegate.create(this, this.onLoadBackground), 5000);
+			PlexAPI.getBackground(key, Delegate.create(this, this.onLoadBackground), PlexData.oSettings.timeout);
 		} else if (crossfadeInterval == undefined){
 			this.startBackground();
 		}
@@ -558,16 +539,15 @@ class plexNMT.as2.pages.HomeMenu {
 	{
 		for (var i in _obj)
 		{
-			if (i != "plex"){
-				//trace("key: " + i + ", value: " + _obj[i] + ", type: " + typeof(_obj[i]));
-				if (typeof(_obj[i]) == "object" || typeof (_obj[i]) == "movieclip"){
-					cleanUp(_obj[i]);
-				}
-				if (typeof(_obj[i]) == "movieclip"){
-					//trace("Removing: " + _obj[i]);
-					_obj[i].removeMovieClip();
-					delete _obj[i];
-				}
+
+			//trace("key: " + i + ", value: " + _obj[i] + ", type: " + typeof(_obj[i]));
+			if (typeof(_obj[i]) == "object" || typeof (_obj[i]) == "movieclip"){
+				cleanUp(_obj[i]);
+			}
+			if (typeof(_obj[i]) == "movieclip"){
+				trace("Home - Removing: " + _obj[i]);
+				_obj[i].removeMovieClip();
+				delete _obj[i];
 			}
 		}
 	}

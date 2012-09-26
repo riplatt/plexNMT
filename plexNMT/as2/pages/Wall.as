@@ -18,10 +18,7 @@ import com.syabas.as2.common.D;
 
 class plexNMT.as2.pages.Wall
 {
-	//public static var plexURL:String = "http://192.168.0.3:32400/";
 	//Strings
-	private var wallC:Number = 7;
-	private var wallR:Number = 3;
 	private var plexSection:String = null;
 	private var plexCategory:String = null;
 	private var plexFilter:String = null; 
@@ -35,7 +32,6 @@ class plexNMT.as2.pages.Wall
 	private var mainMC:MovieClip = null;
 	private var preloadMC:MovieClip = null;
 	private var listMC:MovieClip = null;
-	private var bobbyMC:MovieClip = null;
 	private var g:GridLite = null;
 	private var imgLoader:IMGLoader = null;
 	private var titleMarquee:Marquee = null;
@@ -52,7 +48,7 @@ class plexNMT.as2.pages.Wall
 		_details.destroy();
 		_menu.destroy();
 		
-		cleanUp(this.parentMC);
+		//cleanUp(this.parentMC);
 		
 		this.g.destroy();
 		delete this.g;
@@ -66,39 +62,32 @@ class plexNMT.as2.pages.Wall
 		delete this.titleMarquee;
 		this.titleMarquee = null;
 		
-		trace("Done Wall.Clean Up...");
-		//var_dump(_level0);
+		Utils.cleanUp(this.parentMC);
+		
+		trace("Wall - Done Wall.Clean Up...");
+		Utils.varDump(_level0);
 	}
 
 	public function Wall(parentMC:MovieClip)
 	{
-		trace("Doing Wall...");
-		
-		var i:Number = PlexData.oSettings.curLevel;
-		D.debug(D.lDebug,"Wall - PlexData.oSettings.curLevel: " + i);
-		D.debug(D.lInfo,"Wall - Current URL: " + PlexData.oData["level"+i].current.url);
+		trace("Wall - Doing Wall...");
+		Utils.traceVar(_level0);
+		trace("MovieDetails - PlexData.oSettings");
+		Utils.traceVar(PlexData.oSettings);
 		D.debug(D.lDebug, "Wall - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
-		var l1:String = "";
-		if(i == 1)
-		{
-			var l1 = "/all";
-		}
 		
 		_background = new Background(parentMC);
 
 		this.parentMC = parentMC;
 		this.mainMC = this.parentMC.attachMovie("wallMC", "mainMC", 1, {_x:0, _y:0});
 		this.preloadMC = this.parentMC.attachMovie("busy001", "busy", 3, {_x:640, _y:360, _width:400, _height:400});
-		
-		
 
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
-
-		this.titleMarquee = new Marquee();
 		
 		if (PlexData.oWallData.MediaContainer[0] != undefined)
 		{	
+			D.debug(D.lInfo, "Wall - Already have wall data at pos: " + PlexData.oWallData.intPos);
 			this.onLoadData();
 		} else {
 			var key:String = "/library/sections/";
@@ -113,16 +102,9 @@ class plexNMT.as2.pages.Wall
 			{
 				key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
 			}
-			trace("Calling getWallData with: " + key);
-			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), 5000);
+			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
+			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
 		}
-		/*if (PlexData.oWall.current.index != null){
-			D.debug(D.lDebug,"Wall - Using Old Wall Data...");
-			this.onLoadData(PlexData.oWall.items);
-		} else {
-			D.debug(D.lDebug,"Wall - Loading Wall Data with: " + PlexData.oData["level"+i].current.url+l1);
-			PlexAPI.loadData(PlexData.oData["level"+i].current.url+l1, Delegate.create(this, this.onLoadData), 5000);
-		}*/
 
 		_details = new WallDetails(parentMC);
 		_menu = new MenuTop(parentMC);
@@ -130,12 +112,18 @@ class plexNMT.as2.pages.Wall
 
 	private function onLoadData()
 	{
-		//PlexData.oWall.items = data.concat();
-		//wallData = data;
-		/*this.preloadMC.removeMovieClip();
-		delete this.preloadMC;
-		this.preloadMC = null;*/
-		this.updateBackground();
+		var key:String = "";
+		if (PlexData.oWallData.MediaContainer[0].Directory != undefined) 
+		{
+			key = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.art;
+		} else {
+			key = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.art;
+		}
+		_background._set(key);
+		_details.setText();
+		_menu._update();
+		//set up wall thumbs
+		PlexData.setWall();
 		
 		this.createGridLite();
 
@@ -144,9 +132,8 @@ class plexNMT.as2.pages.Wall
 
 	private function createGridLite():Void
 	{
-		this.listMC = this.mainMC.createEmptyMovieClip("listMC", 1);
+		this.listMC = this.mainMC.createEmptyMovieClip("listMC", mainMC.getNextHighestDepth());
 		
-		// using UI class to create and attach 4 columns and 3 rows MovieClip 2D arrays with 20 pixels horizontal and 10 pixels vertical gaps.
 		var mcArray:Array = UI.attachMovieClip({
 												parentMC:this.listMC, 
 												cSize:PlexData.oWall.columns, 
@@ -242,14 +229,14 @@ class plexNMT.as2.pages.Wall
 		// --- Create UI ---
 
 		// If hl(data index) equals undefined or null then will load data from index 0.
-		this.g.createUI(0);
+		this.g.createUI(PlexData.oWallData.intPos);
 
 		this.preloadMC.removeMovieClip();
 		delete this.preloadMC;
 		this.preloadMC = null;
 		
 		// Highlight with the specified hl(data index) and enable the keyListener.
-		//trace("Highlighting Current...");
+		trace("Wall - Highlighting #" + PlexData.oWallData.intPos);
 		this.g.unhighlight()
 		this.g.highlight(PlexData.oWallData.intPos);
 
@@ -305,7 +292,9 @@ class plexNMT.as2.pages.Wall
 
 	private function hlCB(o:Object):Void
 	{
-		//trace("Doing hlCB...");
+		trace("Wall - Doing hlCB...");
+		/*trace("Wall - PlexData.oWallData.intPos: " + PlexData.oWallData.intPos);
+		trace("Wall - g._hl: " + this.g._hl);*/
 		PlexData.oWallData.intPos = this.g._hl;
 		_details.setText();
 		_menu._update();
@@ -397,6 +386,7 @@ class plexNMT.as2.pages.Wall
 
 	private function onEnterCB(o:Object):Void
 	{
+		trace("Wall - Doing onEnterCB with type: " + o.data.attributes.type);
 		switch (o.data.attributes.type)
 		{
 			case "movie":
@@ -405,6 +395,11 @@ class plexNMT.as2.pages.Wall
 				PlexData.oWallData.intPos = this.g._hl;
 				this.destroy();
 				gotoAndPlay("movieDetails");
+			break;
+			case "show":
+				PlexData.oWallData.intPos = this.g._hl;
+				this.destroy();
+				gotoAndPlay("seasonDetails");
 			break;
 		}
 		/*trace("dataIndex: " + o.dataIndex);
@@ -446,7 +441,7 @@ class plexNMT.as2.pages.Wall
 					cleanUp(_obj[i]);
 				}
 				if (typeof(_obj[i]) == "movieclip"){
-					trace("Removing: " + _obj[i]);
+					trace("Wall - Removing: " + _obj[i]);
 					_obj[i].removeMovieClip();
 					delete _obj[i];
 				}

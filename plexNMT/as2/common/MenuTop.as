@@ -27,9 +27,9 @@ class plexNMT.as2.common.MenuTop {
 	private var timeInterval:Number;
 
 	public function MenuTop(parentMC:MovieClip) {
-		trace("MenuTop - parentMC:"+parentMC);
+		//trace("MenuTop - parentMC:"+parentMC);
 		//Utils.varDump(this.parentMC);
-		trace("MenuTop - Adding new Menu Box...");
+		//trace("MenuTop - Adding new Menu Box...");
 		menuMC = parentMC.createEmptyMovieClip("menuMC", parentMC.getNextHighestDepth());//,{_x:10, _y:600});
 		//trace("WallDetails - Calling draw...");
 		menuMC._x = 140;//, 50);
@@ -48,6 +48,11 @@ class plexNMT.as2.common.MenuTop {
 		this.menuMC._count._visible = true;
 		this.menuMC._count.text = (PlexData.oWallData.intPos + 1) +"/"+ (PlexData.oWallData.intLength + 1);
 	}
+	
+	public function _select()
+	{
+		
+	}
 
 	private function buildMenu(mc:MovieClip) {
 		var dateNow = new Date();
@@ -57,7 +62,7 @@ class plexNMT.as2.common.MenuTop {
 		//Clock
 		mc.createEmptyMovieClip("_clock",mc.getNextHighestDepth());
 		mc._clock.autoSize = true;
-		trace("MenuTop - _clock._width:"+mc._clock._width);
+		//trace("MenuTop - _clock._width:"+mc._clock._width);
 		//Text Format
 		var myFormat:TextFormat = new TextFormat();
 		myFormat.align = "center";
@@ -69,13 +74,13 @@ class plexNMT.as2.common.MenuTop {
 		mc._clock._time.autoSize = true;
 		mc._clock._time.setNewTextFormat(myFormat);
 		mc._clock._time.text = pad(String(dateNow.getHours())) + ":" + pad(String(dateNow.getMinutes()));
-		trace("MenuTop - _clock._width:" + mc._clock._width);
+		//trace("MenuTop - _clock._width:" + mc._clock._width);
 		drawEndcap(mc._clock,(mc._clock._time._x + mc._clock._time._width), 2, 0xCCCCCC, 40);
 		timeInterval = setInterval(Delegate.create(this,updateTime),5000);
-		trace("MenuTop - _clock._width:" + mc._clock._width);
-		trace("MenuTop - _clock._x:" + mc._clock._x);
-		trace("MenuTop - _clock._time._width:" + mc._clock._time._width);
-		trace("MenuTop - _clock._time._x:" + mc._clock._time._x);
+		//trace("MenuTop - _clock._width:" + mc._clock._width);
+		//trace("MenuTop - _clock._x:" + mc._clock._x);
+		//trace("MenuTop - _clock._time._width:" + mc._clock._time._width);
+		//trace("MenuTop - _clock._time._x:" + mc._clock._time._x);
 		//Section
 		mc.createEmptyMovieClip("_section",mc.getNextHighestDepth());
 		mc._section.createTextField("txt",mc.getNextHighestDepth(),30 + 2 + mc._clock._width, 2, 150, 30);
@@ -87,10 +92,10 @@ class plexNMT.as2.common.MenuTop {
 			drawNext(mc._section,(mc._section.txt._x + mc._section.txt._width), 2, 0xCCCCCC, 40);
 		}
 		//Category
-		trace("MenuTop - _section._width:" + mc._section._width);
-		trace("MenuTop - _section._x:" + mc._section._x);
-		trace("MenuTop - _section.txt._width:" + mc._section.txt._width);
-		trace("MenuTop - _section.txt._x:" + mc._section.txt._x);
+		//trace("MenuTop - _section._width:" + mc._section._width);
+		//trace("MenuTop - _section._x:" + mc._section._x);
+		//trace("MenuTop - _section.txt._width:" + mc._section.txt._width);
+		//trace("MenuTop - _section.txt._x:" + mc._section.txt._x);
 		mc.createEmptyMovieClip("_category",mc.getNextHighestDepth());
 		//mc._category._x = mc._section.txt._x + mc._section.txt._width
 		mc._category.createTextField("txt",mc.getNextHighestDepth(),mc._section.txt._x + mc._section.txt._width + 7, 2, 150, 30);
@@ -106,10 +111,10 @@ class plexNMT.as2.common.MenuTop {
 			}
 		}
 		//Filter
-		trace("MenuTop - _category._width:" + mc._category._width);
-		trace("MenuTop - _category._x:" + mc._category._x);
-		trace("MenuTop - _category.txt._width:" + mc._category.txt._width);
-		trace("MenuTop - _category.txt._x:" + mc._category.txt._x);
+		//trace("MenuTop - _category._width:" + mc._category._width);
+		//trace("MenuTop - _category._x:" + mc._category._x);
+		//trace("MenuTop - _category.txt._width:" + mc._category.txt._width);
+		//trace("MenuTop - _category.txt._x:" + mc._category.txt._x);
 		mc.createEmptyMovieClip("_filter",mc.getNextHighestDepth());
 		mc._filter.createTextField("txt",mc.getNextHighestDepth(),mc._category.txt._x + mc._category.txt._width + 7, 2, 150, 30);
 		mc._filter.txt.autoSize = true;
@@ -131,9 +136,9 @@ class plexNMT.as2.common.MenuTop {
 	}
 
 	private function drawEndcap(mc:MovieClip, posX:Number, lineThickness:Number, lineColor:Number, lineAlpha:Number) {
-		trace("MenuTop - Doing drawEndcap with:" + mc + ", posX:" + posX);
+		//trace("MenuTop - Doing drawEndcap with:" + mc + ", posX:" + posX);
 		var x:Number = mc._x+mc._width;
-		trace("MenuTop - x:"+x);
+		//trace("MenuTop - x:"+x);
 		with (mc) {
 			lineStyle(lineThickness,lineColor,lineAlpha);
 			moveTo(posX, 1);
@@ -144,7 +149,7 @@ class plexNMT.as2.common.MenuTop {
 	}
 	
 	private function drawNext(mc:MovieClip, posX:Number, lineThickness:Number, lineColor:Number, lineAlpha:Number) {
-		trace("MenuTop - Doing drawNext with:" + mc + ", posX:" + posX);
+		//trace("MenuTop - Doing drawNext with:" + mc + ", posX:" + posX);
 		with (mc) {
 			lineStyle(lineThickness,lineColor,lineAlpha);
 			moveTo(posX, 1);
@@ -162,7 +167,7 @@ class plexNMT.as2.common.MenuTop {
 	}
 
 	private function drawRoundedRectangle(mc:MovieClip, rectWidth:Number, rectHeight:Number, cornerRadius:Number, fillColor:Number, fillAlpha:Number, lineThickness:Number, lineColor:Number, lineAlpha:Number) {
-		trace("MenuTop - Doing drawRoundedRectangle with:"+mc);
+		//trace("MenuTop - Doing drawRoundedRectangle with:"+mc);
 		with (mc) {
 			beginFill(fillColor,fillAlpha);
 			lineStyle(lineThickness,lineColor,lineAlpha);
