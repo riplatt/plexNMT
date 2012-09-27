@@ -64,7 +64,7 @@ class plexNMT.as2.api.PopAPI {
 	private function onCurrentTime()
 	{
 		D.debug(D.lDev, "PopAPI - PlexData.oCurrentTime.theDavidBox[0].response[0]: ");
-		D.debug(D.lDev, Utils.varDump(PlexData.oCurrentTime.theDavidBox[0].response[0]));
+		//D.debug(D.lDev, Utils.varDump(PlexData.oCurrentTime.theDavidBox[0].response[0]));
 		//var key:Number = PlexData.oCurrentTime.theDavidBox[0].response[0].Data.time;
 		if (PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0] != undefined)
 		{

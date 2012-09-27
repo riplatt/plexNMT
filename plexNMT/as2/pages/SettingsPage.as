@@ -129,6 +129,24 @@ class plexNMT.as2.pages.SettingsPage {
 		txtBuffer.text = PlexData.oSettings.buffer;
 		txtDebugLvl.text = PlexData.oSettings.debug.level;
 		txtDebugRmt.text = PlexData.oSettings.debug.remote;
+		//Debug
+		D.level = PlexData.oSettings.debug.level;
+		D.debug(D.lDebug,"Settings - Debug level on...");
+		D.debug(D.lInfo,"Settings - Info level on...");
+		D.debug(D.lError,"Settings - Error level on...");
+		if(PlexData.oSettings.debug.level == 0){
+			D.debug(D.lInfo,"Settings - Logging off...");
+			D.mc._visible = false;
+			D.destroy();
+		} else {
+			if (D.loaded != true)
+			{
+				D.init({mc:{level:100, showHideKC:16777250, upKC:Key.UP, downKC:40
+					, mcProps:{_x:725, _y:50, _width:500, _height:600}}, remote:{ip:PlexData.oSettings.debug.remote}
+				});
+				
+			}
+		}
 	}
 	
 	private function updateData()
@@ -147,8 +165,27 @@ class plexNMT.as2.pages.SettingsPage {
 		PlexData.oSettings.wall.music.columns = txtWallMusCol.text;
 		//plexNMT
 		PlexData.oSettings.buffer = txtBuffer.text;
-		PlexData.oSettings.debug.level = txtDebugLvl.text;
+		PlexData.oSettings.debug.level = int(txtDebugLvl.text);
 		PlexData.oSettings.debug.remote = txtDebugRmt.text;
+		//Debug
+		D.level = PlexData.oSettings.debug.level;
+		D.debug(D.lDebug,"Settings - Debug level on...");
+		D.debug(D.lInfo,"Settings - Info level on...");
+		D.debug(D.lError,"Settings - Error level on...");
+		if(PlexData.oSettings.debug.level == 0){
+			D.debug(D.lInfo,"Settings - Logging off...");
+			D.mc._visible = false;
+			D.destroy();
+		} else {
+			if (D.loaded != true)
+			{
+				D.init({mc:{level:100, showHideKC:16777250, upKC:Key.UP, downKC:40
+					, mcProps:{_x:725, _y:50, _width:500, _height:600}}, remote:{ip:PlexData.oSettings.debug.remote}
+				});
+				
+			}
+		}
+
 	}
 	
 	private function hlMenu()
@@ -441,9 +478,14 @@ class plexNMT.as2.pages.SettingsPage {
 		mc._plexnmt.txt_2.kbLable = "Enter IP of Debug Remote Server:";
 		
 		//Positioning
-		mc._plex._x = 200;
-		mc._wall._x = 200;
-		mc._plexnmt._x = 200;
+		mc._nav._x = 100;
+		mc._nav._y = 100
+		mc._plex._x = 300;
+		mc._plex._y = 100;
+		mc._wall._x = 300;
+		mc._wall._y = 100;
+		mc._plexnmt._x = 300;
+		mc._plexnmt._y = 100;
 		//trace(Utils.varDump(mc));
 		//Navigation Array
 		//[y][x]
@@ -626,6 +668,7 @@ class plexNMT.as2.pages.SettingsPage {
 	private function onDoneCB(s:String):Void
 	{
 		this.objNav[arrMenu[0].text][navY][navX].text = s;
+		this.updateData();
 		this.vkMain.hideVK();
 		this.enableKeyListener();
 	}

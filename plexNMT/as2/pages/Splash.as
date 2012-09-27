@@ -63,6 +63,24 @@ class plexNMT.as2.pages.Splash {
 					this.loadPage("settings");
 				} else {
 					D.debug(D.lInfo,"Splash - Useing PLEX Server:" + PlexData.oSettings.url + " and Going to " + PlexData.oPage.current + " Page..");
+					//Debug
+					D.level = PlexData.oSettings.debug.level;
+					D.debug(D.lDebug,"Settings - Debug level on...");
+					D.debug(D.lInfo,"Settings - Info level on...");
+					D.debug(D.lError,"Settings - Error level on...");
+					if(PlexData.oSettings.debug.level == 0){
+						D.debug(D.lInfo,"Settings - Logging off...");
+						D.mc._visible = false;
+						D.destroy();
+					} else {
+						if (D.loaded != true)
+						{
+							D.init({mc:{level:100, showHideKC:16777250, upKC:Key.UP, downKC:40
+								, mcProps:{_x:725, _y:50, _width:500, _height:600}}, remote:{ip:PlexData.oSettings.debug.remote}
+							});
+							
+						}
+					}
 					this.loadPage(PlexData.oSettings.lastPage);
 					//this.loadPage("settings");
 				}

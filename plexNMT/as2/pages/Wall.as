@@ -70,10 +70,10 @@ class plexNMT.as2.pages.Wall
 
 	public function Wall(parentMC:MovieClip)
 	{
-		trace("Wall - Doing Wall...");
-		Utils.traceVar(_level0);
+		D.debug(D.lDebug, "Wall - Doing Wall...");
+		/*Utils.traceVar(_level0);
 		trace("MovieDetails - PlexData.oSettings");
-		Utils.traceVar(PlexData.oSettings);
+		Utils.traceVar(PlexData.oSettings);*/
 		D.debug(D.lDebug, "Wall - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		
 		_background = new Background(parentMC);
@@ -239,6 +239,7 @@ class plexNMT.as2.pages.Wall
 		trace("Wall - Highlighting #" + PlexData.oWallData.intPos);
 		this.g.unhighlight()
 		this.g.highlight(PlexData.oWallData.intPos);
+		
 
 	}
 
@@ -302,14 +303,7 @@ class plexNMT.as2.pages.Wall
 		var data:Object = o.data;
 		var mc:MovieClip = o.mc;
 		mc.gotoAndStop("hl");
-		//mc.txt.htmlText = Number(this.g._hl + 1) + "/" + this.g._len;
-		this.mainMC.title.htmlText = o.data.attributes.title
-		this.mainMC.tagline.htmlText = o.data.attributes.tagline
-		/*if(!(data.title == undefined || data.title == null))
-			this.mainMC.title.htmlText = data.title;
-		if(!(data.tagline == undefined || data.tagline == null))
-			this.mainMC.tagline.htmlText = data.tagline;*/
-		this.mainMC.count.text = Number(this.g._hl + 1) + "/" + this.g._len;
+
 	}
 
 	private function unhlCB(o:Object):Void

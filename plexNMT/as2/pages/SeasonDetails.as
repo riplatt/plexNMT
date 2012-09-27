@@ -77,6 +77,7 @@ class plexNMT.as2.pages.SeasonDetails {
 		_menu.destroy();
 		_poster.destroy();
 		_season.destroy();
+		_episode.destroy();
 		clearInterval(slowUpdateInterval);
 		slowUpdateInterval = null;
 		//Remove PopAPI

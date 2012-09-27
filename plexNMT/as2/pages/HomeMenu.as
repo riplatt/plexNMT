@@ -74,12 +74,12 @@ class plexNMT.as2.pages.HomeMenu {
 		
 		D.debug(D.lInfo,"Home - Plex Server URL: " + PlexData.oSettings.url);
 		D.debug(D.lDebug, "Home - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
-		trace("Home - parentMC:" + parentMC);
-		Utils.traceVar(_level0);
-		trace("Home - PlexData.oSettings");
-		Utils.traceVar(PlexData.oSettings);
+		//trace("Home - parentMC:" + parentMC);
+		//Utils.traceVar(_level0);
+		//trace("Home - PlexData.oSettings");
+		//Utils.traceVar(PlexData.oSettings);
 		
-		//PlexData.oPage.curret = "main"
+		PlexData.oSettings.lastPage = "main";
 		
 		this.keyListener = new Object();
 		this.keyListener.onKeyDown = Delegate.create(this, this.onKeyDown);
@@ -491,9 +491,10 @@ class plexNMT.as2.pages.HomeMenu {
 	private function startBackground()
 	{
 		trace("Home - Calling background update with: " + PlexData.oBackground.MediaContainer[0].Video[PlexData.oBackground.intPos].attributes.art);
-		_background._update(PlexData.oBackground.MediaContainer[0].Video[PlexData.oBackground.intPos].attributes.art);
+		var _data:Array = new Array();
+		_background._set(PlexData.oBackground.MediaContainer[0].Video[PlexData.oBackground.intPos].attributes.art);
 		clearInterval(crossfadeInterval);
-		crossfadeInterval = setInterval(Delegate.create(this,crossfade),7500);
+		crossfadeInterval = setInterval(Delegate.create(this,crossfade),15000);
 	}
 	
 	private function crossfade() {
