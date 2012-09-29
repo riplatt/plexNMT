@@ -128,6 +128,24 @@ class plexNMT.as2.api.PlexAPI
 		}), {target:"xml", timeout:timeout});
 	}
 	
+	public static function getWallDataRange(key:String, intPos:Number, size:Number, onLoad:Function, timeout:Number):Void
+	{
+		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		{
+			if(success)
+			{
+				trace("Doing PlexAPI - getWallData: " + success);
+                PlexData.oWallData = new XMLObject().parseXML(xml, true);
+				PlexData.setWallData();
+                delete xml
+				//Utils.varDump(PlexData.oWallData)
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to get WallData...");
+			}
+			this.onLoad(PlexData.oWallData);
+		}), {target:"xml", timeout:timeout});
+	}
+	
 	public static function getWallData(key:String, onLoad:Function, timeout:Number):Void
 	{
 		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void

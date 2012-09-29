@@ -79,9 +79,25 @@ class plexNMT.as2.common.Utils {
 	}
 
 	public static function formatTime(ms:Number):String {
+		
+		
 		var hr:Number = int(ms/(1000*60*60));
 		var min:Number = int(ms/(1000*60))-(hr*60);
+		var sec:Number = int((ms/1000)-(min*60)-(hr*60*60));
+		
+		switch (true)
+		{
+			case ms < 60000:
+				return (sec+"s");
+			break;
+			case ms < 3600000:
+				return (min+"min"+sec+"s");
+			break;
+			default:
+				return (hr+"hr "+min+"min");
+			break;
+		}
 
-		return (hr+"hr "+min+"min");
+		return ("0s");
 	}
 }

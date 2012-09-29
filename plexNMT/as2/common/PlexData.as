@@ -94,12 +94,15 @@ class plexNMT.as2.common.PlexData {
 			oSettings.wall.movies = new Object();
 			oSettings.wall.movies.rows = 2;
 			oSettings.wall.movies.columns = 7;
+			oSettings.wall.movies.total = 14;
 			oSettings.wall.shows = new Object();
 			oSettings.wall.shows.rows = 3;
 			oSettings.wall.shows.columns = 11;
+			oSettings.wall.shows.total = 33;
 			oSettings.wall.music = new Object();
 			oSettings.wall.music.rows = 4;
 			oSettings.wall.music.columns = 12;
+			oSettings.wall.shows.total = 48;
 			oSettings.curLevel = null;
 			oSettings.init = true;
 			oSettings.previous = null;
@@ -221,13 +224,15 @@ class plexNMT.as2.common.PlexData {
 		var rot:Number = Math.abs(menuRotation);
 		var ve:Boolean = false;
 		
-		if (menuRotation < 0)
+		/*var totalSize:Number = PlexData[_objItem].MediaContainer[0].attributes.totalSize - 1;
+		if (totalSize != undefined) 
 		{
-			ve = true;
-		}
+			len = totalSize;
+		}*/
+
 		for(var i=0;i<rot;i++)
 		{
-			if(ve)
+			if(menuRotation < 0)
 			{
 				intPos--;
 				if (intPos < 0)

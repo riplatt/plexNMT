@@ -157,14 +157,17 @@ class plexNMT.as2.pages.SettingsPage {
 		PlexData.oSettings.timeout = txtHTTPTimeout.text;
 		PlexData.oSettings.url = "http://"+PlexData.oSettings.ip+":"+PlexData.oSettings.port
 		//Wall
-		PlexData.oSettings.wall.movies.rows = txtWallMovRow.text;
-		PlexData.oSettings.wall.movies.columns = txtWallMovCol.text;
-		PlexData.oSettings.wall.shows.rows = txtWallShoRow.text;
-		PlexData.oSettings.wall.shows.columns = txtWallShoCol.text;
-		PlexData.oSettings.wall.music.rows = txtWallMusRow.text;
-		PlexData.oSettings.wall.music.columns = txtWallMusCol.text;
+		PlexData.oSettings.wall.movies.rows = int(txtWallMovRow.text);
+		PlexData.oSettings.wall.movies.columns = int(txtWallMovCol.text);
+		PlexData.oSettings.wall.movies.total = int(txtWallMovRow.text) + int(txtWallMovCol.text);
+		PlexData.oSettings.wall.shows.rows = int(txtWallShoRow.text);
+		PlexData.oSettings.wall.shows.columns = int(txtWallShoCol.text);
+		PlexData.oSettings.wall.shows.total = int(txtWallShoRow.text) + int(txtWallShoCol.text);
+		PlexData.oSettings.wall.music.rows = int(txtWallMusRow.text);
+		PlexData.oSettings.wall.music.columns = int(txtWallMusCol.text);
+		PlexData.oSettings.wall.music.total = int(txtWallMusRow.text) + int(txtWallMusCol.text);
 		//plexNMT
-		PlexData.oSettings.buffer = txtBuffer.text;
+		PlexData.oSettings.buffer = int(txtBuffer.text);
 		PlexData.oSettings.debug.level = int(txtDebugLvl.text);
 		PlexData.oSettings.debug.remote = txtDebugRmt.text;
 		//Debug
