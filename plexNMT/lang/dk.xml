@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 	EVERSION English prompts
@@ -268,6 +269,277 @@
 	<eunknownscreen>Ukendt skærmtype</eunknownscreen>
 
 
+=======
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EVERSION English prompts
+	
+	********************** NOT UPDATE FRIENDLY  *********************
+	If you want to make changes to any translation file, please make
+	a unique filename for it.  This is the best way to make sure your
+	file is not lost during upgrades.
+	******************************************************************
+	
+	If you translate the skin into your native language, please let us 
+	know so we can include the translation in a future release (and 
+	contact you if we add new prompts before future releases)
+	
+	Edit <translation>en.xml</translation> controls what language file 
+	to use.
+	
+	Changes to this file will not work until you copy it to your Jukebox 
+	folder AND you have added this file as your translation setting in 
+	skinsettings.xml.
+	
+	For help, visit: http://www.dentedboxes.com/doku.php/help:settings
+-->
+
+<translation>
+  <!-- *** System  -->
+	<starting>Starter</starting>
+	<pleasewait>Vent venligst</pleasewait>
+	<reset>Nulstil</reset>
+	<ignore>Ignorer</ignore>
+	<exit>Afslut</exit>
+	<help>hjælp</help>
+	<home>Hjem</home>
+	<about>Om</about>
+	<sapps>Apps</sapps>	
+	<apps>Apps</apps>
+	<okselect>OK</okselect>      <!-- ok prompt on popup messages -->
+	<yupdate>YAMJ JUKEBOX OPDATERING FUNDET</yupdate>
+	<alert>Information</alert>
+	<loading>Indlæser</loading>
+	<eskin>Eskin</eskin>
+	<prepcat>Indlæser kategorier</prepcat>
+	<prepcset>Indlæser brugerdefinerede afspiller indstillinger</prepcset>
+	
+  <!-- *** SDK Player      	-->
+	<skipto>Spring til</skipto>
+	<goto>Gå til</goto>
+	<playlist>Afspilningsliste</playlist>
+	<couldnotplay>Kunne ikke afspille</couldnotplay>
+	<infopanel>Info</infopanel>
+	<dlspeed>Download hastighed</dlspeed>
+	<videoquality>Video kvalitet</videoquality>
+	<connstatus>Opretter forbindelse til medierne...</connstatus>
+	<buffstatus>Indlæser til buffer...</buffstatus>	
+	<ttpl>Afspilningsliste</ttpl>	
+	<ttseek>Tidssøgning</ttseek>
+	
+	<!-- *** playlist -->
+	<preprom>Forbereder optisk drev</preprom>
+	<prepnet>Forbereder netværkslagring</prepnet>
+	<prepdrives>Opdaterer drevliste</prepdrives>
+	<prepintdrive>Forbereder interne drev</prepintdrive>
+	<usbdrive>USB drev</usbdrive>
+	<intdrive>Internt drev</intdrive>
+	<updateshare>Opdaterer delte foldere liste</updateshare>
+	
+	<!-- *** skins -->
+	
+	<!-- home menu -->
+	
+	<3d>3D</3d>
+	<all>All</all>
+	<award>Award</award>
+	<awards>Awards</awards>
+	<categories>Kategorier</categories>
+	<category>Kategori</category>
+	<cast>Skuespillere</cast>
+	<casts>Skuespillere</casts>
+	<countries>Lande</countries>
+	<country>Land</country>
+	<director>Instruktører</director>
+	<directors>Instruktører</directors>
+	<extra>Extra</extra>
+	<extras>Extra</extras>
+	<hd>HD</hd>
+	<hd-720>HD-720</hd-720>
+	<hd-1080>HD-1080</hd-1080>
+	<libraries>Biblioteker</libraries>
+	<library>Bibliotek</library>
+	<librarydescription>Bibliotek</librarydescription>
+	<movie>Film</movie>
+	<movies>Film</movies>		
+	<new>New</new>
+	<news>News</news>
+	<new-movie>New-Film</new-movie>
+	<new-movies>New-Film</new-movies>
+	<new-tv>New-TV</new-tv>
+	<new-tvs>New-TV</new-tvs>
+	<other>Andre</other>
+	<people>People</people>
+	<person>Person</person>
+	<persons>Personer</persons>
+	<rating>Vurdering</rating>
+	<ratings>Vurderinger</ratings>
+	<set>Set</set>
+	<sets>Sets</sets>   
+	<top250>Top-250</top250>
+	<trailer>Trailer</trailer>
+	<trailers>Trailers</trailers>
+	<tv-shows>TV-Shows</tv-shows>   
+	<unwatched>Usete</unwatched>
+	<watched>Iagttog</watched>
+	<weather>Vejret</weather>
+	<writer>Forfatter</writer>
+	<writers>Forfattere</writers>
+	<year>År</year>
+	<years>År</years>   
+
+<!-- details page -->
+	<actor>Skuespiller</actor>
+	<actors>Skuespillere</actors>
+	<aired>Blev først sendt</aired>
+	<airsinfo>Airs Info</airsinfo>
+	<aspect>Aspect</aspect>
+	<aspectratio>Aspect Forholdet</aspectratio>
+	<audio>Audio</audio>
+	<audiochannel>Audio Kanal</audiochannel>
+	<audiochannels>Audio Kanaler</audiochannels>
+	<audiocodec>Audio Codec</audiocodec>
+	<budget>Budget</budget>
+	<budgets>Budgetter</budgets>
+	<business>Erhverv</business>
+	<channel>Kanal</channel>
+	<channels>Kanaler</channels>
+	<container>Container</container>
+	<company>Company</company>
+	<certification>Certificering</certification>
+	<certifications>Certificeringer</certifications>
+	<date>Date</date>
+	<details>Detaljer</details>
+	<didyouknow>Vidste du</didyouknow>
+	<episode>Episode</episode>			
+	<episodes>Episodes</episodes>			
+	<episodeshort>E</episodeshort>
+	<event>Begivenhed</event>
+	<events>begivenheder</events>
+	<filedate>Fil-Date</filedate>
+	<filesize>File-Størrelse</filesize>
+	<firstaired>Blev først sendt</firstaired>
+	<fps>Fps</fps>
+	<gross>Gross</gross>
+	<language>Sprog</language>
+	<languageflag>Sprog Flag</languageflag>
+	<languages>Sprog</languages>
+	<name>Navn</name>
+	<names>Navne</names>
+	<nominated>Nomineret</nominated>
+	<openweek>Openweek</openweek>
+	<outline>Outline</outline>
+	<part>Del</part>
+	<parts>Dele</parts>
+	<plot>Plot</plot>
+	<quote>Quote</quote>
+	<rated>Bemærkede</rated>
+	<releasedate>Slip</releasedate>
+	<resolution>Resolution</resolution>
+	<resolutions>Resolutioner</resolutions>
+	<runtime>Spilletid</runtime>
+	<season>Sæson</season>       		
+	<seasons>Sæsoner</seasons>
+	<seasonshort>S</seasonshort>
+	<size>Størrelse</size>
+	<studio>Studio</studio> 
+	<studiologo>Studio Logo</studiologo>
+	<subtitle>Undertekst</subtitle>
+	<subtitles>Undertekster</subtitles>
+	<tagline>Slogan</tagline>
+	<unknown>Ukendt</unknown>
+	<videocodec>Video Codec</videocodec>
+	<videocontainer>Video Container</videocontainer>
+	<videosource>Video Source</videosource>
+	<videooutput>Video Output</videooutput>
+	<win>Win</win>
+	<won>Won</won>		
+	
+	<!-- Person details -->
+	<biography>Biografi</biography>
+	<birthday>Fødselsdag</birthday>
+	<character>Character</character>
+	<department>Institut</department>
+	<doublage>Doublage</doublage>
+	<filmography>Filmografi</filmography>
+	<photo>Foto</photo>
+	<photofile>Foto</photofile>
+	<photos>Foto</photos>
+	
+	
+    <!-- *** various for  skin 	-->
+	<false>Falsk</false>
+	<file>File</file>
+	<files>Files</files>
+	<firmware>Firmware</firmware>
+	<firstpart>Første del</firstpart>
+	<genre>Genre</genre>
+	<genres>Genrer</genres>
+	<hardware>Hardware</hardware>
+	<index>Index</index>
+	<known>Kendte</known>
+	<last>Sidste</last>
+	<lastpart>Sidste Del</lastpart>
+	<model>Model</model>
+	<next>Næste </next>
+	<no>Nej</no>
+	<page>Side</page>
+	<pages>Sider</pages>
+	<play-disc>Spil-Disk</play-disc>
+	<previous>Forrige</previous>
+	<settingsfile>Indstillinger File</settingsfile>
+	<show>Show</show>
+	<shows>Shows</shows>
+	<special>Special</special>     		
+	<specials>Specials</specials>
+	<status>Status</status>
+	<title>Titel</title>
+	<titles>Titler</titles>
+	<true>Ægte</true>
+	<tv>TV</tv>
+	<tvs>TVs</tvs>
+	<video>Video</video>
+	<videos>Videos</videos>
+	<webpage>Hjemmeside</webpage>
+	<yes>Ja</yes> 
+	
+<!-- *** Error messages     -->   
+	<badevupdate>Eversion forkert installeret</badevupdate>
+	<badevupgrade>Eversion BETA2 forkert opgraderet</badevupgrade>
+	<ehw>Hardware svarer ikke</ehw>
+	<enodatain>Ingen data i </enodatain>
+	<enovideo>Ingen videoer at afspille</enovideo>
+	<enativeresp>Standardafspilleren reagerer ikke</enativeresp>
+	<enocdrom>Intet DVD/Bluray drev fundet</enocdrom>
+	<enodata>Ingen data</enodata>
+	<enodisc>Indsæt venligst en disk</enodisc>
+	<enoload>Kan ikke indlæse: </enoload>
+	<enomount>Kan ikke etablere forbindelse til netværksdrev:</enomount>
+	<enomountzero>Kan ikke oprette forbindelse til fil:</enomountzero>
+	<enoshare>Ingen delte foldere konfigureret i afspillerens indstillinger:</enoshare>
+	<enotfound>ikke fundet</enotfound>
+	<eprobfile>Problem med fil: </eprobfile>
+	<error>Fejl</error>
+	<evupdatefinish>Eversion update incomplete</evupdatefinish>
+	<ewarning>En dårlig Eversion opgradering fundet. Afslut venligst og kontroller din opsætning.</ewarning>
+	<ewarninga>En ufuldstændig opgradering fra beta1 til BETA2 er fundet. Besøg venligst www.dentedboxes.com/beta2 for hjælp og mere information.</ewarninga>
+	<ewinpath>Fejlkonfigureret afspilningssti, har fundet Windows stiformat</ewinpath>
+	<eyver>Opgrader venligst YAMJ. Eversion virker bedst med R2512</eyver>
+	<noeps>Ingen episoder</noeps>
+	<oldyamj>Gammel yamj version fundet</oldyamj>
+	<restartev>Opdatering til Eversion fundet. Afslut venligst Eversion og start igen.</restartev>
+	<segment>Segment</segment> 
+	
+<!-- eskins skinner errors (most likely not needed for end users) -->
+	<enoextras>Ingen ekstramateriale fundet i YAMJ XML</enoextras>
+	<enoindexfilename>Ingen indeks filnavn</enoindexfilename>
+	<enoparts>Ingen multi-del filmfiler fundet i YAMJ XML</enoparts>
+	<esnoxtradata>Kan ikke starte ekstramateriale, ingen data</esnoxtradata>
+	<esnoxtrafile>Kan ikke starte ekstramateriale, ingen eskin filnavn</esnoxtrafile>
+	<eunknownscreen>Ukendt skærmtype</eunknownscreen>
+
+
+>>>>>>> origin/dev
 =======
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--

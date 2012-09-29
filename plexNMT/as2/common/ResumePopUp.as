@@ -125,8 +125,13 @@ class plexNMT.as2.common.ResumePopUp {
 		this.popUpMC._menu._resume.autoSize = true;
 		this.popUpMC._menu._resume.setNewTextFormat(myFormat);
 <<<<<<< HEAD
+<<<<<<< HEAD
 		this.popUpMC._menu._resume.text = "Resume @ " + Utils.formatTime( PlexData.oMovieData.MediaContainer[0].Video[0].attributes.duration);
 		this.popUpMC._menu._resume._time = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.duration;
+=======
+		this.popUpMC._menu._resume.text = "Resume @ " + Utils.formatTime( PlexData.oMovieData.MediaContainer[0].Video[0].attributes.viewOffset);
+		this.popUpMC._menu._resume._time = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.viewOffsetq;
+>>>>>>> origin/dev
 =======
 		this.popUpMC._menu._resume.text = "Resume @ " + Utils.formatTime( PlexData.oMovieData.MediaContainer[0].Video[0].attributes.viewOffset);
 		this.popUpMC._menu._resume._time = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.viewOffsetq;

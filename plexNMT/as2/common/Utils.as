@@ -80,11 +80,14 @@ class plexNMT.as2.common.Utils {
 
 	public static function formatTime(ms:Number):String {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		var hr:Number = int(ms/(1000*60*60));
 		var min:Number = int(ms/(1000*60))-(hr*60);
 
 		return (hr+"hr "+min+"min");
 =======
+=======
+>>>>>>> origin/dev
 		
 		
 		var hr:Number = int(ms/(1000*60*60));
@@ -105,6 +108,9 @@ class plexNMT.as2.common.Utils {
 		}
 
 		return ("0s");
+<<<<<<< HEAD
+>>>>>>> origin/dev
+=======
 >>>>>>> origin/dev
 	}
 }
