@@ -9,6 +9,7 @@ import mx.xpath.XPathAPI;
 
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Utils;
+import plexNMT.as2.common.ObjClone;
 
 /* -- to infrom plex what we are
 ?X-Plex-Client-Capabilities => 
@@ -130,20 +131,50 @@ class plexNMT.as2.api.PlexAPI
 	
 	public static function getWallDataRange(key:String, intPos:Number, size:Number, onLoad:Function, timeout:Number):Void
 	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+intPos+"&X-Plex-Container-Size="+size;
+		Util.loadURL(url, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if(success)
 			{
-				trace("Doing PlexAPI - getWallData: " + success);
-                PlexData.oWallData = new XMLObject().parseXML(xml, true);
-				PlexData.setWallData();
+						
+				trace("Doing PlexAPI - getWallDataRange: " + success);
+				var child:String = "";
+				var j:Number = 0;
+                var _obj:Object = new XMLObject().parseXML(xml, true);
+				PlexData.oWallData = new ObjClone(_obj);
+				PlexData.oWallData.intLength = _obj.MediaContainer[0].attributes.totalSize - 1;
+				if (_obj.MediaContainer[0].Directory != undefined)
+				{
+					child = "Directory";
+				} else {
+					child = "Video";
+				}
+				for (var i:Number = 0; i<PlexData.oWallData.intLength; i++)
+				{
+					if (i<o.o.intPos)
+					{
+						PlexData.oWallData.MediaContainer[0][child][i] = null; 
+					} else if (i<(o.o.intPos+o.o._size)) {
+						trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][j].attributes.title + " to [\""+child+"\"]["+i+"] From j:" +j);
+						PlexData.oWallData.MediaContainer[0][child][i] = _obj.MediaContainer[0][child][j];
+						j++;
+					} else {
+						PlexData.oWallData.MediaContainer[0][child][i] = null;
+					}
+					
+				}
+				PlexData.oWallData.MediaContainer[0][child].splice(PlexData.oWallData.intLength);
                 delete xml
-				//Utils.varDump(PlexData.oWallData)
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get WallData...");
+				D.debug(D.lDebug, "PlexAPI - Faled to get WallData with range...");
 			}
 			this.onLoad(PlexData.oWallData);
-		}), {target:"xml", timeout:timeout});
+		}), {target:"xml", timeout:timeout, intPos:intPos, _size:size});
+	}
+	
+	private static function onWallDataSet():Void
+	{
+		
 	}
 	
 	public static function getWallData(key:String, onLoad:Function, timeout:Number):Void

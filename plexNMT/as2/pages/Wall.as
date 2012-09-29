@@ -65,7 +65,7 @@ class plexNMT.as2.pages.Wall
 		Utils.cleanUp(this.parentMC);
 		
 		trace("Wall - Done Wall.Clean Up...");
-		Utils.varDump(_level0);
+		//Utils.varDump(_level0);
 	}
 
 	public function Wall(parentMC:MovieClip)
@@ -103,7 +103,8 @@ class plexNMT.as2.pages.Wall
 				key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
 			}
 			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
-			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			//PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			PlexAPI.getWallDataRange(key, 0, 14, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
 		}
 
 		_details = new WallDetails(parentMC);
@@ -294,6 +295,7 @@ class plexNMT.as2.pages.Wall
 	private function hlCB(o:Object):Void
 	{
 		trace("Wall - Doing hlCB...");
+		//Utils.traceVar(o);
 		/*trace("Wall - PlexData.oWallData.intPos: " + PlexData.oWallData.intPos);
 		trace("Wall - g._hl: " + this.g._hl);*/
 		PlexData.oWallData.intPos = this.g._hl;
