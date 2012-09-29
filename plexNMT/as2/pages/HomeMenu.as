@@ -148,7 +148,7 @@ class plexNMT.as2.pages.HomeMenu {
 		{
 			case Key.LEFT:
 				PlexData.oSettings.curLevel --;
-				if (i < 1)
+				if (PlexData.oSettings.curLevel < 1)
 				{
 					PlexData.oSettings.curLevel = 1;
 				}
@@ -225,12 +225,6 @@ class plexNMT.as2.pages.HomeMenu {
 			break;
 			case Key.ENTER:
 				this.loadPage();
-			break;
-			case "soft1":  //for testing on pc
-			case Remote.BACK:
-				//PlexData.readSO();
-				this.destroy();
-				gotoAndPlay("main");
 			break;
 			case Remote.HOME:
 				this.destroy();
