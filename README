@@ -1,1 +1,17 @@
-This is the Dev branch...
+The plexNMT (Plex Client) application allows you to use your popcorn device (C200+) to browse and play your videos using the Plex Media Server installed on your Mac, PC, Linux computer or NAS.
+
+Plex Media Server (PMS) seamlessly connects your Plex clients to all of your local and online media. The combination of networked library management, online content streaming and powerful transcoding functionality provides an unrivalled level of flexibility and ease of use not found in other media server applications.
+
+YOU MUST HAVE THE PLEX MEDIA SERVER INSTALLED AND RUNNING ON YOUR NETWORK TO STREAM MEDIA FROM
+
+Get the PMS for free at http://plexapp.com/getplex; Linux http://plexapp.com/linux/linux-pms-download
+
+*****************
+INCOMPLETE SOURCE
+*****************
+
+plexNMT includes code that requires an agreement with Syabas. To find the missing pieces, you must signup at http://developer.popbox.com and in the general forum you'll find the protected download of the missing pieces.
+
+Use the SDK docs from syabas for how to setup Flash for Flashlite and API DEV
+
+plexNMT is published using Adobe Flash CS4. Just rename the swf to phf to run from usb.
