@@ -104,7 +104,7 @@ class plexNMT.as2.pages.Wall
 			}
 			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
 			//PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
-			PlexAPI.getWallDataRange(key, 0, 14, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			PlexAPI.getWallDataRange(key, 0, 38, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
 		}
 
 		_details = new WallDetails(parentMC);

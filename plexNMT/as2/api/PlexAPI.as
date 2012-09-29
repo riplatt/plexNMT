@@ -136,7 +136,6 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-						
 				trace("Doing PlexAPI - getWallDataRange: " + success);
 				var child:String = "";
 				var j:Number = 0;
