@@ -1,0 +1,544 @@
+<<<<<<< HEAD
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EVERSION English prompts
+	
+	********************** NOT UPDATE FRIENDLY  *********************
+	If you want to make changes to any translation file, please make
+	a unique filename for it.  This is the best way to make sure your
+	file is not lost during upgrades.
+	******************************************************************
+	
+	If you translate the skin into your native language, please let us 
+	know so we can include the translation in a future release (and 
+	contact you if we add new prompts before future releases)
+	
+	Edit <translation>en.xml</translation> controls what language file 
+	to use.
+	
+	Changes to this file will not work until you copy it to your Jukebox 
+	folder AND you have added this file as your translation setting in 
+	skinsettings.xml.
+	
+	For help, visit: http://www.dentedboxes.com/doku.php/help:settings
+-->
+
+<translation>
+  <!-- *** System  -->
+	<starting>Загрузка</starting>
+	<pleasewait>Подождите</pleasewait>
+	<reset>Перезапуск</reset>
+	<ignore>Пропустить</ignore>
+	<exit>Выход</exit>
+	<help>помощь</help>
+	<home>Начало</home>
+	<about>О программе</about>
+	<sapps>Apps</sapps>	
+	<apps>Apps</apps>
+	<okselect>OK</okselect>      <!-- ok prompt on popup messages -->
+	<yupdate>ОБНАРУЖЕНО ОБНОВЛЕНИЕ YAMJ JUKEBOX</yupdate>
+	<alert>Информация</alert>
+	<loading>Загрузка</loading>
+	<eskin>Eskin</eskin>
+	<prepcat>Загрузка категорий</prepcat>
+	<prepcset>Загрузка настроек проигрывателя</prepcset>
+	
+  <!-- *** SDK Player      	-->
+	<skipto>Пропустить до</skipto>
+	<goto>Перейти к</goto>
+	<playlist>Плейлист</playlist>
+	<couldnotplay>Невозможно проиграть</couldnotplay>
+	<infopanel>Инфо</infopanel>
+	<dlspeed>Скорость загрузки</dlspeed>
+	<videoquality>Качество видео</videoquality>
+	<connstatus>Подключение к медиафайлу...</connstatus>
+	<buffstatus>Буфферизация...</buffstatus>	
+	<ttpl>Плейлист</ttpl>	
+	<ttseek>Переход по времени</ttseek>
+	
+	<!-- *** playlist -->
+	<preprom>Preparing Optical Drive</preprom>
+	<prepnet>Preparing network storage</prepnet>
+	<prepdrives>Updating drive list</prepdrives>
+	<prepintdrive>Preparing internal drive</prepintdrive>
+	<usbdrive>USB drive</usbdrive>
+	<intdrive>Internal drive</intdrive>
+	<updateshare>Update share list</updateshare>
+
+	<!-- *** skins -->
+	
+	<!-- home menu -->
+	
+	<3d>3D</3d>
+	<all>все</all>
+	<award>Награды</award>
+	<awards>Награды</awards>
+	<categories>Категории</categories>
+	<category>Категории</category>
+	<cast>Подбор актеров</cast>
+	<casts>Подбор актеров</casts>
+	<countries>Стран</countries>
+	<country>Страна</country>
+	<director>Режиссёр</director>
+	<directors>Режиссёр</directors>
+	<extra>Дополнительные</extra>
+	<extras>Дополнительные</extras>
+	<hd>HD</hd>
+	<hd-720>HD-720</hd-720>
+	<hd-1080>HD-1080</hd-1080>
+	<libraries>Библиотек</libraries>
+	<library>Библиотека</library>
+	<librarydescription>Библиотека</librarydescription>
+	<movie>Фильм</movie>
+	<movies>Фильмы</movies>		
+	<new>Нью</new>
+	<news>Нью</news>
+	<new-movie>Нью-Фильм</new-movie>
+	<new-movies>Нью-Фильмы</new-movies>
+	<new-tv>Нью-TV</new-tv>
+	<new-tvs>Нью TVs</new-tvs>
+	<other>Прочее</other>
+	<people>Люди</people>
+	<person>Персонаж</person>
+	<persons>Персонаж</persons>
+	<rating>Рейтинг</rating>
+	<ratings>Рейтинг</ratings>
+	<set>Серия</set>
+	<sets>Серия</sets>   
+	<top250>Top-250</top250>
+	<trailer>Трейлеры</trailer>
+	<trailers>Трейлеры</trailers>
+	<tv-shows>ТВ-Сериал</tv-shows>   
+	<unwatched>непросмотренные</unwatched>
+	<watched>Просмотрено</watched>
+	<weather>Погода</weather>
+	<writer>Сценарий</writer>
+	<writers>Сценарий</writers>
+	<year>Год</year>
+	<years>Год</years>   
+
+<!-- details page -->
+	<actor>В ролях</actor>
+	<actors>В ролях</actors>
+	<aired>Эфир</aired>
+	<airsinfo>Airs информация</airsinfo>
+	<aspect>аспект</aspect>
+	<aspectratio>Соотношение сторон</aspectratio>
+	<audio>Аудио</audio>
+	<audiochannel>Аудио канала</audiochannel>
+	<audiochannels>Аудио канала</audiochannels>
+	<audiocodec>Аудио кодек</audiocodec>
+	<budget>бюджет</budget>
+	<budgets>бюджетов</budgets>
+	<business>бизнес</business>
+	<channel>канала</channel>
+	<channels>каналов</channels>
+	<container>контейнер</container>
+	<company>компании</company>
+	<certification>Рейтинг MPAA</certification>
+	<certifications>Рейтинг MPAA</certifications>
+	<date>Дата</date>
+	<details>Подробности</details>
+	<didyouknow>Знаете ли вы</didyouknow>
+	<episode>Серия</episode>			
+	<episodes>Серия</episodes>			
+	<episodeshort>E</episodeshort>
+	<event>событие</event>
+	<events>событие</events>
+	<filedate>Файл-Дата</filedate>
+	<filesize>размер файла</filesize>
+	<firstaired>Эфир</firstaired>
+	<fps>кадров в секунду</fps>
+	<gross>Валовой</gross>
+	<language>Язык</language>
+	<languageflag>Язык флага</languageflag>
+	<languages>Язык</languages>
+	<name>Имя</name>
+	<names>Имя</names>
+	<nominated>Назначенный</nominated>
+	<openweek>Openweek</openweek>
+	<outline>структуры</outline>
+	<part>часть</part>
+	<parts>части</parts>
+	<plot>Сюжет</plot>
+	<quote>Цитировать</quote>
+	<rated>рейтингу</rated>
+	<releasedate>выпуска</releasedate>
+	<resolution>Разрешение</resolution>
+	<resolutions>Резолюции</resolutions>
+	<runtime>Время</runtime>
+	<season>Сезон</season>       		
+	<seasons>Сезоны</seasons>
+	<seasonshort>S</seasonshort>
+	<size>Размер</size>
+	<studio>студии</studio> 
+	<studiologo>студия Логотип</studiologo>
+	<subtitle>Субтитр</subtitle>
+	<subtitles>Субтитры</subtitles>
+	<tagline>Слоган</tagline>
+	<unknown>Onbekend</unknown>
+	<videocodec>Видео кодек</videocodec>
+	<videocontainer>Видео контейнер</videocontainer>
+	<videosource>Видео источник</videosource>
+	<videooutput>Видео выход</videooutput>
+	<win>Вине</win>
+	<won>Выиграл</won>		
+	
+	<!-- Person details -->
+	<biography>Биография</biography>
+	<birthday>День рождения</birthday>
+	<character>символов</character>
+	<department>департамента</department>
+	<doublage>Doublage</doublage>
+	<filmography>Фильмография</filmography>
+	<photo>Фото</photo>
+	<photofile>Фото</photofile>
+	<photos>Фото</photos>
+	
+	
+    <!-- *** various for  skin 	-->
+	<false>Onjuist</false>
+	<file>Файл</file>
+	<files>файлы</files>
+	<firmware>Прошивка</firmware>
+	<firstpart>первой части</firstpart>
+	<genre>Жанр</genre>
+	<genres>Жанры</genres>
+	<hardware>Система</hardware>
+	<index>Index</index>
+	<known>Известные</known>
+	<last>Последнее</last>
+	<lastpart>Последнее часть</lastpart>
+	<model>Модель</model>
+	<next>Далее</next>
+	<no>Нет</no>
+	<page>страница</page>
+	<pages>страницы</pages>
+	<play-disc>плей-диска</play-disc>
+	<previous>Предыдущая</previous>
+	<settingsfile>Настройки</settingsfile>
+	<show>Сериал</show>
+	<shows>Сериалы</shows>
+	<special>Специальные</special>     		
+	<specials>Специальные</specials>
+	<status>статус</status>
+	<title>Название</title>
+	<titles>Название</titles>
+	<true>Juist</true>
+	<tv>ТВ</tv>
+	<tvs>ТВ</tvs>
+	<video>Видео</video>
+	<videos>Видео</videos>
+	<webpage>Сайт</webpage>
+	<yes>Да</yes> 
+	
+<!-- *** Error messages     -->   
+	<badevupdate>Eversion установлен неправильно</badevupdate>
+	<badevupgrade>Eversion BETA2 обновлён неверно</badevupgrade>
+	<ehw>Система не отвечает</ehw>
+	<enodatain>Нет данных: </enodatain>
+	<enovideo>Нет видеофайла</enovideo>
+	<enativeresp>Проигрыватель не отвечает</enativeresp>
+	<enocdrom>DVD/Blu-Ray привод не найден</enocdrom>
+	<enodata>Нет данных</enodata>
+	<enodisc>Пожалуйста, вставьте диск</enodisc>
+	<enoload>Неудалось загрузить: </enoload>
+	<enomount>Не удалось установить подключение к сетевому ресурсу:</enomount>
+	<enomountzero>Не удалось установить подключение к файлу:</enomountzero>
+	<enoshare>Сетевой ресурс не прописан в настройках проигрывателя:</enoshare>
+	<enotfound>не найден</enotfound>
+	<eprobfile>Проблема с файлом: </eprobfile>
+	<error>Ошибка</error>
+	<evupdatefinish>Обновление Eversion не завершено</evupdatefinish>
+	<ewarning>Обнаружено неправильное обновление Eversion. Пожалуйста, выйдите и проверьте настройки.</ewarning>
+	<ewarninga>Обнаружено неполное обновление BETA1 на BETA2. За помощью посетите www.dentedboxes.com/beta2.</ewarninga>
+	<ewinpath>Задан неправильный путь проигрывателя</ewinpath>
+	<eyver>Пожалуйста, обновите YAMJ. Eversion работает лучше с версией R2512</eyver>
+
+	<noeps>Нет серий</noeps>
+	<oldyamj>Обнаружена устаревшая версия YAMJ</oldyamj>
+	<restartev>Обнаружено не полное обновление. Пожалуйста, перезапустите Eversion для полного завершения.</restartev>
+	<segment>Сегмент</segment> 
+	
+<!-- eskins skinner errors (most likely not needed for end users) -->
+	<enoextras>No extras found in YAMJ XML</enoextras>
+	<enoindexfilename>No index filename</enoindexfilename>
+	<enoparts>No multi-part movie files found in YAMJ XML</enoparts>
+	<esnoxtradata>Cannot start EXTRA, no data</esnoxtradata>
+	<esnoxtrafile>Cannot start EXTRA, no eskin filename</esnoxtrafile>
+	<eunknownscreen>Unknown screen type</eunknownscreen>		
+
+
+=======
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EVERSION English prompts
+	
+	********************** NOT UPDATE FRIENDLY  *********************
+	If you want to make changes to any translation file, please make
+	a unique filename for it.  This is the best way to make sure your
+	file is not lost during upgrades.
+	******************************************************************
+	
+	If you translate the skin into your native language, please let us 
+	know so we can include the translation in a future release (and 
+	contact you if we add new prompts before future releases)
+	
+	Edit <translation>en.xml</translation> controls what language file 
+	to use.
+	
+	Changes to this file will not work until you copy it to your Jukebox 
+	folder AND you have added this file as your translation setting in 
+	skinsettings.xml.
+	
+	For help, visit: http://www.dentedboxes.com/doku.php/help:settings
+-->
+
+<translation>
+  <!-- *** System  -->
+	<starting>Загрузка</starting>
+	<pleasewait>Подождите</pleasewait>
+	<reset>Перезапуск</reset>
+	<ignore>Пропустить</ignore>
+	<exit>Выход</exit>
+	<help>помощь</help>
+	<home>Начало</home>
+	<about>О программе</about>
+	<sapps>Apps</sapps>	
+	<apps>Apps</apps>
+	<okselect>OK</okselect>      <!-- ok prompt on popup messages -->
+	<yupdate>ОБНАРУЖЕНО ОБНОВЛЕНИЕ YAMJ JUKEBOX</yupdate>
+	<alert>Информация</alert>
+	<loading>Загрузка</loading>
+	<eskin>Eskin</eskin>
+	<prepcat>Загрузка категорий</prepcat>
+	<prepcset>Загрузка настроек проигрывателя</prepcset>
+	
+  <!-- *** SDK Player      	-->
+	<skipto>Пропустить до</skipto>
+	<goto>Перейти к</goto>
+	<playlist>Плейлист</playlist>
+	<couldnotplay>Невозможно проиграть</couldnotplay>
+	<infopanel>Инфо</infopanel>
+	<dlspeed>Скорость загрузки</dlspeed>
+	<videoquality>Качество видео</videoquality>
+	<connstatus>Подключение к медиафайлу...</connstatus>
+	<buffstatus>Буфферизация...</buffstatus>	
+	<ttpl>Плейлист</ttpl>	
+	<ttseek>Переход по времени</ttseek>
+	
+	<!-- *** playlist -->
+	<preprom>Preparing Optical Drive</preprom>
+	<prepnet>Preparing network storage</prepnet>
+	<prepdrives>Updating drive list</prepdrives>
+	<prepintdrive>Preparing internal drive</prepintdrive>
+	<usbdrive>USB drive</usbdrive>
+	<intdrive>Internal drive</intdrive>
+	<updateshare>Update share list</updateshare>
+
+	<!-- *** skins -->
+	
+	<!-- home menu -->
+	
+	<3d>3D</3d>
+	<all>все</all>
+	<award>Награды</award>
+	<awards>Награды</awards>
+	<categories>Категории</categories>
+	<category>Категории</category>
+	<cast>Подбор актеров</cast>
+	<casts>Подбор актеров</casts>
+	<countries>Стран</countries>
+	<country>Страна</country>
+	<director>Режиссёр</director>
+	<directors>Режиссёр</directors>
+	<extra>Дополнительные</extra>
+	<extras>Дополнительные</extras>
+	<hd>HD</hd>
+	<hd-720>HD-720</hd-720>
+	<hd-1080>HD-1080</hd-1080>
+	<libraries>Библиотек</libraries>
+	<library>Библиотека</library>
+	<librarydescription>Библиотека</librarydescription>
+	<movie>Фильм</movie>
+	<movies>Фильмы</movies>		
+	<new>Нью</new>
+	<news>Нью</news>
+	<new-movie>Нью-Фильм</new-movie>
+	<new-movies>Нью-Фильмы</new-movies>
+	<new-tv>Нью-TV</new-tv>
+	<new-tvs>Нью TVs</new-tvs>
+	<other>Прочее</other>
+	<people>Люди</people>
+	<person>Персонаж</person>
+	<persons>Персонаж</persons>
+	<rating>Рейтинг</rating>
+	<ratings>Рейтинг</ratings>
+	<set>Серия</set>
+	<sets>Серия</sets>   
+	<top250>Top-250</top250>
+	<trailer>Трейлеры</trailer>
+	<trailers>Трейлеры</trailers>
+	<tv-shows>ТВ-Сериал</tv-shows>   
+	<unwatched>непросмотренные</unwatched>
+	<watched>Просмотрено</watched>
+	<weather>Погода</weather>
+	<writer>Сценарий</writer>
+	<writers>Сценарий</writers>
+	<year>Год</year>
+	<years>Год</years>   
+
+<!-- details page -->
+	<actor>В ролях</actor>
+	<actors>В ролях</actors>
+	<aired>Эфир</aired>
+	<airsinfo>Airs информация</airsinfo>
+	<aspect>аспект</aspect>
+	<aspectratio>Соотношение сторон</aspectratio>
+	<audio>Аудио</audio>
+	<audiochannel>Аудио канала</audiochannel>
+	<audiochannels>Аудио канала</audiochannels>
+	<audiocodec>Аудио кодек</audiocodec>
+	<budget>бюджет</budget>
+	<budgets>бюджетов</budgets>
+	<business>бизнес</business>
+	<channel>канала</channel>
+	<channels>каналов</channels>
+	<container>контейнер</container>
+	<company>компании</company>
+	<certification>Рейтинг MPAA</certification>
+	<certifications>Рейтинг MPAA</certifications>
+	<date>Дата</date>
+	<details>Подробности</details>
+	<didyouknow>Знаете ли вы</didyouknow>
+	<episode>Серия</episode>			
+	<episodes>Серия</episodes>			
+	<episodeshort>E</episodeshort>
+	<event>событие</event>
+	<events>событие</events>
+	<filedate>Файл-Дата</filedate>
+	<filesize>размер файла</filesize>
+	<firstaired>Эфир</firstaired>
+	<fps>кадров в секунду</fps>
+	<gross>Валовой</gross>
+	<language>Язык</language>
+	<languageflag>Язык флага</languageflag>
+	<languages>Язык</languages>
+	<name>Имя</name>
+	<names>Имя</names>
+	<nominated>Назначенный</nominated>
+	<openweek>Openweek</openweek>
+	<outline>структуры</outline>
+	<part>часть</part>
+	<parts>части</parts>
+	<plot>Сюжет</plot>
+	<quote>Цитировать</quote>
+	<rated>рейтингу</rated>
+	<releasedate>выпуска</releasedate>
+	<resolution>Разрешение</resolution>
+	<resolutions>Резолюции</resolutions>
+	<runtime>Время</runtime>
+	<season>Сезон</season>       		
+	<seasons>Сезоны</seasons>
+	<seasonshort>S</seasonshort>
+	<size>Размер</size>
+	<studio>студии</studio> 
+	<studiologo>студия Логотип</studiologo>
+	<subtitle>Субтитр</subtitle>
+	<subtitles>Субтитры</subtitles>
+	<tagline>Слоган</tagline>
+	<unknown>Onbekend</unknown>
+	<videocodec>Видео кодек</videocodec>
+	<videocontainer>Видео контейнер</videocontainer>
+	<videosource>Видео источник</videosource>
+	<videooutput>Видео выход</videooutput>
+	<win>Вине</win>
+	<won>Выиграл</won>		
+	
+	<!-- Person details -->
+	<biography>Биография</biography>
+	<birthday>День рождения</birthday>
+	<character>символов</character>
+	<department>департамента</department>
+	<doublage>Doublage</doublage>
+	<filmography>Фильмография</filmography>
+	<photo>Фото</photo>
+	<photofile>Фото</photofile>
+	<photos>Фото</photos>
+	
+	
+    <!-- *** various for  skin 	-->
+	<false>Onjuist</false>
+	<file>Файл</file>
+	<files>файлы</files>
+	<firmware>Прошивка</firmware>
+	<firstpart>первой части</firstpart>
+	<genre>Жанр</genre>
+	<genres>Жанры</genres>
+	<hardware>Система</hardware>
+	<index>Index</index>
+	<known>Известные</known>
+	<last>Последнее</last>
+	<lastpart>Последнее часть</lastpart>
+	<model>Модель</model>
+	<next>Далее</next>
+	<no>Нет</no>
+	<page>страница</page>
+	<pages>страницы</pages>
+	<play-disc>плей-диска</play-disc>
+	<previous>Предыдущая</previous>
+	<settingsfile>Настройки</settingsfile>
+	<show>Сериал</show>
+	<shows>Сериалы</shows>
+	<special>Специальные</special>     		
+	<specials>Специальные</specials>
+	<status>статус</status>
+	<title>Название</title>
+	<titles>Название</titles>
+	<true>Juist</true>
+	<tv>ТВ</tv>
+	<tvs>ТВ</tvs>
+	<video>Видео</video>
+	<videos>Видео</videos>
+	<webpage>Сайт</webpage>
+	<yes>Да</yes> 
+	
+<!-- *** Error messages     -->   
+	<badevupdate>Eversion установлен неправильно</badevupdate>
+	<badevupgrade>Eversion BETA2 обновлён неверно</badevupgrade>
+	<ehw>Система не отвечает</ehw>
+	<enodatain>Нет данных: </enodatain>
+	<enovideo>Нет видеофайла</enovideo>
+	<enativeresp>Проигрыватель не отвечает</enativeresp>
+	<enocdrom>DVD/Blu-Ray привод не найден</enocdrom>
+	<enodata>Нет данных</enodata>
+	<enodisc>Пожалуйста, вставьте диск</enodisc>
+	<enoload>Неудалось загрузить: </enoload>
+	<enomount>Не удалось установить подключение к сетевому ресурсу:</enomount>
+	<enomountzero>Не удалось установить подключение к файлу:</enomountzero>
+	<enoshare>Сетевой ресурс не прописан в настройках проигрывателя:</enoshare>
+	<enotfound>не найден</enotfound>
+	<eprobfile>Проблема с файлом: </eprobfile>
+	<error>Ошибка</error>
+	<evupdatefinish>Обновление Eversion не завершено</evupdatefinish>
+	<ewarning>Обнаружено неправильное обновление Eversion. Пожалуйста, выйдите и проверьте настройки.</ewarning>
+	<ewarninga>Обнаружено неполное обновление BETA1 на BETA2. За помощью посетите www.dentedboxes.com/beta2.</ewarninga>
+	<ewinpath>Задан неправильный путь проигрывателя</ewinpath>
+	<eyver>Пожалуйста, обновите YAMJ. Eversion работает лучше с версией R2512</eyver>
+
+	<noeps>Нет серий</noeps>
+	<oldyamj>Обнаружена устаревшая версия YAMJ</oldyamj>
+	<restartev>Обнаружено не полное обновление. Пожалуйста, перезапустите Eversion для полного завершения.</restartev>
+	<segment>Сегмент</segment> 
+	
+<!-- eskins skinner errors (most likely not needed for end users) -->
+	<enoextras>No extras found in YAMJ XML</enoextras>
+	<enoindexfilename>No index filename</enoindexfilename>
+	<enoparts>No multi-part movie files found in YAMJ XML</enoparts>
+	<esnoxtradata>Cannot start EXTRA, no data</esnoxtradata>
+	<esnoxtrafile>Cannot start EXTRA, no eskin filename</esnoxtrafile>
+	<eunknownscreen>Unknown screen type</eunknownscreen>		
+
+
+>>>>>>> origin/dev
+</translation>

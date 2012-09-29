@@ -4,6 +4,7 @@ import com.syabas.as2.common.D;
 
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.popSharedObjects;
+import plexNMT.as2.common.Remote;
 
 import mx.utils.Delegate;
 
@@ -11,43 +12,48 @@ class plexNMT.as2.pages.Splash {
 
 	// Constants:
 	public static var CLASS_REF = plexNMT.as2.pages.Splash;
-	//public var plexData:PlexData = null;
-	
-	private var strSplashTxt;
-	//private var objSO:popSharedObjects;
+
 	private static var reps:Number;
 	private static var IntervalID:Number = null;
+	
+	private var keyListener:Object = null;
 
 	// Initialization:
 	public function Splash(parentMC:MovieClip) {
-		//objSO:popSharedObjcets;
 		
 		IntervalID = setInterval(Delegate.create(this, this.wacthdog), 700);
 		reps = 5;
 		
 		PlexData.init();
-		
+				
 		popSharedObjects.getSO();
-
+		
+		this.keyListener = new Object();
+		this.keyListener.onKeyDown = Delegate.create(this, this.onKeyDown);
+		
+		D.level = 4;
 		D.debug(D.lInfo,"Splash - Press The Blue Key to Turn This Debug Window Off...");
 	}
 
 	// Public Methods:
-	public static function destroy():Void {
+	public function destroy():Void {
 		//Var
 		IntervalID = null;
 		reps = null;
+		
+		//Remove Listener
+		Key.removeListener(keyListener);
+		delete keyListener;
 	}
 	
 	// Private Methods
 	private function wacthdog() {
-		var strSplashTxt:String;
 		D.debug(D.lDebug,"Splash - Shared Object: " + popSharedObjects.strSharedObjectState);
 		
 		switch (popSharedObjects.strSharedObjectState) {
 			case "new":
 				clearInterval(IntervalID);
-				D.debug(D.lInfo,"Splash - First Run, no Saved Settings Going to Settings Page...");
+				D.debug(D.lInfo,"Splash - First Run, no Saved Settings, Going to Settings Page...");
 				this.loadPage("settings");
 				break;
 			case "retrieved":
@@ -57,7 +63,26 @@ class plexNMT.as2.pages.Splash {
 					this.loadPage("settings");
 				} else {
 					D.debug(D.lInfo,"Splash - Useing PLEX Server:" + PlexData.oSettings.url + " and Going to " + PlexData.oPage.current + " Page..");
-					this.loadPage(PlexData.oPage.current);
+					//Debug
+					D.level = PlexData.oSettings.debug.level;
+					D.debug(D.lDebug,"Settings - Debug level on...");
+					D.debug(D.lInfo,"Settings - Info level on...");
+					D.debug(D.lError,"Settings - Error level on...");
+					if(PlexData.oSettings.debug.level == 0){
+						D.debug(D.lInfo,"Settings - Logging off...");
+						D.mc._visible = false;
+						D.destroy();
+					} else {
+						if (D.loaded != true)
+						{
+							D.init({mc:{level:100, showHideKC:16777250, upKC:Key.UP, downKC:40
+								, mcProps:{_x:725, _y:50, _width:500, _height:600}}, remote:{ip:PlexData.oSettings.debug.remote}
+							});
+							
+						}
+					}
+					this.loadPage(PlexData.oSettings.lastPage);
+					//this.loadPage("settings");
 				}
 				break;
 			default:
@@ -70,17 +95,37 @@ class plexNMT.as2.pages.Splash {
 					reps--;
 				}
 		}
+		if(PlexData.oSettings.debugLevel == 0){
+			D.mc._visible = false;
+			D.destroy();
+		}
 	}
 	
 	private function loadPage(page:String):Void {
 		
 		destroy();
-		//trace("Going to page " + page);
-		if(page == ""){
+		D.debug(D.lDev,"Splash - PlexData.oPage.current: " + PlexData.oPage.current);
+		D.debug(D.lDebug,"Splash - Loading Page: " + page);
+		if(page == null){
 			page = "main";
 		}
 		gotoAndPlay(page);
 		
+	}
+
+	private function onKeyDown():Void
+	{
+		var keyCode:Number = Key.getCode();
+
+		switch (keyCode)
+		{
+			case Remote.HOME:
+				this.loadPage("main");
+			break;
+			case Remote.YELLOW:
+				this.loadPage("settings");
+			break;
+		}
 	}
 	
 	private function cleanUp(_obj:Object)
@@ -100,6 +145,7 @@ class plexNMT.as2.pages.Splash {
 			}
 		}
 	}
+	
 	
 	private function var_dump(_obj:Object) {
 		//trace("Doing var_dump...");

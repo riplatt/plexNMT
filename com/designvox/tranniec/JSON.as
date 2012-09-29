@@ -36,7 +36,7 @@ class com.designvox.tranniec.JSON {
 	static function stringify(arg):String {
 
         var c, i, l, s = '', v;
-
+		//trace("Doing stringify with: " + typeof arg);
         switch (typeof arg) {
         case 'object':
             if (arg) {

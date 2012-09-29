@@ -1,6 +1,6 @@
 ﻿/**
- * VERSION: 11.693
- * DATE: 2011-11-07
+ * VERSION: 11.698
+ * DATE: 2012-03-27
  * AS2 (AS3 version is also available)
  * UPDATES AND DOCS AT: http://www.greensock.com 
  **/
@@ -295,14 +295,14 @@ import com.greensock.plugins.*;
  * 	  to members. Learn more at <a href="http://www.greensock.com/club/">http://www.greensock.com/club/</a></li>
  * 	</ul>
  * 	  
- * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <b>Copyright 2012, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
  * 
  * @author Jack Doyle, jack@greensock.com
  */
 
 class com.greensock.TweenMax extends TweenLite {
 		/** @private **/
-		public static var version:Number = 11.693;
+		public static var version:Number = 11.698;
 		
 		/** @private **/
 		private static var _activatedPlugins:Boolean = TweenPlugin.activate([
@@ -531,7 +531,7 @@ class com.greensock.TweenMax extends TweenLite {
 		 * @param force Normally the tween will skip rendering if the time matches the cachedTotalTime (to improve performance), but if force is true, it forces a render. This is primarily used internally for tweens with durations of zero in TimelineLite/Max instances.
 		 */
 		public function renderTime(time:Number, suppressEvents:Boolean, force:Boolean):Void {
-			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTotalTime, isComplete:Boolean, repeated:Boolean, setRatio:Boolean;
+			var totalDur:Number = (this.cacheIsDirty) ? this.totalDuration : this.cachedTotalDuration, prevTime:Number = this.cachedTime, prevTotalTime:Number = this.cachedTotalTime, isComplete:Boolean, repeated:Boolean, setRatio:Boolean;
 			if (time >= totalDur) {
 				this.cachedTotalTime = totalDur;
 				this.cachedTime = this.cachedDuration;
@@ -550,7 +550,7 @@ class com.greensock.TweenMax extends TweenLite {
 					if (this.cachedDuration == 0) { //zero-duration tweens are tricky because we must discern the momentum/direction of time in order to determine whether the starting values should be rendered or the ending values. If the "playhead" of its timeline goes past the zero-duration tween in the forward direction or lands directly on it, the end values should be rendered, but if the timeline's "playhead" moves past it in the backward direction (from a postitive time to a negative time), the starting values must be rendered.
 						if (_rawPrevTime >= 0) {
 							force = true;
-							isComplete = true;
+							isComplete = (_rawPrevTime > 0);
 						}
 						_rawPrevTime = time;
 					}
@@ -558,7 +558,7 @@ class com.greensock.TweenMax extends TweenLite {
 					force = true;
 				}
 				this.cachedTotalTime = this.cachedTime = this.ratio = 0;
-				if (this.cachedReversed && prevTime != 0) {
+				if (this.cachedReversed && prevTotalTime != 0) {
 					isComplete = true;
 				}
 			} else {
@@ -570,20 +570,18 @@ class com.greensock.TweenMax extends TweenLite {
 				
 				var cycleDuration:Number = this.cachedDuration + _repeatDelay;
 				var prevCycles:Number = _cyclesComplete;
-				_cyclesComplete = (this.cachedTotalTime / cycleDuration) >> 0;
-				if (_cyclesComplete == this.cachedTotalTime / cycleDuration) {
+				var prevCycles:Number = _cyclesComplete;
+				if ((_cyclesComplete = (this.cachedTotalTime / cycleDuration) >> 0) == (this.cachedTotalTime / cycleDuration) && _cyclesComplete != 0) {
 					_cyclesComplete--; //otherwise when rendered exactly at the end time, it will act as though it is repeating (at the beginning)
 				}
-				if (prevCycles != _cyclesComplete) {
-					repeated = true;
-				}
+				repeated = Boolean(prevCycles != _cyclesComplete);
 				
 				if (isComplete) {
 					if (this.yoyo && _repeat % 2) {
 						this.cachedTime = this.ratio = 0;
 					}
 				} else if (time > 0) {
-					this.cachedTime = ((this.cachedTotalTime / cycleDuration) - _cyclesComplete) * cycleDuration; //originally this.cachedTotalTime % cycleDuration but floating point errors caused problems, so I normalized it. (4 % 0.8 should be 0 but Flash reports it as 0.79999999!)
+					this.cachedTime = this.cachedTotalTime - (_cyclesComplete * cycleDuration); //originally this.cachedTotalTime % cycleDuration but floating point errors caused problems, so I normalized it. (4 % 0.8 should be 0 but Flash reports it as 0.79999999!)
 					
 					if (this.yoyo && _cyclesComplete % 2) {
 						this.cachedTime = this.cachedDuration - this.cachedTime;
@@ -603,7 +601,7 @@ class com.greensock.TweenMax extends TweenLite {
 				
 			}
 			
-			if (prevTime == this.cachedTotalTime && !force) {
+			if (prevTime == this.cachedTime && !force) {
 				return;
 			} else if (!this.initted) {
 				init();
@@ -614,7 +612,7 @@ class com.greensock.TweenMax extends TweenLite {
 			if (setRatio) {
 				this.ratio = _ease(this.cachedTime, 0, 1, this.cachedDuration);
 			}
-			if (prevTime == 0 && this.vars.onStart && (this.cachedTotalTime != 0 || this.cachedDuration == 0) && !suppressEvents) {
+			if (prevTotalTime == 0 && this.vars.onStart && (this.cachedTotalTime != 0 || this.cachedDuration == 0) && !suppressEvents) {
 				this.vars.onStart.apply(this.vars.onStartScope, this.vars.onStartParams);
 			}
 			
@@ -839,7 +837,8 @@ class com.greensock.TweenMax extends TweenLite {
 		 * @return Array of tweens (could be TweenLite and/or TweenMax instances)
 		 */
 		public static function getTweensOf(target:Object):Array {
-			var a:Array = masterList[target].tweens;
+			var id:String = getID(target, true);
+			var a:Array = masterList[id].tweens;
 			var toReturn:Array = [];
 			if (a) {
 				var i:Number = a.length;
