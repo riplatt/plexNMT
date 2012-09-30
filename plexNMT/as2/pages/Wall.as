@@ -96,15 +96,16 @@ class plexNMT.as2.pages.Wall
 				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/all";
 			}else{
 				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/";
-				key = key + PlexData.oCategories.MediaContainer[0].Directory[PlexData.oCategories.intPos].attributes.key + "/";
+				key = key + PlexData.oCategories.MediaContainer[0].Directory[PlexData.oCategories.intPos].attributes.key;
 			}
 			if (PlexData.oFilters.MediaContainer[0] != undefined) 
 			{
 				key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
 			}
 			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
+			//PlexData.oWallData.key = key;
 			//PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
-			PlexAPI.getWallDataRange(key, 0, 38, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			PlexAPI.getWallDataRange(key, 0, 28, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
 		}
 
 		_details = new WallDetails(parentMC);
@@ -299,6 +300,34 @@ class plexNMT.as2.pages.Wall
 		/*trace("Wall - PlexData.oWallData.intPos: " + PlexData.oWallData.intPos);
 		trace("Wall - g._hl: " + this.g._hl);*/
 		PlexData.oWallData.intPos = this.g._hl;
+		var _data:Array = new Array();
+		if (PlexData.oWallData.MediaContainer[0].Video != undefined) 
+		{
+			_data = PlexData.oWallData.MediaContainer[0].Video;
+		} else {
+			_data = PlexData.oWallData.MediaContainer[0].Directory;
+		}
+		trace("Wall - _data["+PlexData.GetRotation("oWallData", 14)+"]:"+_data[PlexData.GetRotation("oWallData", 14)]);
+		trace("Wall - ..attributes.title:"+_data[PlexData.GetRotation("oWallData", 14)].attributes.title);
+		if (_data[PlexData.GetRotation("oWallData", 14)].attributes.title == undefined)
+		{
+			var key:String = "/library/sections/";
+			if (PlexData.oSections.MediaContainer[0] != undefined && PlexData.oCategories.MediaContainer[0] == undefined) 
+			{
+				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/all";
+			}else{
+				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/";
+				key = key + PlexData.oCategories.MediaContainer[0].Directory[PlexData.oCategories.intPos].attributes.key;
+			}
+			if (PlexData.oFilters.MediaContainer[0] != undefined) 
+			{
+				key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
+			}
+			trace("Wall - Calling PlexAPI.loadWallData with intPos:" + PlexData.GetRotation("oWallData", (PlexData.oWall.total*-1)) + ", size:" + PlexData.oWall.total*3);
+			//PlexAPI.getWallDataRange(PlexData.oWallData.key, PlexData.GetRotation("oWallData", -14), 14*3, Delegate.create(this, this.onLoadWall), PlexData.oSettings.timeout);
+			PlexAPI.loadWallData(key, PlexData.GetRotation("oWallData", (PlexData.oWall.total*-1)), PlexData.oWall.total*3, Delegate.create(this, this.onLoadWall), PlexData.oSettings.timeout);
+			D.debug(D.lDebug, "Wall - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
+		}
 		_details.setText();
 		_menu._update();
 		
@@ -306,6 +335,11 @@ class plexNMT.as2.pages.Wall
 		var mc:MovieClip = o.mc;
 		mc.gotoAndStop("hl");
 
+	}
+	
+	private function onLoadWall(_obj:Object):Void
+	{
+		trace("Wall - Doing onLoadWall...");
 	}
 
 	private function unhlCB(o:Object):Void

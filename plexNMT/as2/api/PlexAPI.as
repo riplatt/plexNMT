@@ -131,6 +131,7 @@ class plexNMT.as2.api.PlexAPI
 	
 	public static function getWallDataRange(key:String, intPos:Number, size:Number, onLoad:Function, timeout:Number):Void
 	{
+		//PlexData.oWallData.key = key; 
 		var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+intPos+"&X-Plex-Container-Size="+size;
 		Util.loadURL(url, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
@@ -142,6 +143,7 @@ class plexNMT.as2.api.PlexAPI
                 var _obj:Object = new XMLObject().parseXML(xml, true);
 				PlexData.oWallData = new ObjClone(_obj);
 				PlexData.oWallData.intLength = _obj.MediaContainer[0].attributes.totalSize - 1;
+				PlexData.oWallData.key = o.o._key;
 				if (_obj.MediaContainer[0].Directory != undefined)
 				{
 					child = "Directory";
@@ -168,7 +170,61 @@ class plexNMT.as2.api.PlexAPI
 				D.debug(D.lDebug, "PlexAPI - Faled to get WallData with range...");
 			}
 			this.onLoad(PlexData.oWallData);
-		}), {target:"xml", timeout:timeout, intPos:intPos, _size:size});
+		}), {target:"xml", timeout:timeout, intPos:intPos, _size:size, _key:key});
+	}
+	
+	public static function loadWallData(key:String, intPos:Number, size:Number, onLoad:Function, timeout:Number):Void
+	{
+		var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+intPos+"&X-Plex-Container-Size="+size;
+		Util.loadURL(url, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		{
+			if(success)
+			{
+				trace("Doing PlexAPI - loadWallData: " + success);
+				var child:String = "";
+				var j:Number = 0;
+				var i:Number = 0;
+                var _obj:Object = new XMLObject().parseXML(xml, true);
+				//Utils.traceVar(_obj);
+				if (_obj.MediaContainer[0].Directory != undefined)
+				{
+					child = "Directory";
+				} else {
+					child = "Video";
+				}
+				//Utils.traceVar(_obj.MediaContainer[0].attributes);
+				var _offset:Number = int(_obj.MediaContainer[0].attributes.offset);
+				var _len:Number = _offset + int(_obj.MediaContainer[0].attributes.size);
+				var _totalSize:Number = int(_obj.MediaContainer[0].attributes.totalSize);
+				trace("PlexAPI - loadWallData._offset:"+_offset);
+				trace("PlexAPI - loadWallData._len:"+_len);
+				trace("PlexAPI - loadWallData._totalSize:"+_totalSize);
+				//Add new
+				for (i = _offset; i<_len; i++)
+				{
+					//trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][j].attributes.title + " to [\""+child+"\"]["+i+"] From j:" +j);
+					PlexData.oWallData.MediaContainer[0][child][i] = _obj.MediaContainer[0][child][j];
+					j++;
+				}
+				//Clean before
+				for (i = _offset-1; i>=0; i--)
+				{
+					//trace("PlexAPI - Nulling [\""+child+"\"]["+i+"] From j:" +j);
+					PlexData.oWallData.MediaContainer[0][child][i] = null;
+				}
+				//Clean after
+				for (i = _len; i<_totalSize; i++)
+				{
+					//trace("PlexAPI - Nulling [\""+child+"\"]["+i+"] From j:" +j);
+					PlexData.oWallData.MediaContainer[0][child][i] = null;
+				}
+				PlexData.oWallData.MediaContainer[0][child].splice(PlexData.oWallData.intLength);
+                delete xml
+			}else{
+				D.debug(D.lDebug, "PlexAPI - Faled to loadWallData with range...");
+			}
+			this.onLoad(PlexData.oWallData);
+		}), {target:"xml", timeout:timeout, _size:size});
 	}
 	
 	private static function onWallDataSet():Void

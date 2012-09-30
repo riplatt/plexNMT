@@ -220,7 +220,15 @@ class plexNMT.as2.common.PlexData {
 	public static function GetRotation(_objItem:String, menuRotation:Number):Number
 	{
 		var intPos:Number = PlexData[_objItem].intPos;
-		var len:Number = PlexData[_objItem].MediaContainer[0].attributes.size - 1
+		var len:Number = 0;
+		
+		if (PlexData[_objItem].MediaContainer[0].attributes.totalSize = undefined)
+		{
+			len = PlexData[_objItem].MediaContainer[0].attributes.size - 1;
+		} else {
+			len = PlexData[_objItem].MediaContainer[0].attributes.totalSize - 1
+		}
+		
 		var rot:Number = Math.abs(menuRotation);
 		var ve:Boolean = false;
 		
@@ -293,17 +301,20 @@ class plexNMT.as2.common.PlexData {
 					//Music
 					oWall.rows = oSettings.wall.music.rows;
 					oWall.columns = oSettings.wall.music.columns;
+					oWall.total = oSettings.wall.music.total;
 				break;
 				case "show":
 				case "episode":
 					//Tv Shows
 					oWall.rows = oSettings.wall.shows.rows;
 					oWall.columns = oSettings.wall.shows.columns;
+					oWall.total = oSettings.wall.shows.total;
 				break;
 				default :
 					//Movies
 					oWall.rows = oSettings.wall.movies.rows;
 					oWall.columns = oSettings.wall.movies.columns;
+					oWall.total = oSettings.wall.movies.total;
 				break;
 			}
 		//Set defulats if not set
