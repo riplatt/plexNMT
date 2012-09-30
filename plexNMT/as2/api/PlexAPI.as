@@ -194,12 +194,33 @@ class plexNMT.as2.api.PlexAPI
 				}
 				//Utils.traceVar(_obj.MediaContainer[0].attributes);
 				var _offset:Number = int(_obj.MediaContainer[0].attributes.offset);
-				var _len:Number = _offset + int(_obj.MediaContainer[0].attributes.size);
+				var _len:Number = _offset + o.o._size; //int(_obj.MediaContainer[0].attributes.size);
 				var _totalSize:Number = int(_obj.MediaContainer[0].attributes.totalSize);
 				trace("PlexAPI - loadWallData._offset:"+_offset);
 				trace("PlexAPI - loadWallData._len:"+_len);
 				trace("PlexAPI - loadWallData._totalSize:"+_totalSize);
+				if (_len > _totalSize)
+				{
+					var _len2:Number = _len - _totalSize;
+					j = 0;
+					for (i=_offset; i<_totalSize; i++)
+					{
+						trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][j].attributes.title + " to [\""+child+"\"]["+i+"] From j:" +j);
+						PlexData.oWallData.MediaContainer[0][child][i] = _obj.MediaContainer[0][child][j];
+						j++;
+					}
+					//Call roll over
+					var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start=0&X-Plex-Container-Size="+_len2;
+					Util.loadURL(url, onWallDataRollOver, {target:"xml", timeout:PlexData.oSettings.timeout, _len:_len2, child:child});
+					//Clean Mid
+					for (i=_len2; i<_offset; i++)
+					{
+						trace("PlexAPI - Nulling [\""+child+"\"]["+i+"] From j:" +j);
+						PlexData.oWallData.MediaContainer[0][child][i] = null;
+					}
+				}
 				//Add new
+				j = 0;
 				for (i = _offset; i<_len; i++)
 				{
 					//trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][j].attributes.title + " to [\""+child+"\"]["+i+"] From j:" +j);
@@ -227,9 +248,23 @@ class plexNMT.as2.api.PlexAPI
 		}), {target:"xml", timeout:timeout, _size:size});
 	}
 	
-	private static function onWallDataSet():Void
+	private static function onWallDataRollOver(success:Boolean, xml:XML, o:Object):Void
 	{
-		
+		if(success)
+		{
+			trace("Doing PlexAPI - onWallDataRollOver: " + success);
+			var j:Number = 0;
+			var i:Number = 0;
+			var _obj:Object = new XMLObject().parseXML(xml, true);
+			for (i=0; i<o.o._len; i++)
+			{
+				trace("PlexAPI - Adding " + _obj.MediaContainer[0][o.o.child][j].attributes.title + " to [\""+o.o.child+"\"]["+i+"] From j:" +j);
+				PlexData.oWallData.MediaContainer[0][o.o.child][i] = _obj.MediaContainer[0][o.o.child][j];
+				j++;
+			}
+		} else {
+			D.debug(D.lDebug, "PlexAPI - onWallDataRollOver Failed to get XML...");
+		}
 	}
 	
 	public static function getWallData(key:String, onLoad:Function, timeout:Number):Void
