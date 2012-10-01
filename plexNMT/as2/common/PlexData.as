@@ -369,7 +369,7 @@ class plexNMT.as2.common.PlexData {
 		var gridWidth = (oWall.thumb.width * oWall.columns) + (oWall.hgap * (oWall.columns - 1));
 		var gridHeight = (oWall.thumb.height * oWall.rows) + (oWall.vgap * (oWall.rows - 1));
 		
-		
+		trace("PlexData - gridWidth:"+gridWidth+", gridHeight:"+gridHeight);
 		oWall.topLeft.x = 1280/2 - gridWidth/2;
 		oWall.topLeft.y = 720/2 - gridHeight/2;
 		
