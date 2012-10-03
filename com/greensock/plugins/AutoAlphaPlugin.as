@@ -1,65 +1,41 @@
 /**
- * VERSION: 2.3
- * DATE: 10/17/2009
+ * VERSION: 12.0
+ * DATE: 2012-01-11
  * AS2
- * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
+ * UPDATES AND DOCS AT: http://www.greensock.com
  **/
-import com.greensock.*;
-import com.greensock.plugins.*;
+import com.greensock.TweenLite;
+import com.greensock.plugins.TweenPlugin;
 /**
- * Tweening "autoAlpha" is exactly the same as tweening an object's "_alpha" except that it ensures 
- * that the object's "_visible" property is true until autoAlpha reaches zero at which point it will 
- * toggle the "_visible" property to false. That not only improves rendering performance in the Flash Player, 
- * but also hides MovieClips so that they don't interact with the mouse. <br /><br />
+ * <p><strong>See AS3 files for full ASDocs</strong></p>
  * 
- * <b>USAGE:</b><br /><br />
- * <code>
- * 		import com.greensock.TweenLite; <br />
- * 		import com.greensock.plugins.TweenPlugin; <br />
- * 		import com.greensock.plugins.AutoAlphaPlugin; <br />
- * 		TweenPlugin.activate([AutoAlphaPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
- * 
- * 		TweenLite.to(mc, 2, {autoAlpha:0}); <br /><br />
- * </code>
- * 
- * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
  * 
  * @author Jack Doyle, jack@greensock.com
  */
-class com.greensock.plugins.AutoAlphaPlugin extends VisiblePlugin {
-		/** @private **/
-		public static var API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
-		
-		/** @private **/
+class com.greensock.plugins.AutoAlphaPlugin extends TweenPlugin {
+		public static var API:Number = 2; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		private var _target:Object;
-		/** @private **/
 		private var _ignoreVisible:Boolean;
 		
-		/** @private **/
 		public function AutoAlphaPlugin() {
-			super();
-			this.propName = "autoAlpha";
-			this.overwriteProps = ["_alpha","_visible"];
+			super("autoAlpha,_alpha,_visible");
 		}
 		
-		/** @private **/
-		public function onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
-			_target = target;
-			addTween(target, "_alpha", target._alpha, value, "_alpha");
+		public function _onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
+			_addTween((_target = target), "_alpha", target._alpha, value);
 			return true;
 		}
 		
-		/** @private **/
-		public function killProps(lookup:Object):Void {
-			super.killProps(lookup);
-			_ignoreVisible = Boolean(lookup._visible != undefined);
+		public function _kill(lookup:Object):Boolean {
+			_ignoreVisible = lookup.hasOwnProperty("_visible");
+			return super._kill(lookup);
 		}
 		
-		/** @private **/
-		public function set changeFactor(n:Number):Void {
-			updateTweens(n);
+		public function setRatio(v:Number):Void {
+			super.setRatio(v);
 			if (!_ignoreVisible) {
-				_target._visible = Boolean(_target._alpha != 0);
+				_target._visible = (_target._alpha != 0);
 			}
 		}
 	

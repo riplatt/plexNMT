@@ -1,40 +1,27 @@
 /**
- * VERSION: 1.2
- * DATE: 2011-02-03
+ * VERSION: 12.0
+ * DATE: 2012-01-12
  * AS2
  * UPDATES AND DOCS AT: http://www.greensock.com
  **/
-import com.greensock.*;
-import com.greensock.plugins.*;
+import com.greensock.TweenLite;
+import com.greensock.plugins.FramePlugin;
 /**
- * Tweens a MovieClip to a particular frame label. <br /><br />
+ * <p><strong>See AS3 files for full ASDocs</strong></p>
  * 
- * <b>USAGE:</b><br /><br />
- * <code>
- * 		import com.greensock.TweenLite; <br />
- * 		import com.greensock.plugins.TweenPlugin; <br />
- * 		import com.greensock.plugins.FrameLabelPlugin; <br />
- * 		TweenPlugin.activate([FrameLabelPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
- * 
- * 		TweenLite.to(mc, 1, {frameLabel:"myLabel"}); <br /><br />
- * </code>
- * 
- * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
  * 
  * @author Jack Doyle, jack@greensock.com
  */
 class com.greensock.plugins.FrameLabelPlugin extends FramePlugin {
-		/** @private **/
-		public static var API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
+		public static var API:Number = 2; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		
-		/** @private **/
 		public function FrameLabelPlugin() {
 			super();
-			this.propName = "frameLabel";
+			_propName = "frameLabel";
 		}
 		
-		/** @private **/
-		public function onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
+		public function _onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
 			if (typeof(tween.target) != "movieclip") {
 				return false;
 			}
@@ -47,7 +34,7 @@ class com.greensock.plugins.FrameLabelPlugin extends FramePlugin {
 			mc.removeMovieClip();
 			
 			if (this.frame != endFrame) {
-				addTween(this, "frame", this.frame, endFrame, "frame");
+				_addTween(this, "frame", this.frame, endFrame, "frame", true);
 			}
 			return true;
 		}

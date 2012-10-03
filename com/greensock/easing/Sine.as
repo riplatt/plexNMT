@@ -1,13 +1,21 @@
+/**
+ * VERSION: 1.0
+ * DATE: 2012-03-22
+ * AS3 (AS2 and JS versions are also available)
+ * UPDATES AND DOCS AT: http://www.greensock.com
+ **/
+import com.greensock.easing.SineOut;
+import com.greensock.easing.SineIn;
+import com.greensock.easing.SineInOut;
+/**
+ * See AS3 files for full ASDocs
+ * 
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
+ * 
+ * @author Jack Doyle, jack@greensock.com
+ */
 class com.greensock.easing.Sine {
-	private static var _HALF_PI:Number = Math.PI * 0.5;
-	
-	public static function easeIn (t:Number, b:Number, c:Number, d:Number):Number {
-		return -c * Math.cos(t/d * _HALF_PI) + c + b;
-	}
-	public static function easeOut (t:Number, b:Number, c:Number, d:Number):Number {
-		return c * Math.sin(t/d * _HALF_PI) + b;
-	}
-	public static function easeInOut (t:Number, b:Number, c:Number, d:Number):Number {
-		return -c*0.5 * (Math.cos(Math.PI*t/d) - 1) + b;
-	}
+		public static var easeOut:SineOut = new SineOut();
+		public static var easeIn:SineIn = new SineIn();
+		public static var easeInOut:SineInOut = new SineInOut();
 }

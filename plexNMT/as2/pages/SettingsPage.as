@@ -8,7 +8,6 @@ import com.syabas.as2.common.JSONUtil;
 import com.designvox.tranniec.JSON;
 
 import com.greensock.TweenLite;
-import com.greensock.OverwriteManager;
 import com.greensock.plugins.TweenPlugin;
 import com.greensock.plugins.AutoAlphaPlugin;
 
@@ -61,7 +60,7 @@ class plexNMT.as2.pages.SettingsPage {
 	public function SettingsPage(parentMC:MovieClip) 
 	{
 		//GreenSock Tween Control
-		OverwriteManager.init(OverwriteManager.PREEXISTING);
+		//OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin]);
 		
 		//Key Listener

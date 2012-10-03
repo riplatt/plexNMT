@@ -6,7 +6,6 @@ import plexNMT.as2.common.Utils;
 import plexNMT.as2.common.Tile;
 
 import com.greensock.TweenLite;
-import com.greensock.OverwriteManager;
 import com.greensock.easing.*;
 import com.greensock.plugins.TweenPlugin;
 import com.greensock.plugins.AutoAlphaPlugin;
@@ -42,7 +41,7 @@ class plexNMT.as2.pages.Wall2 {
 		PlexData.setWall();
 		
 		//GreenSock Tween Control
-		OverwriteManager.init(OverwriteManager.PREEXISTING);
+		//OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin, SetSizePlugin]);
 		
 		//Key Listener
@@ -123,16 +122,22 @@ class plexNMT.as2.pages.Wall2 {
 		}
 	}
 	
-	private function hightLight()
+	private function hightlight()
 	{
 		trace("Wall - Hight Lighting holder_"+navY+"_"+navX+"...");
-		this.unHightLight();
+		this.dim();
+		
+	}
+	
+	private function onDimmed()
+	{
+		trace("Wall - Hightlighting...");
 		this.holders[navY][navX]._tile.select();
 	}
 	
-	private function unHightLight()
+	private function dim()
 	{
-		//trace("Wall - un-Hight Lighting holders");
+		trace("Wall - Dimming holders");
 		var x:Number = 0;
 		var lenX:Number = 0;//this.holders.length;
 		var y:Number =0;
@@ -144,7 +149,62 @@ class plexNMT.as2.pages.Wall2 {
 			{
 				this.holders[y][x]._tile.deselect();
 			}
+			
 		}
+		this.onDimmed();
+	}
+	
+	private function _position(intMov):Void
+	{
+		trace("Wall - Doing _position..");
+		var tempPos:Array = new Array();
+		
+		var x:Number = 0;
+		var lenX:Number = 0;
+		var y:Number =0;
+		var lenY:Number = this.holders.length;
+		var ve:Boolean = true;
+		var i:Number = 0;
+		
+		if (intMov < 0) {ve = false;}
+		
+		intMov = Math.abs(intMov);
+		
+		//Get Current Positions
+		for (y=0; y<lenY; y++)
+		{
+			trace("Wall - tempPos["+y+"]:"+this.holders[y][0]._y);
+			tempPos[y] = this.holders[y][0]._y			
+		}
+		
+		//Shift Holders
+		for (i=0; i<intMov; i++)
+		{
+			trace("Wall - Shifting Holders...");
+			trace("Wall - Holders:" + this.holders);
+			if (ve)
+			{
+				this.holders.unshift(this.holders.pop());
+			} else {
+				this.holders.push(this.holders.shift());
+			}
+			trace("Wall - Shifting Done...");
+			trace("Wall - Holders:" + this.holders);
+		}
+		
+		//Move Holder to New Positions
+		for (y=0; y<lenY; y++)
+		{
+			if (y<navLow || y>navHigh)
+			{
+				TweenLite.to(this.holders[y], 0, {autoAlpha:0, _y:tempPos[y]});
+			} else {
+				TweenLite.to(this.holders[y], 0, {autoAlpha:100, _y:tempPos[y]});			
+			}
+		}
+		
+		//Highlight Current Selection
+		this.hightlight();
 	}
 	
 	private function setStage():Void
@@ -176,7 +236,7 @@ class plexNMT.as2.pages.Wall2 {
 			}
 			posY = posY + PlexData.oWall.thumb.height + PlexData.oWall.vgap;
 		}
-		this.hightLight();
+		this.hightlight();
 	}
 
 	private function enableKeyListener():Void
@@ -216,8 +276,10 @@ class plexNMT.as2.pages.Wall2 {
 				if (navY < navLow)
 				{
 					navY = navLow;
+					this._position(1);
+				} else {
+					this.hightlight();
 				}
-				this.hightLight();
 			break;
 			case Key.DOWN:
 				//this.holders[0].push(this.holders[0].shift());
@@ -225,18 +287,20 @@ class plexNMT.as2.pages.Wall2 {
 				if (navY > navHigh)
 				{
 					navY = navHigh;
+					this._position(-1);
+				} else {
+					this.hightlight();
 				}
-				this.hightLight();
 			break;
 			case Key.RIGHT:
 				//this.holders.push(this.holders.shift());
 				navX++;
-				this.hightLight();
+				this.hightlight();
 			break;
 			case Key.LEFT:
 				//this.holders.push(this.holders.shift());
 				navX--;
-				this.hightLight();
+				this.hightlight();
 			break;
 			case "soft1":
 			case Remote.BACK:

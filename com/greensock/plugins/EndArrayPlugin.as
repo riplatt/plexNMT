@@ -1,81 +1,64 @@
 /**
- * VERSION: 1.53
- * DATE: 10/2/2009
+ * VERSION: 12.0
+ * DATE: 2012-01-12
  * AS2 
- * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
+ * UPDATES AND DOCS AT: http://www.greensock.com
  **/
-import com.greensock.*;
-import com.greensock.plugins.*;
-import com.greensock.plugins.helpers.*;
+import com.greensock.TweenLite;
+import com.greensock.plugins.TweenPlugin;
 /**
- * Tweens numbers in an Array. <br /><br />
+ * <p><strong>See AS3 files for full ASDocs</strong></p>
  * 
- * <b>USAGE:</b><br /><br />
- * <code>
- * 		import com.greensock.TweenLite; <br />
- * 		import com.greensock.plugins.TweenPlugin; <br />
- * 		import com.greensock.plugins.EndArrayPlugin; <br />
- * 		TweenPlugin.activate([EndArrayPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
- * 
- * 		var myArray:Array = [1,2,3,4];<br />
- * 		TweenLite.to(myArray, 1.5, {endArray:[10,20,30,40]}); <br /><br />
- * </code>
- *
- * Bytes added to SWF: 306 (not including dependencies)<br /><br />
- * 
- * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
  * 
  * @author Jack Doyle, jack@greensock.com
- */	
+ */
 class com.greensock.plugins.EndArrayPlugin extends TweenPlugin {
-		/** @private **/
-		public static var API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
-		
-		/** @private **/
+		public static var API:Number = 2; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		private var _a:Array;
-		/** @private **/
 		private var _info:Array;
+		private var _round:Boolean;
 		
-		/** @private **/
 		public function EndArrayPlugin() {
-			super();
-			this.propName = "endArray"; //name of the special property that the plugin should intercept/manage
-			this.overwriteProps = ["endArray"];
+			super("endArray");
 			_info = [];
 		}
 		
-		/** @private **/
-		public function onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
+		public function _onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
 			if (!(target instanceof Array) || !(value instanceof Array)) {
 				return false;
 			}
-			init([target][0], [value][0]); //prevents compiler errors
+			_init(Array(target), Array(value)); 
 			return true;
 		}
 		
-		/** @private **/
-		public function init(start:Array, end:Array):Void {
+		public function _init(start:Array, end:Array):Void {
 			_a = start;
-			var i:Number = end.length;
-			while (i--) {
-				if (start[i] != end[i] && start[i] != undefined) {
-					_info[_info.length] = new ArrayTweenInfo(i, _a[i], end[i] - _a[i]);
+			var i:Number = end.length, cnt:Number = 0;
+			while (--i > -1) {
+				if (start[i] != end[i] && start[i] != null) {
+					_info[cnt++] = {i:i, s:_a[i], c:end[i] - _a[i]};
 				}
 			}
 		}
 		
-		/** @private **/
-		public function set changeFactor(n:Number):Void {
-			var i:Number = _info.length, ti:ArrayTweenInfo;
-			if (this.round) {
-				while (i--) {
+		public function _roundProps(lookup:Object, value:Boolean):Void {
+			if (lookup.endArray) {
+				_round = value;
+			}
+		}
+		
+		public function setRatio(v:Number):Void {
+			var i:Number = _info.length, ti:Object, val:Number;
+			if (_round) {
+				while (--i > -1) {
 					ti = _info[i];
-					_a[ti.index] = Math.round(ti.start + (ti.change * n));
+					_a[ti.i] = ((val = ti.c * v + ti.s) > 0) ? (val + 0.5) >> 0 : (val - 0.5) >> 0;
 				}
 			} else {
-				while (i--) {
+				while (--i > -1) {
 					ti = _info[i];
-					_a[ti.index] = ti.start + (ti.change * n);
+					_a[ti.i] = ti.c * v + ti.s;
 				}
 			}
 		}

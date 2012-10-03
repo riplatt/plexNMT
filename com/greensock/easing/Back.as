@@ -1,15 +1,21 @@
+/**
+ * VERSION: 1.0
+ * DATE: 2012-03-22
+ * AS3 (AS2 and JS versions are also available)
+ * UPDATES AND DOCS AT: http://www.greensock.com
+ **/
+import com.greensock.easing.BackOut;
+import com.greensock.easing.BackIn;
+import com.greensock.easing.BackInOut;
+/**
+ * See AS3 files for full ASDocs
+ * 
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
+ * 
+ * @author Jack Doyle, jack@greensock.com
+ */
 class com.greensock.easing.Back {
-	public static function easeIn (t:Number, b:Number, c:Number, d:Number, s:Number):Number {
-		if (s == undefined) s = 1.70158;
-		return c*(t/=d)*t*((s+1)*t - s) + b;
-	}
-	public static function easeOut (t:Number, b:Number, c:Number, d:Number, s:Number):Number {
-		if (s == undefined) s = 1.70158;
-		return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
-	}
-	public static function easeInOut (t:Number, b:Number, c:Number, d:Number, s:Number):Number {
-		if (s == undefined) s = 1.70158; 
-		if ((t/=d*0.5) < 1) return c*0.5*(t*t*(((s*=(1.525))+1)*t - s)) + b;
-		return c*0.5*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
-	}
+		public static var easeOut:BackOut = new BackOut();
+		public static var easeIn:BackIn = new BackIn();
+		public static var easeInOut:BackInOut = new BackInOut();
 }

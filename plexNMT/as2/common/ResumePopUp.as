@@ -10,7 +10,6 @@ import com.syabas.as2.common.UI;
 import com.syabas.as2.common.D;
 
 import com.greensock.TweenLite;
-import com.greensock.OverwriteManager;
 import com.greensock.easing.*;
 import com.greensock.plugins.TweenPlugin;
 import com.greensock.plugins.AutoAlphaPlugin;
@@ -47,7 +46,7 @@ class plexNMT.as2.common.ResumePopUp {
 		fn = cb;
 		
 		//GreenSock Tween Control
-		OverwriteManager.init(OverwriteManager.PREEXISTING);
+		//OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin]);
 		
 		//Key Lister

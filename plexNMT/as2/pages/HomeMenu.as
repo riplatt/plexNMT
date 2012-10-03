@@ -95,7 +95,7 @@ class plexNMT.as2.pages.HomeMenu {
 		this.menuBGOffset = 50 - 1300;
 		
 		//GreenSock Tween Control
-		OverwriteManager.init(OverwriteManager.PREEXISTING);
+		//OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([GlowFilterPlugin, AutoAlphaPlugin]);
 		
 		//Build stage
@@ -130,6 +130,7 @@ class plexNMT.as2.pages.HomeMenu {
 		//delete plexSO;
 		//Timers
 		clearInterval(crossfadeInterval);
+		crossfadeInterval = null;
 		
 		trace("Done Destroying...");
 		//var_dump(_level0);

@@ -1,70 +1,45 @@
 /**
- * VERSION: 1.2
- * DATE: 2011-01-05
+ * VERSION: 12.0
+ * DATE: 2012-02-14
  * AS2
- * UPDATES AND DOCS AT: http://www.TweenMax.com
+ * UPDATES AND DOCS AT: http://www.greensock.com
  **/
 import com.greensock.*;
 import com.greensock.plugins.*;
 /**
- * Performs SLERP interpolation between 2 Quaternions. Each Quaternion should have x, y, z, and w properties.
- * Simply pass in an Object containing properties that correspond to your object's quaternion properties. 
- * For example, if your myCamera3D has an "orientation" property that's a Quaternion and you want to 
- * tween its values to x:1, y:0.5, z:0.25, w:0.5, you could do:<br /><br /><code>
+ * <p><strong>See AS3 files for full ASDocs</strong></p>
  * 
- * 	TweenLite.to(myCamera3D, 2, {quaternions:{orientation:new Quaternion(1, 0.5, 0.25, 0.5)}});<br /><br /></code>
- * 	
- * You can define as many quaternion properties as you want.<br /><br />
- * 
- * <b>USAGE:</b><br /><br />
- * <code>
- * 		import com.greensock.TweenLite; <br />
- * 		import com.greensock.plugins.TweenPlugin; <br />
- * 		import com.greensock.plugins.QuaternionsPlugin; <br />
- * 		TweenPlugin.activate([QuaternionsPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
- * 
- * 		TweenLite.to(myCamera3D, 2, {quaternions:{orientation:new Quaternion(1, 0.5, 0.25, 0.5)}}); <br /><br />
- * </code>
- * 
- * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
  * 
  * @author Jack Doyle, jack@greensock.com
  */
 class com.greensock.plugins.QuaternionsPlugin extends TweenPlugin {
-		/** @private **/
-		public static var API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
-		
-		/** @private **/
+		public static var API:Number = 2; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		private static var _RAD2DEG:Number = 180 / Math.PI; //precalculate for speed
-		
-		/** @private **/
 		private var _target:Object;
-		/** @private **/
 		private var _quaternions:Array;
 		
-		/** @private **/
 		public function QuaternionsPlugin() {
-			super();
-			this.propName = "quaternions"; //name of the special property that the plugin should intercept/manage
-			this.overwriteProps = [];
+			super("quaternions");
+			_overwriteProps.pop();
 			_quaternions = [];
 		}
 		
-		/** @private **/
-		public function onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
-			if (value == undefined) {
+		public function _onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
+			if (value == null) {
 				return false;
 			}
+			_target = target;
 			for (var p:String in value) {
-				initQuaternion(target[p], value[p], p);
+				_initQuaternion(value[p], p);
 			}
 			return true;	
 		}
 		
-		/** @private **/
-		public function initQuaternion(start:Object, end:Object, propName:String):Void {
+		public function _initQuaternion(end:Object, p:String):Void {
 			var angle:Number, q1:Object, q2:Object, x1:Number, x2:Number, y1:Number, y2:Number, z1:Number, z2:Number, w1:Number, w2:Number, theta:Number;
-			q1 = start;
+			var isFunc:Boolean = (typeof(_target[p]) == "function");
+			q1 = (!isFunc) ? Number(_target[p]) : _target[ ((p.indexOf("set") || typeof(_target["get" + p.substr(3)]) !== "function") ? p : "get" + p.substr(3)) ]();
 			q2 = end;
 			x1 = q1.x; x2 = q2.x;
 			y1 = q1.y; y2 = q2.y;
@@ -85,47 +60,50 @@ class com.greensock.plugins.QuaternionsPlugin extends TweenPlugin {
 				z2 = z1;
 			}
 			theta = Math.acos(angle);
-			_quaternions[_quaternions.length] = [q1, propName, x1, x2, y1, y2, z1, z2, w1, w2, angle, theta, 1 / Math.sin(theta)];
-			this.overwriteProps[this.overwriteProps.length] = propName;
+			_quaternions[_quaternions.length] = [q1, p, x1, x2, y1, y2, z1, z2, w1, w2, angle, theta, 1 / Math.sin(theta), isFunc];
+			_overwriteProps[_overwriteProps.length] = p;
 		}
 		
-		/** @private **/
-		public function killProps(lookup:Object):Void {
+		public function _kill(lookup:Object):Boolean {
 			var i:Number = _quaternions.length;
-			while (i--) {
-				if (lookup[_quaternions[i][1]] != undefined) {
+			while (--i > -1) {
+				if (lookup[_quaternions[i][1]] != null) {
 					_quaternions.splice(i, 1);
 				}
 			}
-			super.killProps(lookup);
+			return super._kill(lookup);
 		}	
 		
-		/** @private **/
-		public function set changeFactor(n:Number):Void {
+		public function setRatio(v:Number):Void {
 			var i:Number = _quaternions.length, q:Array, scale:Number, invScale:Number;
-			while (i--) {
+			while (--i > -1) {
 				q = _quaternions[i];
 				if ((q[10] + 1) > 0.000001) {
 					 if ((1 - q[10]) >= 0.000001) {
-						scale = Math.sin(q[11] * (1 - n)) * q[12];
-						invScale = Math.sin(q[11] * n) * q[12];
+						scale = Math.sin(q[11] * (1 - v)) * q[12];
+						invScale = Math.sin(q[11] * v) * q[12];
 					 } else {
-						scale = 1 - n;
-						invScale = n;
+						scale = 1 - v;
+						invScale = v;
 					 }
 				} else {
-					scale = Math.sin(Math.PI * (0.5 - n));
-					invScale = Math.sin(Math.PI * n);
+					scale = Math.sin(Math.PI * (0.5 - v));
+					invScale = Math.sin(Math.PI * v);
 				}
 				q[0].x = scale * q[2] + invScale * q[3];
 				q[0].y = scale * q[4] + invScale * q[5];
 				q[0].z = scale * q[6] + invScale * q[7];
 				q[0].w = scale * q[8] + invScale * q[9];
+				if (q[13]) {
+					_target[q[1]](q[0]);
+				} else {
+					_target[q[1]] = q[0];
+				}
 			}
 			/*
 			Array access is faster (though less readable). Here is the key:
 			0 - target
-			1 = propName
+			1 = p
 			2 = x1
 			3 = x2
 			4 = y1
@@ -137,6 +115,7 @@ class com.greensock.plugins.QuaternionsPlugin extends TweenPlugin {
 			10 = angle
 			11 = theta
 			12 = invTheta
+			13 = isFunction
 			*/
 		}
 	

@@ -1,13 +1,19 @@
-﻿class com.greensock.easing.Strong {
-	
-	public static function easeIn (t:Number, b:Number, c:Number, d:Number):Number {
-		return c*(t/=d)*t*t*t*t + b;
-	}
-	public static function easeOut (t:Number, b:Number, c:Number, d:Number):Number {
-		return c*((t=t/d-1)*t*t*t*t + 1) + b;
-	}
-	public static function easeInOut (t:Number, b:Number, c:Number, d:Number):Number {
-		if ((t/=d*0.5) < 1) return c*0.5*t*t*t*t*t + b;
-		return c*0.5*((t-=2)*t*t*t*t + 2) + b;
-	}
+﻿/**
+ * VERSION: 1.0
+ * DATE: 2012-03-22
+ * AS3 (AS2 and JS versions are also available)
+ * UPDATES AND DOCS AT: http://www.greensock.com
+ **/
+import com.greensock.easing.Ease;
+/**
+ * See AS3 files for full ASDocs
+ * 
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
+ * 
+ * @author Jack Doyle, jack@greensock.com
+ */
+class com.greensock.easing.Strong {
+		public static var easeOut:Ease = new Ease(null,null,1,4);
+		public static var easeIn:Ease = new Ease(null,null,2,4);
+		public static var easeInOut:Ease = new Ease(null,null,3,4);
 }

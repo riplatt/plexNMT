@@ -1,95 +1,75 @@
 /**
- * VERSION: 1.12
- * DATE: 10/2/2009
+ * VERSION: 12.0
+ * DATE: 2012-01-12
  * AS2
- * UPDATES AND DOCUMENTATION AT: http://www.TweenMax.com
+ * UPDATES AND DOCS AT: http://www.greensock.com
  **/
-import com.greensock.*;
-import com.greensock.plugins.*;
+import com.greensock.TweenLite;
+import com.greensock.plugins.TweenPlugin;
 /**
- * Although hex colors are technically numbers, if you try to tween them conventionally, 
- * you'll notice that they don't tween smoothly. To tween them properly, the red, green, and 
- * blue components must be extracted and tweened independently. The HexColorsPlugin makes it easy. 
- * To tween a property of your object that's a hex color to another hex color, just pass a hexColors 
- * Object with properties named the same as your object's hex color properties. For example, 
- * if myObject has a "myHexColor" property that you'd like to tween to red (<code>0xFF0000</code>) over the 
- * course of 2 seconds, you'd do:<br /><br /><code>
- * 	
- * 	TweenMax.to(myObject, 2, {hexColors:{myHexColor:0xFF0000}});<br /><br /></code>
- * 	
- * You can pass in any number of hexColor properties. <br /><br />
+ * <p><strong>See AS3 files for full ASDocs</strong></p>
  * 
- * <b>USAGE:</b><br /><br />
- * <code>
- * 		import com.greensock.TweenLite; <br />
- * 		import com.greensock.plugins.TweenPlugin; <br />
- * 		import com.greensock.plugins.HexColorsPlugin; <br />
- * 		TweenPlugin.activate([HexColorsPlugin]); //activation is permanent in the SWF, so this line only needs to be run once.<br /><br />
- * 
- * 		TweenLite.to(myObject, 2, {hexColors:{myHexColor:0xFF0000}}); <br /><br /></code>
- * 
- * <b>Copyright 2011, GreenSock. All rights reserved.</b> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for corporate Club GreenSock members, the software agreement that was issued with the corporate membership.
+ * <p><strong>Copyright 2008-2012, GreenSock. All rights reserved.</strong> This work is subject to the terms in <a href="http://www.greensock.com/terms_of_use.html">http://www.greensock.com/terms_of_use.html</a> or for <a href="http://www.greensock.com/club/">Club GreenSock</a> members, the software agreement that was issued with the membership.</p>
  * 
  * @author Jack Doyle, jack@greensock.com
  */
 class com.greensock.plugins.HexColorsPlugin extends TweenPlugin {
-		/** @private **/
-		public static var API:Number = 1.0; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
-		
-		/** @private **/
+		public static var API:Number = 2; //If the API/Framework for plugins changes in the future, this number helps determine compatibility
 		private var _colors:Array;
 		
-		/** @private **/
 		public function HexColorsPlugin() {
-			super();
-			this.propName = "hexColors";
-			this.overwriteProps = [];
+			super("hexColors");
+			_overwriteProps = [];
 			_colors = [];
 		}
 		
-		/** @private **/
-		public function onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
+		public function _onInitTween(target:Object, value:Object, tween:TweenLite):Boolean {
 			for (var p:String in value) {
-				initColor(target, p, Number(target[p]), Number(value[p]));
+				_initColor(target, p, Number(value[p]));
 			}
 			return true;
 		}
 		
-		/** @private **/
-		public function initColor(target:Object, propName:String, start:Number, end:Number):Void {
+		public function _initColor(target:Object, p:String, end:Number):Void {
+			var isFunc:Boolean = (typeof(target[p]) == "function"),
+				start:Number = (!isFunc) ? target[p] : target[ ((p.indexOf("set") || typeof(target["get" + p.substr(3)]) !== "function") ? p : "get" + p.substr(3)) ]();
 			if (start != end) {
-				var r:Number = start >> 16;
-				var g:Number = (start >> 8) & 0xff;
-				var b:Number = start & 0xff;
-				_colors[_colors.length] = [target, 
-										   propName, 
-										   r,
-										   (end >> 16) - r,
-										   g,
-										   ((end >> 8) & 0xff) - g,
-										   b,
-										   (end & 0xff) - b];
-				this.overwriteProps[this.overwriteProps.length] = propName;
+				var r:Number = start >> 16,
+					g:Number = (start >> 8) & 0xff,
+					b:Number = start & 0xff;
+				_colors[_colors.length] = {t:target, 
+										   p:p, 
+										   f:isFunc,
+										   rs:r,
+										   rc:(end >> 16) - r,
+										   gs:g,
+										   gc:((end >> 8) & 0xff) - g,
+										   bs:b,
+										   bc:(end & 0xff) - b};
+				_overwriteProps[_overwriteProps.length] = p;
 			}
 		}
 		
-		/** @private **/
-		public function killProps(lookup:Object):Void {
+		public function _kill(lookup:Object):Boolean {
 			var i:Number = _colors.length;
-			while (i--) {
-				if (lookup[_colors[i][1]] != undefined) {
+			while (--i > -1) {
+				if (lookup[_colors[i].p] != null) {
 					_colors.splice(i, 1);
 				}
 			}
-			super.killProps(lookup);
+			return super._kill(lookup);
 		}	
 		
-		/** @private **/
-		public function set changeFactor(n:Number):Void {
-			var i:Number = _colors.length, a:Array;
-			while (i--) {
-				a = _colors[i];
-				a[0][a[1]] = ((a[2] + (n * a[3])) << 16 | (a[4] + (n * a[5])) << 8 | (a[6] + (n * a[7])));
+		public function setRatio(v:Number):Void {
+			var i:Number = _colors.length, clr:Object, val:Number;
+			while (--i > -1) {
+				clr = _colors[i];
+				val = (clr.rs + (v * clr.rc)) << 16 | (clr.gs + (v * clr.gc)) << 8 | (clr.bs + (v * clr.bc));
+				if (clr.f) {
+					clr.t[clr.p](val);
+				} else {
+					clr.t[clr.p] = val;
+				}
 			}
 		}
 	
