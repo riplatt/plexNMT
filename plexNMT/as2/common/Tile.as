@@ -31,6 +31,7 @@ class plexNMT.as2.common.Tile {
 	{
 		//GreenSock Tween Control
 		TweenPlugin.activate([AutoAlphaPlugin, GlowFilterPlugin, SetSizePlugin]);
+		TweenLite.defaultOverwrite = "preexisting";
 		
 		this._tile = parentMC.createEmptyMovieClip("_tile", parentMC.getNextHighestDepth());
 		this.imgWidth = width;
@@ -66,21 +67,21 @@ class plexNMT.as2.common.Tile {
 	public function select():Void
 	{
 		//trace("Tile - Doing select on:"+this._tile);
-		TweenLite.to(this._foreground, 0.5, {autoAlpha:0});
-		TweenLite.to(this._selection, 1, {autoAlpha:100});
+		TweenLite.to(this._foreground, 0.1, {autoAlpha:0});
+		TweenLite.to(this._selection, 0.1, {autoAlpha:100});
 	}
 	
 	public function deselect():Void
 	{
 		//trace("Tile - Doing deselect on:"+this._tile);
-		TweenLite.to(this._foreground, 1, {autoAlpha:40});
-		TweenLite.to(this._selection, 0.7, {autoAlpha:0});
+		TweenLite.to(this._foreground, 0, {autoAlpha:40});
+		TweenLite.to(this._selection, 0, {autoAlpha:0});
 	}
 	// Private Methods:
 	private function onImageLoad():Void
 	{
 		//trace("Tile - Doing onImageLoad with:"+this._tile);
-		TweenLite.to(this._image, 1, {autoAlpha:100, _width:this.imgWidth, _height:this.imgHeight});
+		TweenLite.to(this._image, 0.1, {autoAlpha:100, _width:this.imgWidth, _height:this.imgHeight});
 		TweenLite.to(this._background, 0, {delay:0.7, onComplete:Delegate.create(this, noBackground)});		
 	}
 	

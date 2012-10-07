@@ -129,147 +129,75 @@ class plexNMT.as2.api.PlexAPI
 		}), {target:"xml", timeout:timeout});
 	}
 	
-	public static function getWallDataRange(key:String, intPos:Number, size:Number, onLoad:Function, timeout:Number):Void
+	public static function getLazyWallData(key:String, startPos:Number, size:Number, onLoad:Function, timeout:Number):Void
 	{
-		//PlexData.oWallData.key = key; 
-		var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+intPos+"&X-Plex-Container-Size="+size;
-		Util.loadURL(url, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		trace("Doing PlexAPI - Doing getLazyWallData...");
+		trace("Doing PlexAPI - key=>"+key);
+		trace("Doing PlexAPI - startPos=>"+startPos);
+		trace("Doing PlexAPI - size=>"+size);
+		trace("Doing PlexAPI - onLoad=>"+onLoad);
+		trace("Doing PlexAPI - timeout=>"+timeout);
+		if (PlexData.oWallData.MediaContainer != undefined)
 		{
-			if(success)
+			trace("Doing PlexAPI - "+(startPos+size)+" > "+PlexData.oWallData.intLength);
+			if (startPos+size>PlexData.oWallData.intLength)
 			{
-				trace("Doing PlexAPI - getWallDataRange: " + success);
-				var child:String = "";
-				var j:Number = 0;
-                var _obj:Object = new XMLObject().parseXML(xml, true);
-				PlexData.oWallData = new ObjClone(_obj);
-				PlexData.oWallData.intLength = _obj.MediaContainer[0].attributes.totalSize - 1;
-				PlexData.oWallData.key = o.o._key;
-				if (_obj.MediaContainer[0].Directory != undefined)
-				{
-					child = "Directory";
-				} else {
-					child = "Video";
-				}
-				for (var i:Number = 0; i<PlexData.oWallData.intLength; i++)
-				{
-					if (i<o.o.intPos)
-					{
-						PlexData.oWallData.MediaContainer[0][child][i] = null; 
-					} else if (i<(o.o.intPos+o.o._size)) {
-						trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][j].attributes.title + " to [\""+child+"\"]["+i+"] From j:" +j);
-						PlexData.oWallData.MediaContainer[0][child][i] = _obj.MediaContainer[0][child][j];
-						j++;
-					} else {
-						PlexData.oWallData.MediaContainer[0][child][i] = null;
-					}
-					
-				}
-				PlexData.oWallData.MediaContainer[0][child].splice(PlexData.oWallData.intLength);
-                delete xml
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get WallData with range...");
+				var intEnd:Number = startPos+size-PlexData.oWallData.intLength;
+				var url1:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+startPos+"&X-Plex-Container-Size="+size;
+				var url2:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start=0&X-Plex-Container-Size="+intEnd;
+				
+				Util.loadURL(url1, Delegate.create({onLoad:onLoad}, onLazyLoad), {target:"xml", timeout:timeout, intStart:startPos, intStop:PlexData.oWallData.intLength, _key:key, go:false});
+				Util.loadURL(url2, Delegate.create({onLoad:onLoad}, onLazyLoad), {target:"xml", timeout:timeout, intStart:0, intStop:intEnd, _key:key, go:true});
+			} else {
+				var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+startPos+"&X-Plex-Container-Size="+size;
+				Util.loadURL(url, Delegate.create({onLoad:onLoad}, onLazyLoad), {target:"xml", timeout:timeout, intStart:startPos, intStop:startPos+size, _key:key , go:true});
 			}
-			this.onLoad(PlexData.oWallData);
-		}), {target:"xml", timeout:timeout, intPos:intPos, _size:size, _key:key});
+		} else {
+			trace("Doing PlexAPI - No Wall Data Yet Calling getWallData...");
+			getWallData(key, 0, 1, Delegate.create({onLoad:onLoad}, getLazyWallData), {key:key, startPos:startPos, size:size, onLoad:onLoad, timeout:timeout},PlexData.oSettings.timeout);
+		}
 	}
 	
-	public static function loadWallData(key:String, intPos:Number, size:Number, onLoad:Function, timeout:Number):Void
+	private static function onLazyLoad(success:Boolean, xml:XML, o:Object):Void
 	{
-		var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+intPos+"&X-Plex-Container-Size="+size;
-		Util.loadURL(url, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
+		if(success)
 			{
-				trace("Doing PlexAPI - loadWallData: " + success);
+				trace("Doing PlexAPI - Got Lazyload Data...");
 				var child:String = "";
 				var j:Number = 0;
 				var i:Number = 0;
                 var _obj:Object = new XMLObject().parseXML(xml, true);
-				//Utils.traceVar(_obj);
+				//PlexData.oWallData = new ObjClone(_obj);
+				//PlexData.oWallData.intLength = _obj.MediaContainer[0].attributes.totalSize - 1;
+				//PlexData.oWallData.key = o.o._key;
 				if (_obj.MediaContainer[0].Directory != undefined)
 				{
 					child = "Directory";
 				} else {
 					child = "Video";
 				}
-				//Utils.traceVar(_obj.MediaContainer[0].attributes);
-				var _offset:Number = int(_obj.MediaContainer[0].attributes.offset);
-				var _len:Number = _offset + o.o._size; //int(_obj.MediaContainer[0].attributes.size);
-				var _totalSize:Number = int(_obj.MediaContainer[0].attributes.totalSize);
-				trace("PlexAPI - loadWallData._offset:"+_offset);
-				trace("PlexAPI - loadWallData._len:"+_len);
-				trace("PlexAPI - loadWallData._totalSize:"+_totalSize);
-				if (_len > _totalSize)
+				//Utils.traceVar(o.o);
+				var intStart:Number = o.o.intStart;
+				var intStop:Number = o.o.intStop;
+				for (j=intStart; j<intStop; j++)
 				{
-					var _len2:Number = _len - _totalSize;
-					j = 0;
-					for (i=_offset; i<_totalSize; i++)
-					{
-						trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][j].attributes.title + " to [\""+child+"\"]["+i+"] From j:" +j);
-						PlexData.oWallData.MediaContainer[0][child][i] = _obj.MediaContainer[0][child][j];
-						j++;
-					}
-					//Call roll over
-					var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start=0&X-Plex-Container-Size="+_len2;
-					Util.loadURL(url, onWallDataRollOver, {target:"xml", timeout:PlexData.oSettings.timeout, _len:_len2, child:child});
-					//Clean Mid
-					for (i=_len2; i<_offset; i++)
-					{
-						trace("PlexAPI - Nulling [\""+child+"\"]["+i+"] From j:" +j);
-						PlexData.oWallData.MediaContainer[0][child][i] = null;
-					}
+					trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][i].attributes.title + " to MediaContainer[0]["+child+"]["+j+"]");
+					PlexData.oWallData.MediaContainer[0][child][j] = _obj.MediaContainer[0][child][i];
+					trace("PlexAPI - Added " + PlexData.oWallData.MediaContainer[0][child][j].attributes.title);
+					i++;
 				}
-				//Add new
-				j = 0;
-				for (i = _offset; i<_len; i++)
-				{
-					//trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][j].attributes.title + " to [\""+child+"\"]["+i+"] From j:" +j);
-					PlexData.oWallData.MediaContainer[0][child][i] = _obj.MediaContainer[0][child][j];
-					j++;
-				}
-				//Clean before
-				for (i = _offset-1; i>=0; i--)
-				{
-					//trace("PlexAPI - Nulling [\""+child+"\"]["+i+"] From j:" +j);
-					PlexData.oWallData.MediaContainer[0][child][i] = null;
-				}
-				//Clean after
-				for (i = _len; i<_totalSize; i++)
-				{
-					//trace("PlexAPI - Nulling [\""+child+"\"]["+i+"] From j:" +j);
-					PlexData.oWallData.MediaContainer[0][child][i] = null;
-				}
-				PlexData.oWallData.MediaContainer[0][child].splice(PlexData.oWallData.intLength);
-                delete xml
+				//Utils.traceVar(PlexData.oWallData.MediaContainer[0][child][0]);
+				if (o.o.go){o.o.onLoad(PlexData.oWallData);}
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to loadWallData with range...");
+				D.debug(D.lDebug, "PlexAPI - Faled to do Lazyload...");
 			}
-			this.onLoad(PlexData.oWallData);
-		}), {target:"xml", timeout:timeout, _size:size});
 	}
 	
-	private static function onWallDataRollOver(success:Boolean, xml:XML, o:Object):Void
+	public static function getWallData(key:String, startPos:Number, size:Number, onLoad:Function, obj:Object, timeout:Number):Void
 	{
-		if(success)
-		{
-			trace("Doing PlexAPI - onWallDataRollOver: " + success);
-			var j:Number = 0;
-			var i:Number = 0;
-			var _obj:Object = new XMLObject().parseXML(xml, true);
-			for (i=0; i<o.o._len; i++)
-			{
-				trace("PlexAPI - Adding " + _obj.MediaContainer[0][o.o.child][j].attributes.title + " to [\""+o.o.child+"\"]["+i+"] From j:" +j);
-				PlexData.oWallData.MediaContainer[0][o.o.child][i] = _obj.MediaContainer[0][o.o.child][j];
-				j++;
-			}
-		} else {
-			D.debug(D.lDebug, "PlexAPI - onWallDataRollOver Failed to get XML...");
-		}
-	}
-	
-	public static function getWallData(key:String, onLoad:Function, timeout:Number):Void
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		trace("Doing PlexAPI - Doing getWallData...");
+		var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+startPos+"&X-Plex-Container-Size="+size;
+		Util.loadURL(url, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if(success)
 			{
@@ -281,8 +209,9 @@ class plexNMT.as2.api.PlexAPI
 			}else{
 				D.debug(D.lDebug, "PlexAPI - Faled to get WallData...");
 			}
-			this.onLoad(PlexData.oWallData);
-		}), {target:"xml", timeout:timeout});
+			var obj:Object = o.o.obj;
+			this.onLoad(obj.key, obj.startPos, obj.size, obj.onLoad, obj.timeout);
+		}), {target:"xml", timeout:timeout, obj:obj});
 	}
 	
 	public static function getMovieData(key:String, onLoad:Function, timeout:Number):Void

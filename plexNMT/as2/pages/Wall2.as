@@ -1,5 +1,6 @@
 ﻿
 import plexNMT.as2.api.PlexAPI;
+import plexNMT.as2.api.PlexAPI2;
 import plexNMT.as2.common.Remote;
 import plexNMT.as2.common.PlexData;
 import plexNMT.as2.common.Utils;
@@ -29,6 +30,7 @@ class plexNMT.as2.pages.Wall2 {
 	private var navY:Number = 0;
 	private var navHigh:Number = 0;
 	private var navLow:Number = 0;
+	private var api:PlexAPI2 = null;
 	//Key Listener
 	private var keyListener:Object = null;
 	private var klInterval:Number = 0;
@@ -39,6 +41,9 @@ class plexNMT.as2.pages.Wall2 {
 		_wall = parentMC.createEmptyMovieClip("_wall", parentMC.getNextHighestDepth());
 		//_wall._x = 80;
 		PlexData.setWall();
+		
+		//PlexAPI
+		var api:PlexAPI2 = new PlexAPI2();
 		
 		//GreenSock Tween Control
 		//OverwriteManager.init(OverwriteManager.PREEXISTING);
@@ -72,11 +77,16 @@ class plexNMT.as2.pages.Wall2 {
 			}
 			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
 			//PlexData.oWallData.key = key;
-			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
-			//PlexAPI.getWallDataRange(key, 0, 28, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			//PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			//PlexAPI.getLazyWallData(key, PlexData.GetRotation("oWallData",-14), 28, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			api.lazyLoad("oWallData", key, 0, 28);
+			api.addEventListener("helloBob", this.helloBob);
 		}
 	}
 
+	private function helloBob():Void{
+		trace("Wall - Hello Bob...");
+	}
 	// Public Methods:
 	public function destroy()
 	{
@@ -99,8 +109,6 @@ class plexNMT.as2.pages.Wall2 {
 		var url:String = "";
 		var key:String = "";
 		
-		
-		
 		for (i=0; i<lenX; i++)
 		{
 			lenY = this.holders[i].length;
@@ -120,6 +128,7 @@ class plexNMT.as2.pages.Wall2 {
 				r++;
 			}
 		}
+		
 	}
 	
 	private function hightlight()
@@ -227,7 +236,7 @@ class plexNMT.as2.pages.Wall2 {
 			this.holders[y] = new Array();
 			for (x=0; x<PlexData.oWall.columns; x++)
 			{
-				trace("Wall - Setting holder["+y+"]["+x+"] to _x:"+posX+", _y:"+posY);
+				//trace("Wall - Setting holder["+y+"]["+x+"] to _x:"+posX+", _y:"+posY);
 				this.holders[y][x] = this._wall.createEmptyMovieClip("holder_"+y+"_"+x, _wall.getNextHighestDepth());
 				
 				this.holders[y][x]._tile = new Tile(this.holders[y][x], "poster", PlexData.oWall.thumb.width, PlexData.oWall.thumb.height);
@@ -237,6 +246,7 @@ class plexNMT.as2.pages.Wall2 {
 			posY = posY + PlexData.oWall.thumb.height + PlexData.oWall.vgap;
 		}
 		this.hightlight();
+		this._position(0);
 	}
 
 	private function enableKeyListener():Void
@@ -267,6 +277,7 @@ class plexNMT.as2.pages.Wall2 {
 		var keyCode:Number = Key.getCode();
 		var asciiCode:Number = Key.getAscii();
 		trace("Wall - keyDownCB with:"+keyCode);
+		var rowEnd:Number = this.holders[navY].length -1;
 		
 		switch (keyCode)
 		{
@@ -295,12 +306,38 @@ class plexNMT.as2.pages.Wall2 {
 			case Key.RIGHT:
 				//this.holders.push(this.holders.shift());
 				navX++;
-				this.hightlight();
+				if (navX > rowEnd)
+				{
+					navX = 0;
+					navY++;
+					if (navY > navHigh)
+					{
+						navY = navHigh;
+						this._position(-1);
+					} else {
+						this.hightlight();
+					}
+				} else {
+					this.hightlight();
+				}
 			break;
 			case Key.LEFT:
 				//this.holders.push(this.holders.shift());
 				navX--;
-				this.hightlight();
+				if (navX < 0)
+				{
+					navX = this.holders[navY-1].length - 1;
+					navY--;
+					if (navY < navLow)
+					{
+						navY = navLow;
+						this._position(1);
+					} else {
+						this.hightlight();
+					}
+				} else {
+					this.hightlight();
+				}
 			break;
 			case "soft1":
 			case Remote.BACK:
