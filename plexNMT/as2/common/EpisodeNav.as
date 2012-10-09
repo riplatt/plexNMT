@@ -99,7 +99,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			holder1.autoAlpha = 100;
 			var h1URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:episodeData[PlexData.GetRotation("oEpisodeData", -2)].attributes.thumb});
+										  key:episodeData[PlexData.getRotation("oEpisodeData", -2)].attributes.thumb});
 			UI.loadImage(h1URL, holder1, "img");
 		}
 		
@@ -111,7 +111,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			holder2.autoAlpha = 100;
 			var h1URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:episodeData[PlexData.GetRotation("oEpisodeData", -1)].attributes.thumb});
+										  key:episodeData[PlexData.getRotation("oEpisodeData", -1)].attributes.thumb});
 			UI.loadImage(h1URL, holder2, "img");
 		}
 		
@@ -120,7 +120,7 @@ class plexNMT.as2.common.EpisodeNav {
 		holder3._visible = false;
 		holder3.autoAlpha = 100;
 		var h1URL:String = PlexAPI.getImg({width:263, height:148,
-									  key:episodeData[PlexData.GetRotation("oEpisodeData", 0)].attributes.thumb});
+									  key:episodeData[PlexData.getRotation("oEpisodeData", 0)].attributes.thumb});
 		UI.loadImage(h1URL, holder3, "img");
 		
 		holder4 = mc.createEmptyMovieClip("holder4", 5);
@@ -131,7 +131,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			holder4.autoAlpha = 100;
 			var h1URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:episodeData[PlexData.GetRotation("oEpisodeData", 1)].attributes.thumb});
+										  key:episodeData[PlexData.getRotation("oEpisodeData", 1)].attributes.thumb});
 			UI.loadImage(h1URL, holder4, "img");
 		}
 		
@@ -143,7 +143,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			holder5.autoAlpha = 100;
 			var h1URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:episodeData[PlexData.GetRotation("oEpisodeData", 2)].attributes.thumb});
+										  key:episodeData[PlexData.getRotation("oEpisodeData", 2)].attributes.thumb});
 			UI.loadImage(h1URL, holder5, "img");
 		}
 		
@@ -155,7 +155,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			holder6.autoAlpha = 100;
 			var h1URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:episodeData[PlexData.GetRotation("oEpisodeData", 3)].attributes.thumb});
+										  key:episodeData[PlexData.getRotation("oEpisodeData", 3)].attributes.thumb});
 			UI.loadImage(h1URL, holder6, "img");
 		}
 		this.holders = [holder1, holder2, holder3, holder4, holder5, holder6];
@@ -215,7 +215,7 @@ class plexNMT.as2.common.EpisodeNav {
 	{
 		trace("EpisodeNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
 		trace("EpisodeNav - PlexData.oEpisodeData.intPos: " + PlexData.oEpisodeData.intPos);
-		var url:String = PlexAPI.getImg({width:246, height:364, key:episodeData[PlexData.GetRotation("oEpisodeData", intImg)].attributes.thumb});
+		var url:String = PlexAPI.getImg({width:246, height:364, key:episodeData[PlexData.getRotation("oEpisodeData", intImg)].attributes.thumb});
 		UI.loadImage(url, holders[intHolder], "img");
 	}
 	

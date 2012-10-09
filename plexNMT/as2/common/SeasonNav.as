@@ -125,7 +125,7 @@ class plexNMT.as2.common.SeasonNav {
 		{
 			trace("SeasonNav - PlexData.oSeasonData.intPos-3:" + PlexData.oSeasonData.intPos-3);
 			var h1URL:String = PlexAPI.getImg({width:134, height:198,
-										  key:seasonData[PlexData.GetRotation("oSeasonData",-3)].attributes.thumb});
+										  key:seasonData[PlexData.getRotation("oSeasonData",-3)].attributes.thumb});
 			UI.loadImage(h1URL, holder1, "img");
 		}
 		
@@ -137,7 +137,7 @@ class plexNMT.as2.common.SeasonNav {
 		{
 			holder2.autoAlpha = 100;
 			var h2URL:String = PlexAPI.getImg({width:134, height:198,
-										  key:seasonData[PlexData.GetRotation("oSeasonData",-2)].attributes.thumb});
+										  key:seasonData[PlexData.getRotation("oSeasonData",-2)].attributes.thumb});
 			UI.loadImage(h2URL, holder2, "img");
 		}
 		
@@ -149,7 +149,7 @@ class plexNMT.as2.common.SeasonNav {
 		{
 			holder3.autoAlpha = 100;
 			var h3URL = PlexAPI.getImg({width:134, height:198,
-										  key:seasonData[PlexData.GetRotation("oSeasonData",-1)].attributes.thumb});
+										  key:seasonData[PlexData.getRotation("oSeasonData",-1)].attributes.thumb});
 			UI.loadImage(h3URL, holder3, "img");
 		}
 		
@@ -158,7 +158,7 @@ class plexNMT.as2.common.SeasonNav {
 		holder4._visible = false;
 		holder4.autoAlpha = 100;
 		var h4URL:String = PlexAPI.getImg({width:134, height:198,
-									  key:seasonData[PlexData.GetRotation("oSeasonData",0)].attributes.thumb});
+									  key:seasonData[PlexData.getRotation("oSeasonData",0)].attributes.thumb});
 		UI.loadImage(h4URL, holder4, "img");
 		
 		holder5 = mc.createEmptyMovieClip("holder5", 2);
@@ -169,7 +169,7 @@ class plexNMT.as2.common.SeasonNav {
 		{
 			holder5.autoAlpha = 100;
 			var h5URL:String = PlexAPI.getImg({width:134, height:198,
-										  key:seasonData[PlexData.GetRotation("oSeasonData",1)].attributes.thumb});
+										  key:seasonData[PlexData.getRotation("oSeasonData",1)].attributes.thumb});
 			UI.loadImage(h5URL, holder5, "img");
 		}
 		
@@ -181,7 +181,7 @@ class plexNMT.as2.common.SeasonNav {
 		{
 			holder6.autoAlpha = 100;
 			var h5URL:String = PlexAPI.getImg({width:134, height:198,
-										  key:seasonData[PlexData.GetRotation("oSeasonData",2)].attributes.thumb});
+										  key:seasonData[PlexData.getRotation("oSeasonData",2)].attributes.thumb});
 			UI.loadImage(h5URL, holder6, "img");
 		}
 		
@@ -192,7 +192,7 @@ class plexNMT.as2.common.SeasonNav {
 		if ((PlexData.oSeasonData.intPos+3)<=PlexData.oSeasonData.intLength)
 		{
 			var h5URL:String = PlexAPI.getImg({width:134, height:198,
-										  key:seasonData[PlexData.GetRotation("oSeasonData",3)].attributes.thumb});
+										  key:seasonData[PlexData.getRotation("oSeasonData",3)].attributes.thumb});
 			UI.loadImage(h5URL, holder7, "img");
 		}
 		
@@ -241,7 +241,7 @@ class plexNMT.as2.common.SeasonNav {
 	{
 		trace("SeasonNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
 		trace("SeasonNav - PlexData.oSeasonData.intPos: " + PlexData.oSeasonData.intPos);
-		var url:String = PlexAPI.getImg({width:134, height:198, key:seasonData[PlexData.GetRotation("oSeasonData", intImg)].attributes.thumb});
+		var url:String = PlexAPI.getImg({width:134, height:198, key:seasonData[PlexData.getRotation("oSeasonData", intImg)].attributes.thumb});
 		UI.loadImage(url, holders[intHolder], "img");
 	}
 	

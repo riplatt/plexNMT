@@ -224,19 +224,21 @@ class plexNMT.as2.common.PlexData {
 		oEpisodeData.intLength = oEpisodeData.MediaContainer[0].attributes.size - 1;
 	}
 	
-	public static function GetRotation(_objItem:String, menuRotation:Number):Number
+	public static function getRotation(_objItem:String, iRotation:Number):Number
 	{
 		var intPos:Number = PlexData[_objItem].intPos;
 		var len:Number = 0;
-		
-		if (PlexData[_objItem].MediaContainer[0].attributes.totalSize = undefined)
+		//trace("PlexData - intPos: " + intPos);
+		if (PlexData[_objItem].MediaContainer[0].attributes.totalSize == undefined)
 		{
-			len = PlexData[_objItem].MediaContainer[0].attributes.size - 1;
+			//trace("PlexData - size: " + PlexData[_objItem].MediaContainer[0].attributes.size);
+			len = int(PlexData[_objItem].MediaContainer[0].attributes.size) - 1;
 		} else {
-			len = PlexData[_objItem].MediaContainer[0].attributes.totalSize - 1
+			//trace("PlexData - totalSize: " + PlexData[_objItem].MediaContainer[0].attributes.totalSize);
+			len = int(PlexData[_objItem].MediaContainer[0].attributes.totalSize) - 1
 		}
-		
-		var rot:Number = Math.abs(menuRotation);
+		//trace("PlexData - len: " + len);
+		var rot:Number = Math.abs(iRotation);
 		var ve:Boolean = false;
 		
 		/*var totalSize:Number = PlexData[_objItem].MediaContainer[0].attributes.totalSize - 1;
@@ -247,7 +249,7 @@ class plexNMT.as2.common.PlexData {
 
 		for(var i=0;i<rot;i++)
 		{
-			if(menuRotation < 0)
+			if(iRotation < 0)
 			{
 				intPos--;
 				if (intPos < 0)
@@ -262,7 +264,7 @@ class plexNMT.as2.common.PlexData {
 				}
 			}
 		}
-		//trace("PlexData - GetRotation Returning: " + intPos + " From a Rotation of: " + menuRotation);
+		//trace("PlexData - GetRotation Returning: " + intPos + " From a Rotation of: " + iRotation);
 		return intPos;
 	}
 	public static function _addItem(_level:String, _item:Object):Void

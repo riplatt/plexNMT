@@ -77,7 +77,7 @@ class plexNMT.as2.common.LoadManager {
     }
     
     private function onLoadError(mc:MovieClip, errorCode:String, httpStatus:Number) {
-        trace("LoadManager - " + mc + " error: " + errorCode + " (" + httpStatus + ")");
+        trace("LoadManager - " + mc + " error: " + errorCode + " (" + httpStatus + ") | url:"+_url);
     } 
     
     private function onLoadProgress(mc:MovieClip, bytesLoaded:Number, bytesTotal:Number) {

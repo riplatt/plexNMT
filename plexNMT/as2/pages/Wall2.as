@@ -78,15 +78,12 @@ class plexNMT.as2.pages.Wall2 {
 			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
 			//PlexData.oWallData.key = key;
 			//PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
-			//PlexAPI.getLazyWallData(key, PlexData.GetRotation("oWallData",-14), 28, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
-			api.lazyLoad("oWallData", key, 0, 28);
-			api.addEventListener("helloBob", this.helloBob);
+			//PlexAPI.getLazyWallData(key, PlexData.getRotation("oWallData",-14), 28, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
+			api.lazyLoad("oWallData", key, -14, 42);
+			api.addEventListener("onDataLoaded", Delegate.create(this, onLoadData));
 		}
 	}
 
-	private function helloBob():Void{
-		trace("Wall - Hello Bob...");
-	}
 	// Public Methods:
 	public function destroy()
 	{
@@ -101,11 +98,12 @@ class plexNMT.as2.pages.Wall2 {
 	// Private Methods:
 	private function onLoadData()
 	{
+		trace("Wall - Doing onLoadData...");
 		var lenX:Number = this.holders.length;
 		var lenY:Number = 0;
 		var i:Number = 0;
 		var j:Number = 0;
-		var r:Number = 0;
+		var r:Number = -14;
 		var url:String = "";
 		var key:String = "";
 		
@@ -117,10 +115,11 @@ class plexNMT.as2.pages.Wall2 {
 			{
 				if (PlexData.oWallData.MediaContainer[0].Directory != undefined) 
 				{
-					key = PlexData.oWallData.MediaContainer[0].Directory[PlexData.GetRotation("oWallData", r)].attributes.thumb;
+					key = PlexData.oWallData.MediaContainer[0].Directory[PlexData.getRotation("oWallData", r)].attributes.thumb;
 				} else {
-					key = PlexData.oWallData.MediaContainer[0].Video[PlexData.GetRotation("oWallData", r)].attributes.thumb;
+					key = PlexData.oWallData.MediaContainer[0].Video[PlexData.getRotation("oWallData", r)].attributes.thumb;
 				}
+				trace("Wall - key:"+key);
 				url = PlexData.oSettings.url + "/photo/:/transcode?width="+PlexData.oWall.thumb.size+"&height="+PlexData.oWall.thumb.size+"&url=" + escape(PlexData.oSettings.url + Util.trim(key));
 				//trace("Wall - Loading Image to " + holders[i][j]);
 				this.holders[i][j]._tile.loadImg(url);

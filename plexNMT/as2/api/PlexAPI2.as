@@ -32,35 +32,38 @@ class plexNMT.as2.api.PlexAPI2 {
 	public function lazyLoad(strObj:String, key:String, iStart:Number, iSize:Number)
 	{
 		trace("PlexAPI - Doing Lazy Load...");
-		trace("PlexAPI - key=>"+key);
-		trace("PlexAPI - iStart=>"+iStart);
-		trace("PlexAPI - size=>"+iSize);
-		trace("PlexAPI - strObj=>"+strObj);
+		
 		if (PlexData[strObj].MediaContainer != undefined)
 		{
-			trace("PlexAPI - "+(iStart+iSize)+" > "+PlexData[strObj].intLength);
-			if (iStart+iSize>PlexData[strObj].intLength)
+			trace("PlexAPI - "+strObj+" Initialized...");
+			if (iSize > PlexData[strObj].intLength)
 			{
-				var iEnd:Number = iStart+iSize-PlexData.oWallData.intLength;
-				var url1:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+iStart+"&X-Plex-Container-Size="+iSize;
+				trace("PlexAPI - iSize is bigger then range, Setting to range size...")
+				iSize = PlexData[strObj].intLength;
+			}
+			var iBegin:Number = PlexData.getRotation(strObj, iStart);
+			trace("PlexAPI - "+(iBegin+iSize)+" > "+PlexData[strObj].intLength);
+			if (iBegin+iSize>PlexData[strObj].intLength)
+			{
+				trace("PlexAPI - Request is out of range, Doing 2 Calls...");
+				var iEnd:Number = iBegin+iSize-PlexData.oWallData.intLength;
+				
+				var url1:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+iBegin+"&X-Plex-Container-Size="+iSize;
 				var url2:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start=0&X-Plex-Container-Size="+iEnd;
 				
-				//Util.loadURL(url1, Delegate.create({onLoad:onLoad}, onLazyLoad), {target:"xml", timeout:timeout, intStart:iStart, iSize:PlexData.oWallData.intLength, _key:key, action:"wait"});
-				//Util.loadURL(url2, Delegate.create({onLoad:onLoad}, onLazyLoad), {target:"xml", timeout:timeout, intStart:0, iSize:iEnd, _key:key, action:"dispatch"});
+				getData(strObj, url1, PlexData.oSettings.timeout, {iStart:iBegin, iEnd:PlexData[strObj].intLength+1, action:"wait"});
+				getData(strObj, url2, PlexData.oSettings.timeout, {iStart:0, iEnd:iEnd, action:"dispatch"});
 			} else {
+				trace("PlexAPI - Request is in range, Doing 1 Call...");
 				var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start="+iStart+"&X-Plex-Container-Size="+iSize;
-				//Util.loadURL(url, Delegate.create({onLoad:onLoad}, onLazyLoad), {target:"xml", timeout:timeout, intStart:iStart, iSize:iStart+size, _key:key , action:"dispatch"});
+				
+				getData(strObj, url, PlexData.oSettings.timeout, {iStart:iStart, iSize:iSize, action:"dispatch"});
 			}
 		} else {
 			trace("PlexAPI - No Data Yet! Initializing "+strObj+"...");
 			var url:String = PlexData.oSettings.url + key + "?X-Plex-Container-Start=0&X-Plex-Container-Size=1";
 
 			getData(strObj, url, PlexData.oSettings.timeout, {key:key, iStart:iStart, iSize:iSize, action:"init"});
-			trace("PlexAPI - this:");
-			Utils.traceVar(this);
-			this.addEventListener("onDataLoad", this);
-			//this.addEventListener("onDataLoad", this);
-			//getWallData(key, 0, 1, Delegate.create({onLoad:onLoad}, getLazyWallData), {key:key, iStart:iStart, size:size, onLoad:onLoad, timeout:timeout},PlexData.oSettings.timeout);
 		}
 	}
 	// Private Methods:
@@ -82,7 +85,7 @@ class plexNMT.as2.api.PlexAPI2 {
 	private function onXMLLoad(evtObj:Object):Void
 	{
 		trace("PlexAPI - Doing onXMLLoad...");
-		Utils.traceVar(evtObj.obj);
+		//Utils.traceVar(evtObj.obj);
 		var XMLObj:XML = evtObj.target;
 		var obj:Object = new ObjClone(evtObj.obj.obj);
 		var strObj:String = evtObj.obj.strObj;
@@ -91,22 +94,38 @@ class plexNMT.as2.api.PlexAPI2 {
 			trace("PlexAPI - Initializing " + evtObj.obj.strObj);
 			//var strObj:String = evtObj.obj.strObj;
 			PlexData[strObj] = new XMLObject().parseXML(XMLObj, true);
+			trace("PlexAPI - "+strObj.substr(1, strObj.length -1));
+			PlexData["set" + strObj.substr(1, strObj.length -1)]();
 			obj.action = "lasyload";
 		} else {
-			
+			trace("PlexAPI - Adding objects to " + evtObj.obj.strObj);
+			var j:Number = 0;
+			var i:Number = 0;
+			var child:String = "";
+			var _obj:Object = new XMLObject().parseXML(XMLObj, true);
+			if (_obj.MediaContainer[0].Directory != undefined)
+			{
+				child = "Directory";
+			} else {
+				child = "Video";
+			}
+			trace("PlexAPI - Adding objects to " + evtObj.obj.strObj + " from " + obj.iStart + " to " + obj.iEnd);
+			for (j=obj.iStart; j<obj.iEnd; j++)
+			{
+				trace("PlexAPI - Adding " + _obj.MediaContainer[0][child][i].attributes.title + " to MediaContainer[0]["+child+"]["+j+"]");
+				PlexData.oWallData.MediaContainer[0][child][j] = _obj.MediaContainer[0][child][i];
+				trace("PlexAPI - Added " + PlexData.oWallData.MediaContainer[0][child][j].attributes.title);
+				i++;
+			}
 		}
 		
-		/*trace("PlexAPI - Calling onDataLoad...");
-		this.onDataLoad(strObj, obj);*/
-		//Dispatch
-		trace("PlexAPI - Sending Dispatch Event 'helloBob'...");
-		dispatchEvent ({type:"helloBob", strObj:strObj, obj:obj});
-		this.helloBob();
+		delete XMLObj.idMap;
+		XMLObj = null;
+
+		trace("PlexAPI - Calling onDataLoad...");
+		this.onDataLoad(strObj, obj);
 	}
 
-	private function helloBob():Void{
-		trace("PlexAPI - Hello Bob...");
-	}
 	// function to handle the httpStatus event:
 	private function httpStatus(evtObj:Object):Void {
 		trace("PlexAPI - http status: "+evtObj.httpStatus);
@@ -115,20 +134,26 @@ class plexNMT.as2.api.PlexAPI2 {
 	private function onDataLoad(strObj:String, obj:Object):Void
 	{
 		trace("PlexAPI - Doing onDataLoad...");
-		if (obj.action == undefined)
+		Utils.traceVar(obj);
+		var action:String = obj.action.toString();
+		if (action == undefined)
 		{
-			dispatchEvent ({type:"onDataLoaded"});
+			trace("PlexAPI - Dispatching evtError event...");
+			dispatchEvent ({type:"evtError", msg:"PlexAPI.onDataLoad call without action..."});
 		} else {
-			switch (obj.action)
+			trace("PlexAPI - obj.action:"+action+" typeOf:"+typeof(action));
+			switch (action)
 			{
 				case "lasyload":
-					PlexData["set" + strObj.substr(1, strObj.length -1)]();
+					//PlexData["set" + strObj.substr(1, strObj.length -1)]();
+					lazyLoad(strObj, obj.key, obj.iStart, obj.iSize);
 				break;
 				case "dispatch":
-					
+					trace("PlexAPI - Dispatching onDataLoaded event...");
+					dispatchEvent ({type:"onDataLoaded"});
 				break;
 				case "wait":
-					
+					trace("PlexAPI - Been asked to wait...");
 				break;
 			}
 		}

@@ -268,11 +268,11 @@ class plexNMT.as2.pages.HomeMenu {
 			if (PlexData.oSections.MediaContainer[0] != undefined)
 			{
 				D.debug(D.lDev,"Home - Setting Menu Level 1...");
-				this.menu1MC.item_0.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",-2)].attributes.title;
-				this.menu1MC.item_1.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",-1)].attributes.title;
-				this.menu1MC.item_2.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",0)].attributes.title;
-				this.menu1MC.item_3.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",1)].attributes.title;
-				this.menu1MC.item_4.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.GetRotation("oSections",2)].attributes.title;
+				this.menu1MC.item_0.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.getRotation("oSections",-2)].attributes.title;
+				this.menu1MC.item_1.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.getRotation("oSections",-1)].attributes.title;
+				this.menu1MC.item_2.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.getRotation("oSections",0)].attributes.title;
+				this.menu1MC.item_3.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.getRotation("oSections",1)].attributes.title;
+				this.menu1MC.item_4.txt.htmlText = PlexData.oSections.MediaContainer[0].Directory[PlexData.getRotation("oSections",2)].attributes.title;
 				this.level1MaxX = getMaxTxtLen(this.menu1MC);
 				u = 1;
 			}
@@ -281,11 +281,11 @@ class plexNMT.as2.pages.HomeMenu {
 			if (PlexData.oCategories.MediaContainer[0] != undefined)
 			{
 				D.debug(D.lDev,"Home - Setting Menu Level 2...");
-				this.menu2MC.item_0.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.GetRotation("oCategories",-2)].attributes.title;
-				this.menu2MC.item_1.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.GetRotation("oCategories",-1)].attributes.title;
-				this.menu2MC.item_2.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.GetRotation("oCategories",0)].attributes.title;
-				this.menu2MC.item_3.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.GetRotation("oCategories",1)].attributes.title;
-				this.menu2MC.item_4.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.GetRotation("oCategories",2)].attributes.title;
+				this.menu2MC.item_0.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.getRotation("oCategories",-2)].attributes.title;
+				this.menu2MC.item_1.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.getRotation("oCategories",-1)].attributes.title;
+				this.menu2MC.item_2.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.getRotation("oCategories",0)].attributes.title;
+				this.menu2MC.item_3.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.getRotation("oCategories",1)].attributes.title;
+				this.menu2MC.item_4.txt.htmlText = PlexData.oCategories.MediaContainer[0].Directory[PlexData.getRotation("oCategories",2)].attributes.title;
 				this.level2MaxX = getMaxTxtLen(this.menu2MC);
 				u = 2;
 			}
@@ -294,11 +294,11 @@ class plexNMT.as2.pages.HomeMenu {
 			if (PlexData.oFilters.MediaContainer[0] != undefined)
 			{
 				D.debug(D.lDev,"Home - Setting Menu Level 3...");
-				this.menu3MC.item_0.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.GetRotation("oFilters",-2)].attributes.title;
-				this.menu3MC.item_1.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.GetRotation("oFilters",-1)].attributes.title;
-				this.menu3MC.item_2.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.GetRotation("oFilters",0)].attributes.title;
-				this.menu3MC.item_3.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.GetRotation("oFilters",1)].attributes.title;
-				this.menu3MC.item_4.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.GetRotation("oFilters",2)].attributes.title;
+				this.menu3MC.item_0.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.getRotation("oFilters",-2)].attributes.title;
+				this.menu3MC.item_1.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.getRotation("oFilters",-1)].attributes.title;
+				this.menu3MC.item_2.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.getRotation("oFilters",0)].attributes.title;
+				this.menu3MC.item_3.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.getRotation("oFilters",1)].attributes.title;
+				this.menu3MC.item_4.txt.htmlText = PlexData.oFilters.MediaContainer[0].Directory[PlexData.getRotation("oFilters",2)].attributes.title;
 				this.level3MaxX = getMaxTxtLen(this.menu3MC);
 				u = 3;
 			}
