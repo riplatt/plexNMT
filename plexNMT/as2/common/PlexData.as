@@ -94,30 +94,12 @@ class plexNMT.as2.common.PlexData {
 			oSettings.wall.movies = new Object();
 			oSettings.wall.movies.rows = 2;
 			oSettings.wall.movies.columns = 7;
-<<<<<<< HEAD
-<<<<<<< HEAD
 			oSettings.wall.shows = new Object();
 			oSettings.wall.shows.rows = 3;
 			oSettings.wall.shows.columns = 11;
 			oSettings.wall.music = new Object();
 			oSettings.wall.music.rows = 4;
 			oSettings.wall.music.columns = 12;
-=======
-=======
->>>>>>> origin/dev
-			oSettings.wall.movies.total = 14;
-			oSettings.wall.shows = new Object();
-			oSettings.wall.shows.rows = 3;
-			oSettings.wall.shows.columns = 11;
-			oSettings.wall.shows.total = 33;
-			oSettings.wall.music = new Object();
-			oSettings.wall.music.rows = 4;
-			oSettings.wall.music.columns = 12;
-			oSettings.wall.shows.total = 48;
-<<<<<<< HEAD
->>>>>>> origin/dev
-=======
->>>>>>> origin/dev
 			oSettings.curLevel = null;
 			oSettings.init = true;
 			oSettings.previous = null;
@@ -239,8 +221,6 @@ class plexNMT.as2.common.PlexData {
 		var rot:Number = Math.abs(menuRotation);
 		var ve:Boolean = false;
 		
-<<<<<<< HEAD
-<<<<<<< HEAD
 		if (menuRotation < 0)
 		{
 			ve = true;
@@ -248,22 +228,6 @@ class plexNMT.as2.common.PlexData {
 		for(var i=0;i<rot;i++)
 		{
 			if(ve)
-=======
-=======
->>>>>>> origin/dev
-		/*var totalSize:Number = PlexData[_objItem].MediaContainer[0].attributes.totalSize - 1;
-		if (totalSize != undefined) 
-		{
-			len = totalSize;
-		}*/
-
-		for(var i=0;i<rot;i++)
-		{
-			if(menuRotation < 0)
-<<<<<<< HEAD
->>>>>>> origin/dev
-=======
->>>>>>> origin/dev
 			{
 				intPos--;
 				if (intPos < 0)
