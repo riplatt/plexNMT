@@ -224,20 +224,9 @@ class plexNMT.as2.common.PosterNav {
 	
 	private function onImgLoad()
 	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-		this.hiResImg._x = 0;
-		TweenLite.to(this.hiResImg, 0, {_width:402, _height:595});
-=======
 		/*this.hiResImg._x = 0;
 		this.hiResImg._y = 125.04;*/
 		TweenLite.to(this.hiResImg, 0, {_width:402, _height:595, _x:0, _y:125.04});
->>>>>>> origin/dev
-=======
-		/*this.hiResImg._x = 0;
-		this.hiResImg._y = 125.04;*/
-		TweenLite.to(this.hiResImg, 0, {_width:402, _height:595, _x:0, _y:125.04});
->>>>>>> origin/dev
 		TweenLite.to(this.hiResImg, 0.4, {autoAlpha:100});
 	}
 	

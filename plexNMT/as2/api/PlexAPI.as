@@ -111,10 +111,6 @@ class plexNMT.as2.api.PlexAPI
 	}
 	
 	public static function getFilters(key:String, onLoad:Function, timeout:Number):Void
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/dev
 	{
 		Util.loadURL(PlexData.oSettings.url + "/library/sections/" + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
@@ -132,7 +128,6 @@ class plexNMT.as2.api.PlexAPI
 		}), {target:"xml", timeout:timeout});
 	}
 	
-<<<<<<< HEAD
 	public static function getWallData(key:String, onLoad:Function, timeout:Number):Void
 	{
 		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
@@ -152,7 +147,6 @@ class plexNMT.as2.api.PlexAPI
 	}
 	
 	public static function getMovieData(key:String, onLoad:Function, timeout:Number):Void
-=======
 	{
 		Util.loadURL(PlexData.oSettings.url + "/library/sections/" + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
@@ -169,64 +163,7 @@ class plexNMT.as2.api.PlexAPI
 			this.onLoad(PlexData.oFilters);
 		}), {target:"xml", timeout:timeout});
 	}
-	
-=======
->>>>>>> origin/dev
-	public static function getWallDataRange(key:String, intPos:Number, size:Number, onLoad:Function, timeout:Number):Void
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - getWallData: " + success);
-                PlexData.oWallData = new XMLObject().parseXML(xml, true);
-				PlexData.setWallData();
-                delete xml
-				//Utils.varDump(PlexData.oWallData)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get WallData...");
-			}
-			this.onLoad(PlexData.oWallData);
-		}), {target:"xml", timeout:timeout});
-	}
-	
-	public static function getWallData(key:String, onLoad:Function, timeout:Number):Void
-<<<<<<< HEAD
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - getWallData: " + success);
-                PlexData.oWallData = new XMLObject().parseXML(xml, true);
-				PlexData.setWallData();
-                delete xml
-				//Utils.varDump(PlexData.oWallData)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get WallData...");
-			}
-			this.onLoad(PlexData.oWallData);
-		}), {target:"xml", timeout:timeout});
-	}
-	
-	public static function getMovieData(key:String, onLoad:Function, timeout:Number):Void
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - getMovieData: " + success);
-                PlexData.oMovieData = new XMLObject().parseXML(xml, true);
-				PlexData.setMovieData();
-                delete xml
-				//Utils.varDump(PlexData.oMovieData)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get MovieData...");
-			}
-			this.onLoad(PlexData.oMovieData);
-		}), {target:"xml", timeout:timeout});
-	}
-	
+		
 	public static function getSeasonData(key:String, onLoad:Function, timeout:Number):Void
 	{
 		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
@@ -246,13 +183,11 @@ class plexNMT.as2.api.PlexAPI
 	}
 	
 	public static function getEpisodeData(key:String, onLoad:Function, timeout:Number):Void
->>>>>>> origin/dev
 	{
 		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if(success)
 			{
-<<<<<<< HEAD
 				trace("Doing PlexAPI - getMovieData: " + success);
                 PlexData.oMovieData = new XMLObject().parseXML(xml, true);
 				PlexData.setMovieData();
@@ -265,30 +200,12 @@ class plexNMT.as2.api.PlexAPI
 		}), {target:"xml", timeout:timeout});
 	}
 	
-	public static function getSeasonData(key:String, onLoad:Function, timeout:Number):Void
-=======
-				trace("Doing PlexAPI - getEpisodeData: " + success);
-                PlexData.oEpisodeData = new XMLObject().parseXML(xml, true);
-				PlexData.setEpisodeData();
-                delete xml
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Episode Data...");
-			}
-			this.onLoad(PlexData.oEpisodeData);
-		}), {target:"xml", timeout:timeout});
-	}
-	
 	public static function getBackground(key:String, onLoad:Function, timeout:Number):Void
->>>>>>> origin/dev
-=======
->>>>>>> origin/dev
 	{
 		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if(success)
 			{
-<<<<<<< HEAD
-<<<<<<< HEAD
 				trace("Doing PlexAPI - getSeasonData: " + success);
                 PlexData.oSeasonData = new XMLObject().parseXML(xml, true);
 				PlexData.setSeasonData();
@@ -296,93 +213,11 @@ class plexNMT.as2.api.PlexAPI
 				//Utils.varDump(PlexData.oMovieData)
 			}else{
 				D.debug(D.lDebug, "PlexAPI - Faled to get Season Data...");
-			}
-=======
-				trace("Doing PlexAPI - getWallData: " + success);
-                PlexData.oWallData = new XMLObject().parseXML(xml, true);
-				PlexData.setWallData();
-                delete xml
-				//Utils.varDump(PlexData.oWallData)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get WallData...");
 			}
 			this.onLoad(PlexData.oWallData);
 		}), {target:"xml", timeout:timeout});
 	}
 	
-	public static function getMovieData(key:String, onLoad:Function, timeout:Number):Void
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - getMovieData: " + success);
-                PlexData.oMovieData = new XMLObject().parseXML(xml, true);
-				PlexData.setMovieData();
-                delete xml
-				//Utils.varDump(PlexData.oMovieData)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get MovieData...");
-			}
-			this.onLoad(PlexData.oMovieData);
-		}), {target:"xml", timeout:timeout});
-	}
-	
-	public static function getSeasonData(key:String, onLoad:Function, timeout:Number):Void
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - getSeasonData: " + success);
-                PlexData.oSeasonData = new XMLObject().parseXML(xml, true);
-				PlexData.setSeasonData();
-                delete xml
-				//Utils.varDump(PlexData.oMovieData)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Season Data...");
-			}
->>>>>>> origin/dev
-			this.onLoad(PlexData.oSeasonData);
-		}), {target:"xml", timeout:timeout});
-	}
-	
-	public static function getEpisodeData(key:String, onLoad:Function, timeout:Number):Void
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - getEpisodeData: " + success);
-                PlexData.oEpisodeData = new XMLObject().parseXML(xml, true);
-				PlexData.setEpisodeData();
-                delete xml
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Episode Data...");
-			}
-			this.onLoad(PlexData.oEpisodeData);
-		}), {target:"xml", timeout:timeout});
-	}
-	
-	public static function getBackground(key:String, onLoad:Function, timeout:Number):Void
-<<<<<<< HEAD
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - Got Background XML...");
-                PlexData.oBackground = new XMLObject().parseXML(xml, true);
-				PlexData.setBackground();
-                delete xml
-				//Utils.varDump(PlexData.oBackground)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Background...");
-			}
-			this.onLoad(PlexData.oFilters);
-		}), {target:"xml", timeout:timeout});
-	}
-	
 	public static function getViewGroup(url:String, onLoad:Function, timeout:Number):Void
 	{
 		trace("Doing getViewGroup with: " + url);
@@ -395,50 +230,6 @@ class plexNMT.as2.api.PlexAPI
 			}else{
 				D.debug(D.lDebug, "PlexAPI - Faled to get ViewGroup...");
 			}
-=======
-				trace("Doing PlexAPI - Got Background XML...");
-                PlexData.oBackground = new XMLObject().parseXML(xml, true);
-				PlexData.setBackground();
-                delete xml
-				//Utils.varDump(PlexData.oBackground)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Background...");
-			}
-=======
-	{
-		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			if(success)
-			{
-				trace("Doing PlexAPI - Got Background XML...");
-                PlexData.oBackground = new XMLObject().parseXML(xml, true);
-				PlexData.setBackground();
-                delete xml
-				//Utils.varDump(PlexData.oBackground)
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Background...");
-			}
->>>>>>> origin/dev
-			this.onLoad(PlexData.oFilters);
-		}), {target:"xml", timeout:timeout});
-	}
-	
-	public static function getViewGroup(url:String, onLoad:Function, timeout:Number):Void
-	{
-		trace("Doing getViewGroup with: " + url);
-		Util.loadURL(PlexData.oSettings.url + url + "?X-Plex-Container-Start=0&X-Plex-Container-Size=0", Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
-		{
-			var viewGroup:String = "Error";
-			if(success)
-			{
-				viewGroup = Util.trim(XPathAPI.selectSingleNode(xml.firstChild, "/MediaContainer").attributes.viewGroup.toString());
-			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get ViewGroup...");
-			}
-<<<<<<< HEAD
->>>>>>> origin/dev
-=======
->>>>>>> origin/dev
 			this.onLoad(viewGroup);
 		}), {target:"xml", timeout:timeout});
 	}
