@@ -148,17 +148,17 @@ class plexNMT.as2.api.PlexAPI
 	
 	public static function getMovieData(key:String, onLoad:Function, timeout:Number):Void
 	{
-		Util.loadURL(PlexData.oSettings.url + "/library/sections/" + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
+		Util.loadURL(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, xml:XML, o:Object):Void
 		{
 			if(success)
 			{
-				trace("Doing PlexAPI - getFilters: " + success);
-                PlexData.oFilters = new XMLObject().parseXML(xml, true);
-				PlexData.setFilters();
+				trace("Doing PlexAPI - getMovieData: " + success);
+                PlexData.oMovieData = new XMLObject().parseXML(xml, true);
+				PlexData.setMovieData();
                 delete xml
 				//Utils.varDump(PlexData.oFilters)
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Filters...");
+				D.debug(D.lDebug, "PlexAPI - Faled to get Movie Data...");
 			}
 			this.onLoad(PlexData.oFilters);
 		}), {target:"xml", timeout:timeout});
