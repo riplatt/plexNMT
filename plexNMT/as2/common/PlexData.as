@@ -104,7 +104,7 @@ class plexNMT.as2.common.PlexData {
 			oSettings.init = true;
 			oSettings.previous = null;
 			oSettings.debug = new Object();
-			oSettings.debug.level = 4;
+			oSettings.debug.level = 0;
 			oSettings.debug.remote = "192.168.1.18";
 			oSettings.buffer = 0;
 			oSettings.overscan = false;
