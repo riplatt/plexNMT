@@ -314,7 +314,7 @@ class plexNMT.as2.common.SeasonNav {
 			break;
 		}
 		trace("SeasonNav - Calling fastUpdate...");
-		this.fn();
+		this.fn("season");
 	}
 
 }

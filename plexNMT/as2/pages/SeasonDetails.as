@@ -40,7 +40,7 @@ class plexNMT.as2.pages.SeasonDetails {
 	private var popAPI:PopAPI = null;
 	
 	private var _background:Background = null;
-	//private var _details:SeasonDetailsPane = null;
+	private var _details:SeasonDetailsPane = null;
 	private var _poster:PosterNav = null;
 	private var _season:SeasonNav = null;
 	private var _episode:EpisodeNav = null;
@@ -66,7 +66,8 @@ class plexNMT.as2.pages.SeasonDetails {
 		//trace("Calling getMovieData With: " + key);
 		D.debug(D.lDev, "SeasonDetails - Calling getSeasonData With: " + key);
 		trace("SeasonDetails - Calling getSeasonData With: " + key);
-		PlexAPI.getSeasonData(key, Delegate.create(this, this.onDataLoad), 5000);
+		PlexAPI.getSeasonData(key, Delegate.create(this, this.onSeasonLoad), 5000);
+		
 	}
 	
 	// Destroy all global variables.
@@ -88,14 +89,19 @@ class plexNMT.as2.pages.SeasonDetails {
 		delete keyListener;
 
 	}
-
+	
+	private function onSeasonLoad():Void
+	{
+		var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[0].attributes.key
+		PlexAPI.getEpisodeData(key, Delegate.create(this, this.onDataLoad), 5000);
+	}
 	private function onDataLoad(data:Object):Void
 	{
-		D.debug(D.lDev, "SeasonDetails - Doing moveieDetails.parseXML.data... ");
+		D.debug(D.lDev, "SeasonDetails - Doing seasonDetails.parseXML.data... ");
 			//Add Components
 			_background = new Background(this.mainMC);
 			
-			//_details = new SeasonDetailsPane(this.mainMC);
+			_details = new SeasonDetailsPane(this.mainMC);
 			
 			_poster = new PosterNav(this.mainMC, PlexData.oWallData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
 			_season = new SeasonNav(this.mainMC, PlexData.oSeasonData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
@@ -103,7 +109,7 @@ class plexNMT.as2.pages.SeasonDetails {
 			
 			_menu = new MenuTop(this.mainMC);
 			
-			_background._set(PlexData.oMovieData.MediaContainer[0].Directory[0].attributes.art);
+			_background._set(PlexData.oSeasonData.MediaContainer[0].attributes.art);
 			
 			
 			this.select = [_season, _poster, _episode];
@@ -116,47 +122,48 @@ class plexNMT.as2.pages.SeasonDetails {
 			
 	}
 	
-	public function fastUpdate(arg:Object)
+	public function fastUpdate(str:String)
 	{
-		/*//Menu Number of:
-		this._menu._update();
-		//Details
-		this._details.setText(PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.title,
-							  PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.year,
-							  PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.tagline);
-		*/
+		trace("SeasonDetails - fastUpdate str:" + str + "...");
+		switch (str)
+		{
+			case "poster":
+				_details._update()
+			break;
+		}
+		
 		//Slow Update
 		clearInterval(slowUpdateInterval);
-		slowUpdateInterval = setInterval(Delegate.create(this, this.slowUpdate), 600);
+		slowUpdateInterval = setInterval(Delegate.create(this, this.slowUpdate(str)), 600);
 		
 	}
 	
-	public function slowUpdate()
+	public function slowUpdate(str:String)
 	{
 		D.debug(D.lDev, "SeasonDetails - Doing slowUpdate...");
-		trace("SeasonDetails - Doing slowUpdate...");
-		var posterKey:Number = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.ratingKey;
-		var seasonKey:Number = PlexData.oSeasonData.MediaContainer[0].attributes.key;
-		var seasonRatingKey:Number = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.ratingKey;
-		var episodeKey:Number = PlexData.oEpisodeData.MediaContainer[0].attributes.key;
-		trace("SeasonDetails - posterKey: " + posterKey);
-		trace("SeasonDetails - seasonKey: " + seasonKey);
-		trace("SeasonDetails - seasonRatingKey: " + seasonRatingKey);
-		trace("SeasonDetails - episodeKey: " + episodeKey);
-		if (posterKey != seasonKey)
+		switch (str)
 		{
-			var key:String = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.key
-			PlexAPI.getSeasonData(key, Delegate.create(this, function()
-			{
+			case "poster":
+				//Update Season Navigation
 				_season.destroy();
 				var key:String = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.key
 				PlexAPI.getSeasonData(key, Delegate.create(this, function()
 					{
 						_season = new SeasonNav(this.mainMC, PlexData.oSeasonData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
 					}), 5000);
-			}), 5000);
-		} 
-		
+				
+			break;
+			case "season":
+				//Update Episode Navigation
+				_episode.destroy();
+				var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[0].attributes.key
+				PlexAPI.getEpisodeData(key, Delegate.create(this, function()
+					{
+						_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
+					}), 5000);
+			break;
+		}
+				
 		clearInterval(slowUpdateInterval);
 	}
 	

@@ -188,15 +188,15 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				trace("Doing PlexAPI - getMovieData: " + success);
-                PlexData.oMovieData = new XMLObject().parseXML(xml, true);
-				PlexData.setMovieData();
+				trace("Doing PlexAPI - getEpisodeData: " + success);
+                PlexData.oEpisodeData = new XMLObject().parseXML(xml, true);
+				PlexData.setEpisodeData();
                 delete xml
-				//Utils.varDump(PlexData.oMovieData)
+				//Utils.varDump(PlexData.oEpisodeData)
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get MovieData...");
+				D.debug(D.lDebug, "PlexAPI - Faled to get Episode Data...");
 			}
-			this.onLoad(PlexData.oMovieData);
+			this.onLoad(PlexData.oEpisodeData);
 		}), {target:"xml", timeout:timeout});
 	}
 	

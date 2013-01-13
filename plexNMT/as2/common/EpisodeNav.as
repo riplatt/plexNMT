@@ -61,6 +61,14 @@ class plexNMT.as2.common.EpisodeNav {
 		//buildHolders(episodes)
 	}
 	
+	public function _update()
+	{
+		trace("EpisodeNav - Doing _update...");
+		this.delHolders();
+		//buildHolders();
+		trace("EpisodeNav - Done _update...");
+	}
+	
 	public function _select()
 	{
 		//this.selectToggle = true;
@@ -85,6 +93,24 @@ class plexNMT.as2.common.EpisodeNav {
 		delete keyListener;
 	}
 	// Private Methods:
+	private function delHolders()
+	{
+		trace("SeasonNav - Doing delHolders...");
+		this.holder1.removeMovieClip();
+		this.holder2.removeMovieClip();
+		this.holder3.removeMovieClip();
+		this.holder4.removeMovieClip();
+		this.holder5.removeMovieClip();
+		this.holder6.removeMovieClip();
+		
+		this.holder1 = null;
+		this.holder2 = null;
+		this.holder3 = null;
+		this.holder4 = null;
+		this.holder5 = null;
+		this.holder6 = null;
+	}
+	
 	private function buildHolders()
 	{
 		trace("EpisodeNav - Doing buildHolders...");
