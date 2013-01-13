@@ -74,7 +74,7 @@ class plexNMT.as2.pages.SeasonDetails {
 	public function destroy():Void
 	{
 		_background.destroy();
-		//_details.destroy();
+		_details.destroy();
 		_menu.destroy();
 		_poster.destroy();
 		_season.destroy();
@@ -155,11 +155,13 @@ class plexNMT.as2.pages.SeasonDetails {
 			break;
 			case "season":
 				//Update Episode Navigation
+				//_episode._update();
 				_episode.destroy();
 				var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[0].attributes.key
 				PlexAPI.getEpisodeData(key, Delegate.create(this, function()
 					{
-						_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
+						_episode._update();
+						//_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
 					}), 5000);
 			break;
 		}

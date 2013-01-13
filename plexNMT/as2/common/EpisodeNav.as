@@ -64,7 +64,41 @@ class plexNMT.as2.common.EpisodeNav {
 	public function _update()
 	{
 		trace("EpisodeNav - Doing _update...");
-		this.delHolders();
+		this._unselect();
+		PlexData.oEpisodeData.intPos = 0;
+		this.episodeData = PlexData.oEpisodeData.MediaContainer[0].Video;
+		
+		
+		var h1URL:String = PlexAPI.getImg({width:263, height:148,
+									  key:episodeData[PlexData.GetRotation("oEpisodeData", 0)].attributes.thumb});
+		//holder3.attachMovie("poster_wide.png","img",holder3.getNextHighestDepth())
+		UI.loadImage(h1URL, holder3, "img");
+		if ((PlexData.oEpisodeData.intPos+1)<=PlexData.oEpisodeData.intLength)
+		{
+			holder4.autoAlpha = 100;
+			var h1URL:String = PlexAPI.getImg({width:263, height:148,
+										  key:episodeData[PlexData.GetRotation("oEpisodeData", 1)].attributes.thumb});
+			UI.loadImage(h1URL, holder4, "img");
+		}
+		
+		if ((PlexData.oEpisodeData.intPos+2)<=PlexData.oEpisodeData.intLength)
+		{
+			holder5.autoAlpha = 100;
+			var h1URL:String = PlexAPI.getImg({width:263, height:148,
+										  key:episodeData[PlexData.GetRotation("oEpisodeData", 2)].attributes.thumb});
+			UI.loadImage(h1URL, holder5, "img");
+		}
+		
+		if ((PlexData.oEpisodeData.intPos+3)<=PlexData.oEpisodeData.intLength)
+		{
+			holder6.autoAlpha = 100;
+			var h1URL:String = PlexAPI.getImg({width:263, height:148,
+										  key:episodeData[PlexData.GetRotation("oEpisodeData", 3)].attributes.thumb});
+			UI.loadImage(h1URL, holder6, "img");
+		}
+
+		//this._position();
+		//this.delHolders();
 		//buildHolders();
 		trace("EpisodeNav - Done _update...");
 	}
@@ -116,7 +150,7 @@ class plexNMT.as2.common.EpisodeNav {
 		trace("EpisodeNav - Doing buildHolders...");
 		var mc:MovieClip = this.episodes;
 		this.episodeData = PlexData.oEpisodeData.MediaContainer[0].Video;
-		trace(Utils.varDump(this.episodeData));
+		//trace(Utils.varDump(this.episodeData));
 		holder1 = mc.createEmptyMovieClip("holder1", 1);
 		holder1._alpha = 0;
 		holder1._visible = false;
@@ -190,7 +224,8 @@ class plexNMT.as2.common.EpisodeNav {
 		this.episodes._x = 1017;
 		this.episodes._y = 0;
 		
-		this._position();
+		//this._position();
+		this.deselect()
 		
 	}
 	
