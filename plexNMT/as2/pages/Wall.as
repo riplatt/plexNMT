@@ -10,6 +10,7 @@ import mx.utils.Delegate;
 import mx.xpath.XPathAPI;
 
 import com.syabas.as2.common.GridLite;
+//import com.syabas.as2.common.Grid2;
 import com.syabas.as2.common.Util;
 import com.syabas.as2.common.UI;
 import com.syabas.as2.common.Marquee;
@@ -33,6 +34,7 @@ class plexNMT.as2.pages.Wall
 	private var preloadMC:MovieClip = null;
 	private var listMC:MovieClip = null;
 	private var g:GridLite = null;
+	//private var g:Grid2 = null;
 	private var imgLoader:IMGLoader = null;
 	private var titleMarquee:Marquee = null;
 	private var data:Array = null;
@@ -125,12 +127,13 @@ class plexNMT.as2.pages.Wall
 		//set up wall thumbs
 		PlexData.setWall();
 		
-		this.createGridLite();
+		//this.createGridLite();
+		this.createGrid();
 
 	//trace("Done onLoadData...");
 	}
 
-	private function createGridLite():Void
+	private function createGrid():Void
 	{
 		this.listMC = this.mainMC.createEmptyMovieClip("listMC", mainMC.getNextHighestDepth());
 		
@@ -149,6 +152,7 @@ class plexNMT.as2.pages.Wall
 		});
 
 		this.g = new GridLite();
+		//this.g = new Grid2();
 
 		// all variables prefix with 'x' are to be set ONE TIME ONLY.
 		this.g.xMCArray = mcArray;
@@ -384,8 +388,6 @@ class plexNMT.as2.pages.Wall
 		switch (o.data.attributes.type)
 		{
 			case "movie":
-				//PlexData.oWall.current.url = PlexData.oSettings.url + o.data.attributes.key //"library/metadata/" + o.data.ratingKey;
-				//PlexData.oWall.current.index = o.data.index - 1;
 				PlexData.oWallData.intPos = this.g._hl;
 				this.destroy();
 				gotoAndPlay("movieDetails");
