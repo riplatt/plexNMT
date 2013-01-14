@@ -146,7 +146,8 @@ class plexNMT.as2.pages.SeasonDetails {
 			case "poster":
 				//Update Season Navigation
 				_season.destroy();
-				var key:String = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.key
+				PlexData.oSeasonData.intPos = 0;
+				var key:String = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.key;
 				PlexAPI.getSeasonData(key, Delegate.create(this, function()
 					{
 						_season = new SeasonNav(this.mainMC, PlexData.oSeasonData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
@@ -157,7 +158,7 @@ class plexNMT.as2.pages.SeasonDetails {
 				//Update Episode Navigation
 				//_episode._update();
 				_episode.destroy();
-				var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[0].attributes.key
+				var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.key;
 				PlexAPI.getEpisodeData(key, Delegate.create(this, function()
 					{
 						_episode._update();

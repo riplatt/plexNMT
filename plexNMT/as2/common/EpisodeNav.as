@@ -4,6 +4,7 @@ import plexNMT.as2.common.Utils;
 import plexNMT.as2.common.Remote;
 
 import com.syabas.as2.common.UI;
+import com.syabas.as2.common.IMGLoader;
 import com.syabas.as2.common.D;
 
 import com.greensock.TweenLite;
@@ -12,7 +13,6 @@ import com.greensock.easing.*;
 import com.greensock.plugins.TweenPlugin;
 import com.greensock.plugins.AutoAlphaPlugin;
 import com.greensock.plugins.SetSizePlugin;
-import com.greensock.plugins.GlowFilterPlugin;
 
 import mx.utils.Delegate;
 
@@ -23,6 +23,8 @@ class plexNMT.as2.common.EpisodeNav {
 	
 	// Public Properties:
 	// Private Properties:
+	private var imgLoader:IMGLoader = null;
+	
 	private var episodes:MovieClip = null;
 	private var holders:Array = new Array();
 	private var holder1:MovieClip = null;
@@ -45,7 +47,7 @@ class plexNMT.as2.common.EpisodeNav {
 		
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
-		TweenPlugin.activate([GlowFilterPlugin, AutoAlphaPlugin]);
+		TweenPlugin.activate([AutoAlphaPlugin]);
 		
 		//Update function
 		fn = updateFN;
@@ -64,7 +66,6 @@ class plexNMT.as2.common.EpisodeNav {
 	public function _update()
 	{
 		trace("EpisodeNav - Doing _update...");
-		this._unselect();
 		PlexData.oEpisodeData.intPos = 0;
 		this.episodeData = PlexData.oEpisodeData.MediaContainer[0].Video;
 		
@@ -72,7 +73,28 @@ class plexNMT.as2.common.EpisodeNav {
 		var h1URL:String = PlexAPI.getImg({width:263, height:148,
 									  key:episodeData[PlexData.GetRotation("oEpisodeData", 0)].attributes.thumb});
 		//holder3.attachMovie("poster_wide.png","img",holder3.getNextHighestDepth())
-		UI.loadImage(h1URL, holder3, "img");
+		//UI.loadImage(h1URL, holder3, "img");
+		
+		this.imgLoader.load("holder3", h1URL, holder3,
+			{
+				mcProps:{_height:148,_width:263}, lmcId:"poster_wide.png",
+				lmcProps:{_x:180,_y:280},
+				retry:0, 
+				timeout:5000, 
+				addToFirst:false,
+				scaleMode:2, 
+				scaleProps:{center:false, 
+							width:263,
+							height:148,
+							actualSizeOption:1},
+				doneCB:Delegate.create(this, function(success:Boolean, obj:Object)
+					{
+						holder3.preload.removeMovieClip();
+						if(success == false)
+							holder3.fail.text = "NoImage"
+					})
+			});
+		
 		if ((PlexData.oEpisodeData.intPos+1)<=PlexData.oEpisodeData.intLength)
 		{
 			holder4.autoAlpha = 100;
@@ -97,7 +119,7 @@ class plexNMT.as2.common.EpisodeNav {
 			UI.loadImage(h1URL, holder6, "img");
 		}
 
-		//this._position();
+		this.deselect();
 		//this.delHolders();
 		//buildHolders();
 		trace("EpisodeNav - Done _update...");
