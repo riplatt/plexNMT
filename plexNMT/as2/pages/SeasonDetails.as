@@ -134,30 +134,38 @@ class plexNMT.as2.pages.SeasonDetails {
 		
 		//Slow Update
 		clearInterval(slowUpdateInterval);
-		slowUpdateInterval = setInterval(Delegate.create(this, this.slowUpdate(str)), 600);
+		slowUpdateInterval = setInterval(Delegate.create(this, this.slowUpdate(str)), 5000);
 		
 	}
 	
 	public function slowUpdate(str:String)
 	{
 		D.debug(D.lDev, "SeasonDetails - Doing slowUpdate...");
+		trace("SeasonDetails - slowUpdate str:" + str + "...");
 		switch (str)
 		{
 			case "poster":
-				//Update Season Navigation
-				_season.destroy();
+				//Update Season
 				PlexData.oSeasonData.intPos = 0;
 				var key:String = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.key;
 				PlexAPI.getSeasonData(key, Delegate.create(this, function()
 					{
-						_season = new SeasonNav(this.mainMC, PlexData.oSeasonData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
+						//Update Background
+						_background._update(PlexData.oSeasonData.MediaContainer[0].attributes.art);
+						_season._update();
+						//Update Episode
+						var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.key;
+						PlexAPI.getEpisodeData(key, Delegate.create(this, function()
+							{
+								_episode._update();
+								//_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
+							}), 5000);
 					}), 5000);
+				
 				
 			break;
 			case "season":
-				//Update Episode Navigation
-				//_episode._update();
-				_episode.destroy();
+				PlexData.oEpisodeData.intPos = 0;
 				var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.key;
 				PlexAPI.getEpisodeData(key, Delegate.create(this, function()
 					{
@@ -167,7 +175,7 @@ class plexNMT.as2.pages.SeasonDetails {
 			break;
 		}
 				
-		clearInterval(slowUpdateInterval);
+		//clearInterval(slowUpdateInterval);
 	}
 	
 	private function enableKeyListener():Void

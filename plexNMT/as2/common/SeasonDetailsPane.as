@@ -50,7 +50,7 @@ class plexNMT.as2.common.SeasonDetailsPane {
 		current = 0;
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
-		TweenPlugin.activate([GlowFilterPlugin, AutoAlphaPlugin]);
+		TweenPlugin.activate([AutoAlphaPlugin]);
 		
 		return;
 	}
@@ -76,9 +76,9 @@ class plexNMT.as2.common.SeasonDetailsPane {
 	public function _update():Void 
 	{	
 		var _season:Array = new Array();
-		_season = PlexData.oSeasonData.MediaContainer[0];
 		var _wall:Array = new Array();
 		_wall = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos];
+		_season = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos];
 		//D.debug(D.lDev, Utils.varDump(_data));
 		
 		//Title
@@ -181,8 +181,8 @@ class plexNMT.as2.common.SeasonDetailsPane {
 	// Private Methods:
 	private function onFlagLoad(success:Boolean, o:Object)
 	{
-		trace("SeasonDetailsPane - Doing onFlagLoad with:" + o.o.flag);
-		trace("this.seasonDetailsMC._width:" + this.seasonDetailsMC._width);
+		//trace("SeasonDetailsPane - Doing onFlagLoad with:" + o.o.flag);
+		//trace("this.seasonDetailsMC._width:" + this.seasonDetailsMC._width);
 		var flag:String = o.o.flag;
 		if (flag != undefined)
 		{

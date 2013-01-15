@@ -269,6 +269,8 @@ class plexNMT.as2.common.PosterNav {
 				}
 				this.newImg(-2, 0);
 				this._position();
+				trace("PosterNav - Calling fastUpdate...");
+				this.fn("poster");
 			break;
 			case Key.DOWN:
 				this.holders.push(this.holders.shift());
@@ -279,10 +281,10 @@ class plexNMT.as2.common.PosterNav {
 				}
 				this.newImg(2, 4);
 				this._position();
+				trace("PosterNav - Calling fastUpdate...");
+				this.fn("poster");
 			break;
 		}
-		trace("PosterNav - Calling fastUpdate...");
-		this.fn("poster");
 	}
 
 }
