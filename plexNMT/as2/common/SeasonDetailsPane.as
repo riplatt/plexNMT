@@ -100,8 +100,8 @@ class plexNMT.as2.common.SeasonDetailsPane {
 									  key:prefix + "studio/" + _wall.attributes.studio + "?t=" + version});
 		UI.loadImage(url, this.seasonDetailsMC.fStudio, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"studio"});
 		//Content Rating Flag
-		var ratingURL:String = PlexAPI.getImg({width:50,
-									  height:50,
+		var ratingURL:String = PlexAPI.getImg({width:40,
+									  height:40,
 									  key:prefix + "contentRating/" + _wall.attributes.contentRating + "?t=" + version});
 		UI.loadImage(ratingURL, this.seasonDetailsMC.fRating, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"rating"});
 		//Aspect Ratio Flag
@@ -193,7 +193,7 @@ class plexNMT.as2.common.SeasonDetailsPane {
 					this.seasonDetailsMC.fStudio._y = 300 //495 - (this.seasonDetailsMC.fStudio._height);
 				break;
 				case "rating":
-					this.seasonDetailsMC.fRating._x = 484 //650 - this.seasonDetailsMC.fRating._width;
+					this.seasonDetailsMC.fRating._x = 488 //650 - this.seasonDetailsMC.fRating._width;
 					this.seasonDetailsMC.fRating._y = 33 //37;
 				break;
 				case "ratio":
@@ -283,7 +283,7 @@ class plexNMT.as2.common.SeasonDetailsPane {
 		/*scTitle = new SmallCaps(mc._title, 19, 24);
 		scTitle.text = "Title";*/
 		//Summary
-		mc.createTextField("_summary", mc.getNextHighestDepth(), 25, 77, 600, 220);
+		mc.createTextField("_summary", mc.getNextHighestDepth(), 25, 77, 580, 220);
 		//mc._summary.autoSize = "left";
 		mc._summary.multiline = true;
 		mc._summary.wordWrap = true;

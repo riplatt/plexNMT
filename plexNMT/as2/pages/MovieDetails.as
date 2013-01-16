@@ -98,7 +98,7 @@ class plexNMT.as2.pages.MovieDetails
 							  PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.tagline);
 		//Slow Update
 		clearInterval(slowUpdateInterval);
-		slowUpdateInterval = setInterval(Delegate.create(this,slowUpdate),600);
+		slowUpdateInterval = setInterval(Delegate.create(this,slowUpdate),700);
 		
 	}
 	

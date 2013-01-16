@@ -38,6 +38,18 @@ class plexNMT.as2.api.PopAPI {
 		playingInterval = setInterval(Delegate.create(this,getCurrentTime), PlexData.oSettings.timeout);
 	}
 	
+	public function queueVOD(key:String, partKey:String)
+	{
+		D.debug(D.lDev, "PopAPI - Doing queueVOD...");
+		videoKey = key;
+		Util.loadURL("http://127.0.0.1:8008/playback" + 
+					 "?arg0=insert_vod_queue" +
+					 "&arg1=" + key + 
+					 "&arg2=" + PlexData.oSettings.url + partKey + 
+					 "&arg3=show" + 
+					 "&arg4=start_zero");
+	}
+	
 	public function stopUpdates()
 	{
 		clearInterval(this.playingInterval);
@@ -50,7 +62,7 @@ class plexNMT.as2.api.PopAPI {
 		{
 			if(success)
 			{
-				trace("Doing PopAPI - getCurrentTime successful: " + success);
+				D.debug(D.lDev,"Doing PopAPI - getCurrentTime successful: " + success);
                 PlexData.oCurrentTime = new XMLObject().parseXML(xml, true);
                 delete xml
 				//Utils.varDump(PlexData.oCategories)
@@ -63,12 +75,14 @@ class plexNMT.as2.api.PopAPI {
 	
 	private function onCurrentTime()
 	{
-		D.debug(D.lDev, "PopAPI - PlexData.oCurrentTime.theDavidBox[0].response[0]: ");
+		D.debug(D.lDev, "PopAPI - onCurrentTime title: " + PlexData.oCurrentTime.theDavidBox[0].response[0].title[0].data);
+		D.debug(D.lDev, "PopAPI - onCurrentTime currentTime: " + PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0].data);
 		//D.debug(D.lDev, Utils.varDump(PlexData.oCurrentTime.theDavidBox[0].response[0]));
 		//var key:Number = PlexData.oCurrentTime.theDavidBox[0].response[0].Data.time;
 		if (PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0] != undefined)
 		{
-			var key:String = this.videoKey;
+			//var key:String = this.videoKey;
+			var key:String = PlexData.oCurrentTime.theDavidBox[0].response[0].title[0].data;
 			var time:Number = int(PlexData.oCurrentTime.theDavidBox[0].response[0].currentTime[0].data);
 			var _state:String = PlexData.oCurrentTime.theDavidBox[0].response[0].currentStatus[0].data;
 			PlexAPI._setProgress(key, time, _state);

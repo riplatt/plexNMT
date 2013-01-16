@@ -36,7 +36,9 @@ class plexNMT.as2.pages.SeasonDetails {
 	//TAB Control
 	private var select:Array = new Array();
 	//Slow Update
-	private var slowUpdateInterval:Number;
+	private var slowUpdateInterval:Number = 0;
+	private var slowUpdateSection:String = "";
+	
 	private var popAPI:PopAPI = null;
 	
 	private var _background:Background = null;
@@ -125,6 +127,7 @@ class plexNMT.as2.pages.SeasonDetails {
 	public function fastUpdate(str:String)
 	{
 		trace("SeasonDetails - fastUpdate str:" + str + "...");
+		this.slowUpdateSection = str;
 		switch (str)
 		{
 			case "poster":
@@ -134,15 +137,16 @@ class plexNMT.as2.pages.SeasonDetails {
 		
 		//Slow Update
 		clearInterval(slowUpdateInterval);
-		slowUpdateInterval = setInterval(Delegate.create(this, this.slowUpdate(str)), 5000);
+		slowUpdateInterval = setInterval(Delegate.create(this,slowUpdate),700);
 		
 	}
 	
-	public function slowUpdate(str:String)
+	public function slowUpdate()
 	{
 		D.debug(D.lDev, "SeasonDetails - Doing slowUpdate...");
-		trace("SeasonDetails - slowUpdate str:" + str + "...");
-		switch (str)
+		trace("SeasonDetails - slowUpdate str:" + this.slowUpdateSection + "...");
+		clearInterval(slowUpdateInterval);
+		switch (this.slowUpdateSection)
 		{
 			case "poster":
 				//Update Season
@@ -175,7 +179,7 @@ class plexNMT.as2.pages.SeasonDetails {
 			break;
 		}
 				
-		//clearInterval(slowUpdateInterval);
+		
 	}
 	
 	private function enableKeyListener():Void
