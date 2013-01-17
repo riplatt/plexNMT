@@ -38,16 +38,23 @@ class plexNMT.as2.api.PopAPI {
 		playingInterval = setInterval(Delegate.create(this,getCurrentTime), PlexData.oSettings.timeout);
 	}
 	
-	public function queueVOD(key:String, partKey:String)
+	public function queueVOD(_title:String, partKey:String)
 	{
 		D.debug(D.lDev, "PopAPI - Doing queueVOD...");
-		videoKey = key;
 		Util.loadURL("http://127.0.0.1:8008/playback" + 
 					 "?arg0=insert_vod_queue" +
-					 "&arg1=" + key + 
+					 "&arg1=" + _title + 
 					 "&arg2=" + PlexData.oSettings.url + partKey + 
 					 "&arg3=show" + 
 					 "&arg4=start_zero");
+	}
+	
+	public function playQueueVOD()
+	{
+		D.debug(D.lDev, "PopAPI - Doing playQueueVOD...");
+		Util.loadURL("http://127.0.0.1:8008/playback" + 
+					 "?arg0=next_vod_in_queue");
+		playingInterval = setInterval(Delegate.create(this,getCurrentTime), PlexData.oSettings.timeout);
 	}
 	
 	public function stopUpdates()

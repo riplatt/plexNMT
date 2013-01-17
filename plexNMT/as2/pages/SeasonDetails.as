@@ -247,24 +247,35 @@ class plexNMT.as2.pages.SeasonDetails {
 				popAPI.stopUpdates();
 			break;
 			case Remote.PLAY:
-			case Remote.ENTER:
 				D.debug(D.lDev, "SeasonDetails - PLAY Button Pressed...");
-				var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.ratingKey;
-				var partKey:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].Media[0].Part[0].attributes.key;
-				var resume:Number = 0;
-				
-				if (PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.viewOffset != undefined)
+				var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video
+				var _len:Number = PlexData.oEpisodeData.intLength
+				var key:String = "";
+				var _title:String = "";
+				var i:Number = 0;
+				for (i=0; i<_len; i++)
 				{
-					resume = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.viewOffset / 1000;
-					this.disableKeyListener();
-					var popUp:ResumePopUp = new ResumePopUp(this.mainMC, Delegate.create(this, this.onEnableKeyListener));
-					
-				} else {
-					D.debug(D.lDev, "SeasonDetails - Calling playVOD with: key => " + key);
-					D.debug(D.lDev, "SeasonDetails - partKey => " + partKey);
-					D.debug(D.lDev, "SeasonDetails - resume => " + resume);
-					popAPI.playVOD(key, partKey, resume);
+					_title = _data[i].attributes.title;
+					D.debug(D.lDev, "SeasonDetails - Adding" + _title + " to queue");
+					key = _data[i].Media[0].Part[0].attributes.key;
+					popAPI.queueVOD(_title, key);
 				}
+				D.debug(D.lDev, "SeasonDetails - Play from queue...");
+				popAPI.playQueueVOD();
+				
+			break;
+			case Remote.ENTER:
+				D.debug(D.lDev, "SeasonDetails - ENTER Button Pressed...");
+				var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video;
+				var partKey:String = _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].attributes.key;
+				var key:String = _data[PlexData.oEpisodeData.intPos].attributes.title;
+				var resume:Numberq = 0;
+				
+				D.debug(D.lDev, "SeasonDetails - Calling playVOD with: key => " + key);
+				D.debug(D.lDev, "SeasonDetails - partKey => " + partKey);
+				D.debug(D.lDev, "SeasonDetails - resume => " + resume);
+				popAPI.playVOD(key, partKey, resume);
+
 			break;
 		}
 	}
