@@ -206,13 +206,12 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				trace("Doing PlexAPI - getSeasonData: " + success);
-                PlexData.oSeasonData = new XMLObject().parseXML(xml, true);
-				PlexData.setSeasonData();
+				trace("Doing PlexAPI - getBackground: " + success);
+                PlexData.oBackground = new XMLObject().parseXML(xml, true);
+				PlexData.setBackground();
                 delete xml
-				//Utils.varDump(PlexData.oMovieData)
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Faled to get Season Data...");
+				D.debug(D.lDebug, "PlexAPI - Faled to get Background...");
 			}
 			this.onLoad(PlexData.oWallData);
 		}), {target:"xml", timeout:timeout});
