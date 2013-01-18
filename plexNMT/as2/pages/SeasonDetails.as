@@ -133,6 +133,10 @@ class plexNMT.as2.pages.SeasonDetails {
 			case "poster":
 				_details._update()
 			break;
+			default :
+				//_details._update();
+				//_season._update();
+				//_episode._update();
 		}
 		
 		//Slow Update
@@ -253,15 +257,14 @@ class plexNMT.as2.pages.SeasonDetails {
 				var key:String = "";
 				var _title:String = "";
 				var i:Number = 0;
-				for (i=0; i<_len; i++)
+				popAPI.playVOD(_data[PlexData.oEpisodeData.intPos].attributes.title, _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].attributes.key, 0);
+				for (i=PlexData.oEpisodeData.intPos + 1; i<_len; i++)
 				{
 					_title = _data[i].attributes.title;
 					D.debug(D.lDev, "SeasonDetails - Adding" + _title + " to queue");
 					key = _data[i].Media[0].Part[0].attributes.key;
 					popAPI.queueVOD(_title, key);
 				}
-				D.debug(D.lDev, "SeasonDetails - Play from queue...");
-				popAPI.playQueueVOD();
 				
 			break;
 			case Remote.ENTER:
@@ -269,7 +272,7 @@ class plexNMT.as2.pages.SeasonDetails {
 				var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video;
 				var partKey:String = _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].attributes.key;
 				var key:String = _data[PlexData.oEpisodeData.intPos].attributes.title;
-				var resume:Numberq = 0;
+				var resume:Number = 0;
 				
 				D.debug(D.lDev, "SeasonDetails - Calling playVOD with: key => " + key);
 				D.debug(D.lDev, "SeasonDetails - partKey => " + partKey);
