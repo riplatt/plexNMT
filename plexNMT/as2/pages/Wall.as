@@ -252,7 +252,7 @@ class plexNMT.as2.pages.Wall
 	{
 		//trace("Doing onItemShowCB...");
 		o.mc.preload.removeMovieClip();
-		var preload:MovieClip = o.mc.attachMovie("preload40", "busy", 1, {_x:58, _y:87});
+		var preload:MovieClip = o.mc.attachMovie("preload40", "poster", 1, {_x:0, _y:0});
 		o.mc.fail.text = "Unable to Load Image...";
 		//trace("o.mc._name:" + o.mc._name);
 		//trace("o.mc.imgMC:" + o.mc.imgMC);
@@ -270,13 +270,14 @@ class plexNMT.as2.pages.Wall
 		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width="+PlexData.oWall.thumb.size+"&height="+PlexData.oWall.thumb.size+"&url=" + escape(PlexData.oSettings.url + Util.trim(o.data.attributes.thumb))
 		this.imgLoader.load(o.mc._name, url, o.mc.imgMC,
 			{
-				mcProps:{_height:200,_width:200}, lmcId:"busy",
-				lmcProps:{_x:100,_y:100},
-				retry:0, timeout:30000, addToFirst:false,
-				scaleMode:2, scaleProps:{center:false, 
-										width:PlexData.oWall.thumb.width,
-										height:PlexData.oWall.thumb.height,
-										actualSizeOption:1},
+				mcProps:{_height:200,_width:200}, lmcId:"poster",
+				lmcProps:{_x:0,_y:0, _width:PlexData.oWall.thumb.width*2.1, _height:PlexData.oWall.thumb.height*1.5},
+				retry:0, timeout:5000, addToFirst:false,
+				scaleMode:1, 
+				scaleProps:{center:false, 
+							width:PlexData.oWall.thumb.width,
+							height:PlexData.oWall.thumb.height,
+							actualSizeOption:1},
 				doneCB:Delegate.create(this, function(success:Boolean, obj:Object)
 					{
 						o.mc.preload.removeMovieClip();
@@ -289,7 +290,7 @@ class plexNMT.as2.pages.Wall
 	private function onItemClearCB(o:Object):Void
 	{
 		//trace("onItemClearCB...");
-		this.imgLoader.unload(o.mc._name, o.mc.imgMC, "busy");
+		this.imgLoader.unload(o.mc._name, o.mc.imgMC, "poster");
 
 		this.mainMC.txtName.htmlText = "";
 		o.mc.gotoAndStop("unhl");

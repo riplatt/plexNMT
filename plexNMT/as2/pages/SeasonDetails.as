@@ -131,7 +131,29 @@ class plexNMT.as2.pages.SeasonDetails {
 		switch (str)
 		{
 			case "poster":
-				_details._update()
+				_details._update();
+				_details.setSeasonText("");
+				_details.setEpisodeText("");
+				_details.setEpisodeTitleText("");
+			break;
+			case "season":
+				_details.setSeasonText(PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.title);
+				_details.setEpisodeText("");
+				_details.setEpisodeTitleText("");
+				_details.setSummaryText(PlexData.oSeasonData.MediaContainer[0].attributes.summary);
+			break;
+			case "episode":
+				var seasonNumber:String = "";
+				if (PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.parentIndex != undefined)
+				{
+					seasonNumber = PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.parentIndex;
+				} else {
+					seasonNumber = PlexData.oEpisodeData.MediaContainer[0].attributes.parentIndex;
+				}
+				_details.setSeasonText("Season " + seasonNumber);
+				_details.setEpisodeText("Episode " + PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.index);
+				_details.setEpisodeTitleText(PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.title);
+				_details.setSummaryText(PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.summary);
 			break;
 			default :
 				//_details._update();
@@ -166,7 +188,6 @@ class plexNMT.as2.pages.SeasonDetails {
 						PlexAPI.getEpisodeData(key, Delegate.create(this, function()
 							{
 								_episode._update();
-								//_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
 							}), 5000);
 					}), 5000);
 				
@@ -178,7 +199,6 @@ class plexNMT.as2.pages.SeasonDetails {
 				PlexAPI.getEpisodeData(key, Delegate.create(this, function()
 					{
 						_episode._update();
-						//_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
 					}), 5000);
 			break;
 		}

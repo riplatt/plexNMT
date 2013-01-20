@@ -63,6 +63,26 @@ class plexNMT.as2.common.SeasonDetailsPane {
 		this.seasonDetailsMC._tagline.text = _tagline;
 	}
 	
+	public function setSeasonText(str:String)
+	{
+		this.seasonDetailsMC._season.text = str;
+	}
+	
+	public function setEpisodeText(str:String)
+	{
+		this.seasonDetailsMC._episode.text = str;
+	}
+	
+	public function setEpisodeTitleText(str:String)
+	{
+		this.seasonDetailsMC._episodeTitle.text = str;
+	}
+	
+	public function setSummaryText(str:String)
+	{
+		this.seasonDetailsMC._summary.text = str;
+	}
+	
 	public function _select()
 	{
 		//TweenLite.to(this.seasonDetailsMC, 1.4, {glowFilter:{color:0x0000ff, alpha:1, blurX:15, blurY:15}});
@@ -341,10 +361,28 @@ class plexNMT.as2.common.SeasonDetailsPane {
 		myFormat.size = 28;
 		mc._year.setNewTextFormat(myFormat);
 		//Tag Line
-		mc.createTextField("_tagline", mc.getNextHighestDepth(), 10, 40, 520, 25);
+		/*mc.createTextField("_tagline", mc.getNextHighestDepth(), 10, 40, 520, 25);
 		//mc._tagline.autoSize = true;
 		myFormat.size = 18;
-		mc._tagline.setNewTextFormat(myFormat);
+		mc._tagline.setNewTextFormat(myFormat);*/
+		//Season
+		mc.createTextField("_season", mc.getNextHighestDepth(), 10, 35, 90, 20);
+		mc._season.autoSize = true;
+		myFormat.size = 18;
+		mc._season.setNewTextFormat(myFormat);
+		mc._season.text = "Season 00"
+		//Episode
+		mc.createTextField("_episode", mc.getNextHighestDepth(), 100, 35, 90, 20);
+		mc._episode.autoSize = true;
+		myFormat.size = 18;
+		mc._episode.setNewTextFormat(myFormat);
+		mc._episode.text = "Episode 00"
+		//Episode Title
+		mc.createTextField("_episodeTitle", mc.getNextHighestDepth(), 10, 55, 90, 20);
+		mc._episodeTitle.autoSize = true;
+		myFormat.size = 18;
+		mc._episodeTitle.setNewTextFormat(myFormat);
+		mc._episodeTitle.text = "Episode Title"
 		
 		this.setText(_data.Video[0].attributes.title, _data.Video[0].attributes.year, _data.Video[0].attributes.tagline);
 		this._update();

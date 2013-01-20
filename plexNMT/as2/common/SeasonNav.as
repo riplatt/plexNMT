@@ -66,6 +66,8 @@ class plexNMT.as2.common.SeasonNav {
 		//this.selectToggle = true;
 		this._position();
 		this.enableKeyListener();
+		//trace("SeasonNav - Calling fastUpdate...");
+		this.fn("season");
 	}
 	
 	public function _unselect()

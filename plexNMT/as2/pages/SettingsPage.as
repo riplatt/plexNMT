@@ -63,6 +63,10 @@ class plexNMT.as2.pages.SettingsPage {
 		//OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin]);
 		
+		
+		//json test
+		//httpService.headers = {Accept:"application/json"};
+		
 		//Key Listener
 		this.keyListener = new Object();
 		Key.addListener(this.keyListener);
@@ -81,7 +85,7 @@ class plexNMT.as2.pages.SettingsPage {
 		
 		Util.loadURL("json/vk3_data.json", Delegate.create(this, this.loadAlphanum));
 	}
-
+	
 	// Public Methods:
 	public function destroy():Void
 	{

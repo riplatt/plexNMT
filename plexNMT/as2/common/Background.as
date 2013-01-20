@@ -54,16 +54,16 @@ class plexNMT.as2.common.Background {
 			UI.loadImage(url, this.backgroundMC,"imgBG2", {scaleMode:2});
 			this.backgroundMC.imgBG2._alpha = 0;
 			this.backgroundMC.imgBG2._visible = false;
-			TweenLite.to(this.backgroundMC.imgBG2, 4, {autoAlpha:100});
-			TweenLite.to(this.backgroundMC.imgBG1, 4, {autoAlpha:0});
+			TweenLite.to(this.backgroundMC.imgBG2, 0, {autoAlpha:100});
+			TweenLite.to(this.backgroundMC.imgBG1, 0, {autoAlpha:0});
 			this.current = 1;
 		} else {
 			//trace("Doing 1 with: " + url);
 			UI.loadImage(url, this.backgroundMC,"imgBG1", {scaleMode:2});
 			this.backgroundMC.imgBG1._alpha = 0;
 			this.backgroundMC.imgBG1._visible = false;
-			TweenLite.to(this.backgroundMC.imgBG1, 4, {autoAlpha:100});
-			TweenLite.to(this.backgroundMC.imgBG2, 4, {autoAlpha:0});
+			TweenLite.to(this.backgroundMC.imgBG1, 0, {autoAlpha:100});
+			TweenLite.to(this.backgroundMC.imgBG2, 0, {autoAlpha:0});
 			this.current = 0;
 		}
 		//trace("Background - Dumping this.backgroundMC...");

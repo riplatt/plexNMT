@@ -59,8 +59,7 @@ class plexNMT.as2.common.EpisodeNav {
 		episodes = parentMC.createEmptyMovieClip("episodes", parentMC.getNextHighestDepth());
 		
 		var key:String = PlexData.oEpisodeData.MediaContainer[0].Directory[PlexData.oEpisodeData.intPos].attributes.key
-		PlexAPI.getEpisodeData(key, Delegate.create(this, this.buildHolders), 5000);
-		//buildHolders(episodes)
+		PlexAPI.getEpisodeData(key, Delegate.create(this, buildHolders), 5000);
 	}
 	
 	public function _update()
@@ -71,28 +70,29 @@ class plexNMT.as2.common.EpisodeNav {
 		var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video;		
 		
 		this.holders[0].autoAlpha = 0;
-		UI.loadImage("poster.png", this.holders[0], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:0});
+		UI.loadImage("posterWide", this.holders[0], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:0, lmcId:"posterWide"});
 		this.holders[1].autoAlpha = 0;
-		UI.loadImage("poster.png", this.holders[1], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:1});
-		this.holders[2].autoAlpha = 100;
-		//UI.loadImage("poster.png", this.holders[2], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:2});
+		UI.loadImage("posterWide", this.holders[1], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:1, lmcId:"posterWide"});
+		this.holders[2].autoAlpha = 0;
+		UI.loadImage("posterWide", this.holders[2], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:2, lmcId:"posterWide"});
 		this.holders[3].autoAlpha = 0;
-		UI.loadImage("poster.png", this.holders[3], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:3});
+		UI.loadImage("posterWide", this.holders[3], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:3, lmcId:"posterWide"});
 		this.holders[4].autoAlpha = 0;
-		UI.loadImage("poster.png", this.holders[4], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:4});
+		UI.loadImage("posterWide", this.holders[4], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:4, lmcId:"posterWide"});
 		this.holders[5].autoAlpha = 0;
-		UI.loadImage("poster.png", this.holders[5], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:5});
+		UI.loadImage("posterWide", this.holders[5], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:5, lmcId:"posterWide"});
 
+		this.holders[2].autoAlpha = 100;
 		var h2URL:String = PlexAPI.getImg({width:263, height:148,
 									  key:_data[PlexData.GetRotation("oEpisodeData",0)].attributes.thumb});
-		UI.loadImage(h2URL, this.holders[2], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:2, _selected:false});
+		UI.loadImage(h2URL, this.holders[2], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:2, lmcId:"posterWide", _selected:false});
 		
 		if ((PlexData.oEpisodeData.intPos+1)<=PlexData.oEpisodeData.intLength)
 		{
 			this.holders[3].autoAlpha = 100;
 			var h3URL:String = PlexAPI.getImg({width:263, height:148,
 										  key:_data[PlexData.GetRotation("oEpisodeData",1)].attributes.thumb});
-			UI.loadImage(h3URL, this.holders[3], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:3});
+			UI.loadImage(h3URL, this.holders[3], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:3, lmcId:"posterWide"});
 		}
 		
 		if ((PlexData.oEpisodeData.intPos+2)<=PlexData.oEpisodeData.intLength)
@@ -100,7 +100,7 @@ class plexNMT.as2.common.EpisodeNav {
 			this.holders[4].autoAlpha = 100;
 			var h4URL:String = PlexAPI.getImg({width:263, height:148,
 										  key:_data[PlexData.GetRotation("oEpisodeData",2)].attributes.thumb});
-			UI.loadImage(h4URL, this.holders[4], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:4});
+			UI.loadImage(h4URL, this.holders[4], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:4, lmcId:"posterWide"});
 		}
 		
 		if ((PlexData.oEpisodeData.intPos+3)<=PlexData.oEpisodeData.intLength)
@@ -108,7 +108,7 @@ class plexNMT.as2.common.EpisodeNav {
 			this.holders[5].autoAlpha = 100;
 			var h5URL:String = PlexAPI.getImg({width:263, height:148,
 										  key:_data[PlexData.GetRotation("oEpisodeData",3)].attributes.thumb});
-			UI.loadImage(h5URL, this.holders[5], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:5});
+			UI.loadImage(h5URL, this.holders[5], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:5, lmcId:"posterWide"});
 		}
 
 		trace("EpisodeNav - Done _update...");
@@ -119,6 +119,8 @@ class plexNMT.as2.common.EpisodeNav {
 		//this.selectToggle = true;
 		this._position();
 		this.enableKeyListener();
+		trace("EpisodeNav - Calling fastUpdate...");
+		this.fn("episode");
 	}
 	
 	public function _unselect()
@@ -242,7 +244,7 @@ class plexNMT.as2.common.EpisodeNav {
 		this.episodes._y = 0;
 		
 		//this._position();
-		this.deselect()
+		//this.deselect()
 		
 	}
 	
@@ -256,7 +258,7 @@ class plexNMT.as2.common.EpisodeNav {
 		switch (holder)
 		{
 			case 0:
-				trace("EpisodeNav - Doing holders[0] with autoAlpha of " + this.holders[1].autoAlpha);
+				trace("EpisodeNav - Doing holders[0] with autoAlpha of " + this.holders[0].autoAlpha);
 				TweenLite.to(this.holders[0], 0, {autoAlpha:0, _x:29, _y:-17, _width:234, _height:131.625});
 			break;
 			case 1:
@@ -264,11 +266,11 @@ class plexNMT.as2.common.EpisodeNav {
 				TweenLite.to(this.holders[1], 0, {autoAlpha:this.holders[1].autoAlpha, _x:29, _y:123.38, _width:234, _height:131.625});
 			break;
 			case 2:
-				trace("EpisodeNav - Doing holders[2] with autoAlpha of " + this.holders[1].autoAlpha);
+				trace("EpisodeNav - Doing holders[2] with autoAlpha of " + this.holders[2].autoAlpha);
 				TweenLite.to(this.holders[2], 0, {autoAlpha:this.holders[2].autoAlpha, _x:29, _y:263.31, _width:234, _height:131.625});
 			break;
 			case 3:
-				trace("EpisodeNav - Doing holders[3] with autoAlpha of " + this.holders[1].autoAlpha);
+				trace("EpisodeNav - Doing holders[3] with autoAlpha of " + this.holders[3].autoAlpha);
 				if (_sel)
 				{
 					TweenLite.to(this.holders[3], 0, {autoAlpha:this.holders[3].autoAlpha, _x:0, _y:255.16, _width:263, _height:148});
@@ -277,11 +279,11 @@ class plexNMT.as2.common.EpisodeNav {
 				}
 			break;
 			case 4:
-				trace("EpisodeNav - Doing holders[4] with autoAlpha of " + this.holders[1].autoAlpha);
+				trace("EpisodeNav - Doing holders[4] with autoAlpha of " + this.holders[4].autoAlpha);
 				TweenLite.to(this.holders[4], 0, {autoAlpha:this.holders[4].autoAlpha, _x:29, _y:543.19, _width:234, _height:131.625});
 			break;
 			case 5:
-				trace("EpisodeNav - Doing holders[5] with autoAlpha of " + this.holders[1].autoAlpha);
+				trace("EpisodeNav - Doing holders[5] with autoAlpha of " + this.holders[5].autoAlpha);
 				TweenLite.to(this.holders[5], 0, {autoAlpha:0, _x:29, _y:684.38, _width:234, _height:131.625});
 			break;
 		}
@@ -386,6 +388,8 @@ class plexNMT.as2.common.EpisodeNav {
 						this.holders[0].autoAlpha = 0;
 					}
 				}
+				trace("EpisodeNav - Calling fastUpdate...");
+				this.fn("episode");
 				this._position();
 			break;
 			case Key.DOWN:
@@ -404,6 +408,8 @@ class plexNMT.as2.common.EpisodeNav {
 						this.holders[5].autoAlpha = 0;
 					}
 				}
+				trace("EpisodeNav - Calling fastUpdate...");
+				this.fn("episode");
 				this._position();
 			break;
 		}
