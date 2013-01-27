@@ -66,12 +66,8 @@ class plexNMT.as2.pages.MovieDetails
 		D.debug(D.lInfo, "MovieDetails - Doing plexNMT.movieDetails...");
 		D.debug(D.lDebug, "MovieDetails - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		trace("MovieDetails - Doing plexNMT.movieDetails...");
-		Utils.traceVar(_level0);
-		/*trace("MovieDetails - PlexData.oSettings");
-		Utils.traceVar(PlexData.oSettings);*/
+
 		this.mainMC = parentMC;
-		/*trace("MovieDetails - Dumpping mainMC:");
-		Utils.varDump(parentMC);*/
 
 		this.keyListener = new Object();
 		Key.addListener(this.keyListener);
@@ -81,10 +77,9 @@ class plexNMT.as2.pages.MovieDetails
 		
 		this.preloadMC = this.mainMC.attachMovie("busy", "busy", mainMC.getNextHighestDepth(), {_x:640, _y:360, _width:200, _height:200});
 		
-		var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.key
-		trace("oWallData.intPos: " + PlexData.oWallData.intPos);
-		//trace("Calling getMovieData With: " + key);
-		D.debug(D.lDev, "MovieDetails - Calling getMovieData With: " + key);
+		var key:String = PlexData.oWallData._children[PlexData.oWallData.intPos].key
+
+		D.debug(D.lDebug, "MovieDetails - Calling getMovieData With: " + key);
 		PlexAPI.getMovieData(key, Delegate.create(this, this.onDataLoad), PlexData.oSettings.timeout);
 	}
 	
@@ -93,9 +88,9 @@ class plexNMT.as2.pages.MovieDetails
 		//Menu Number of:
 		this._menu._update();
 		//Details
-		this._details.setText(PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.title,
-							  PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.year,
-							  PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.tagline);
+		this._details.setText(PlexData.oWallData._children[PlexData.oWallData.intPos].title,
+							  PlexData.oWallData._children[PlexData.oWallData.intPos].year,
+							  PlexData.oWallData._children[PlexData.oWallData.intPos].tagline);
 		//Slow Update
 		clearInterval(slowUpdateInterval);
 		slowUpdateInterval = setInterval(Delegate.create(this,slowUpdate),700);
@@ -106,30 +101,29 @@ class plexNMT.as2.pages.MovieDetails
 	{
 		D.debug(D.lDev, "MovieDetails - Doing slowUpdate...");
 		clearInterval(slowUpdateInterval);
-		var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.key
+		var key:String = PlexData.oWallData._children[PlexData.oWallData.intPos].key
 		PlexAPI.getMovieData(key, Delegate.create(this, this.onUpdateLoad), PlexData.oSettings.timeout);
 	}
 	
 	private function onUpdateLoad()
 	{
 		this._details._update();
-		var key:String = PlexData.oMovieData.MediaContainer[0].Video[0].attributes.art
+		var key:String = PlexData.oMovieData._children[0].art
 		this._background._update(key);
 	}
 	
 	private function onDataLoad(data:Object):Void
 	{
-			trace("Doing moveieDetails.parseXML.data: ");
 			//Add Components
 			_background = new Background(this.mainMC);
 			
 			_details = new MovieDetailsPane(this.mainMC);
 			
-			_poster = new PosterNav(this.mainMC, PlexData.oWallData.MediaContainer[0].Video, Delegate.create(this, this.fastUpdate));
+			_poster = new PosterNav(this.mainMC, PlexData.oWallData._children, Delegate.create(this, this.fastUpdate));
 			
 			_menu = new MenuTop(this.mainMC);
 			
-			_background._set(PlexData.oMovieData.MediaContainer[0].Video[0].attributes.art);
+			_background._set(PlexData.oMovieData._children[0].art);
 			
 			//this.select = [_details, _poster, _menu];
 			this.select = [_details, _poster];
@@ -170,13 +164,12 @@ class plexNMT.as2.pages.MovieDetails
 		var keyCode:Number = Key.getCode();
 		var asciiCode:Number = Key.getAscii();
 		D.debug(D.lDev, "Moveie Details - keyDownCB.keyCode: " + keyCode);
-		trace("Moveie Details - fscommand2 GetFreePlayerMemory: " + fscommand2("GetFreePlayerMemory"));
 		
 		switch (keyCode)
 		{
 			case Remote.BACK:
 			case "soft1":
-			case 81:
+			case 81: //Keyboard Q
 				//this.disableKeyListener();
 				this.destroy();
 				gotoAndPlay("wall");
@@ -209,13 +202,13 @@ class plexNMT.as2.pages.MovieDetails
 			case Remote.PLAY:
 			case Remote.ENTER:
 				D.debug(D.lDev, "MovieDetails - PLAY Button Pressed...");
-				var key:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.ratingKey;
-				var partKey:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].Media[0].Part[0].attributes.key;
+				var key:String = PlexData.oWallData._children[PlexData.oWallData.intPos].ratingKey;
+				var partKey:String = PlexData.oWallData._children[PlexData.oWallData.intPos]._children[0]._children[0].key;
 				var resume:Number = 0;
 				
-				if (PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.viewOffset != undefined)
+				if (PlexData.oWallData._children[PlexData.oWallData.intPos].viewOffset != undefined && false) //Disable till play offset works
 				{
-					resume = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.viewOffset / 1000;
+					resume = PlexData.oWallData._children[PlexData.oWallData.intPos].viewOffset / 1000;
 					this.disableKeyListener();
 					var popUp:ResumePopUp = new ResumePopUp(this.mainMC, Delegate.create(this, this.onEnableKeyListener));
 					

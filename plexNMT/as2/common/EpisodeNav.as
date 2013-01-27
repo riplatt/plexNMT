@@ -12,7 +12,6 @@ import com.greensock.OverwriteManager;
 import com.greensock.easing.*;
 import com.greensock.plugins.TweenPlugin;
 import com.greensock.plugins.AutoAlphaPlugin;
-import com.greensock.plugins.SetSizePlugin;
 
 import mx.utils.Delegate;
 
@@ -42,8 +41,8 @@ class plexNMT.as2.common.EpisodeNav {
 	// Initialization:
 	public function EpisodeNav(parentMC:MovieClip, data:Array, updateFN:Function) 
 	{
-		trace("EpisodeNav - Doing Initializtion with data:");
-		trace(Utils.varDump(data));
+		D.debug(D.lDev, "EpisodeNav - Doing Initializtion with data:");
+		D.debug(D.lDev, Utils.varDump(data));
 		
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
@@ -58,16 +57,16 @@ class plexNMT.as2.common.EpisodeNav {
 		episodeData = data;
 		episodes = parentMC.createEmptyMovieClip("episodes", parentMC.getNextHighestDepth());
 		
-		var key:String = PlexData.oEpisodeData.MediaContainer[0].Directory[PlexData.oEpisodeData.intPos].attributes.key
+		var key:String = PlexData.oEpisodeData._children[PlexData.oEpisodeData.intPos].key
 		PlexAPI.getEpisodeData(key, Delegate.create(this, buildHolders), 5000);
 	}
 	
 	public function _update()
 	{
-		trace("EpisodeNav - Doing _update...");
+		D.debug(D.lDev, "EpisodeNav - Doing _update...");
 		PlexData.oEpisodeData.intPos = 0;
 		
-		var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video;		
+		var _data:Array = PlexData.oEpisodeData._children;		
 		
 		this.holders[0].autoAlpha = 0;
 		UI.loadImage("posterWide", this.holders[0], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:0, lmcId:"posterWide"});
@@ -84,14 +83,14 @@ class plexNMT.as2.common.EpisodeNav {
 
 		this.holders[2].autoAlpha = 100;
 		var h2URL:String = PlexAPI.getImg({width:263, height:148,
-									  key:_data[PlexData.GetRotation("oEpisodeData",0)].attributes.thumb});
+									  key:_data[PlexData.GetRotation("oEpisodeData",0)].thumb});
 		UI.loadImage(h2URL, this.holders[2], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:2, lmcId:"posterWide", _selected:false});
 		
 		if ((PlexData.oEpisodeData.intPos+1)<=PlexData.oEpisodeData.intLength)
 		{
 			this.holders[3].autoAlpha = 100;
 			var h3URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData",1)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData",1)].thumb});
 			UI.loadImage(h3URL, this.holders[3], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:3, lmcId:"posterWide"});
 		}
 		
@@ -99,7 +98,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			this.holders[4].autoAlpha = 100;
 			var h4URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData",2)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData",2)].thumb});
 			UI.loadImage(h4URL, this.holders[4], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:4, lmcId:"posterWide"});
 		}
 		
@@ -107,11 +106,11 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			this.holders[5].autoAlpha = 100;
 			var h5URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData",3)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData",3)].thumb});
 			UI.loadImage(h5URL, this.holders[5], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:5, lmcId:"posterWide"});
 		}
 
-		trace("EpisodeNav - Done _update...");
+		D.debug(D.lDev, "EpisodeNav - Done _update...");
 	}
 	
 	public function _select()
@@ -119,7 +118,7 @@ class plexNMT.as2.common.EpisodeNav {
 		//this.selectToggle = true;
 		this._position();
 		this.enableKeyListener();
-		trace("EpisodeNav - Calling fastUpdate...");
+		D.debug(D.lDev, "EpisodeNav - Calling fastUpdate...");
 		this.fn("episode");
 	}
 	
@@ -142,7 +141,7 @@ class plexNMT.as2.common.EpisodeNav {
 	// Private Methods:
 	private function delHolders()
 	{
-		trace("EpisodeNav - Doing delHolders...");
+		D.debug(D.lDev, "EpisodeNav - Doing delHolders...");
 		this.holder1.removeMovieClip();
 		this.holder2.removeMovieClip();
 		this.holder3.removeMovieClip();
@@ -160,10 +159,10 @@ class plexNMT.as2.common.EpisodeNav {
 	
 	private function buildHolders()
 	{
-		trace("EpisodeNav - Doing buildHolders...");
+		D.debug(D.lDev, "EpisodeNav - Doing buildHolders...");
 		var mc:MovieClip = this.episodes;
-		var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video;		
-		//trace(Utils.varDump(this.episodeData));
+		var _data:Array = PlexData.oEpisodeData._children;		
+		//D.debug(D.lDev, Utils.varDump(this.episodeData));
 		holder1 = mc.createEmptyMovieClip("holder1", 1);
 		holder1._alpha = 0;
 		holder1._visible = false;
@@ -195,7 +194,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			this.holders[0].autoAlpha = 100;
 			var h0URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData", -2)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData", -2)].thumb});
 			UI.loadImage(h0URL, this.holders[0], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:0});
 		}
 				
@@ -203,13 +202,13 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			this.holders[1].autoAlpha = 100;
 			var h1URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData", -1)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData", -1)].thumb});
 			UI.loadImage(h1URL, this.holders[1], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:1});
 		}
 		
 		this.holders[2].autoAlpha = 100;
 		var h2URL:String = PlexAPI.getImg({width:263, height:148,
-									  key:_data[PlexData.GetRotation("oEpisodeData", 0)].attributes.thumb});
+									  key:_data[PlexData.GetRotation("oEpisodeData", 0)].thumb});
 		UI.loadImage(h2URL, this.holders[2], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:2, _selected:false});
 		
 		
@@ -217,7 +216,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			this.holders[3].autoAlpha = 100;
 			var h3URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData", 1)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData", 1)].thumb});
 			UI.loadImage(h3URL, this.holders[3], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:3});
 		}
 		
@@ -226,7 +225,7 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			this.holders[4].autoAlpha = 100;
 			var h4URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData", 2)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData", 2)].thumb});
 			UI.loadImage(h4URL, this.holders[4], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:4});
 		}
 		
@@ -235,22 +234,18 @@ class plexNMT.as2.common.EpisodeNav {
 		{
 			this.holders[5].autoAlpha = 100;
 			var h5URL:String = PlexAPI.getImg({width:263, height:148,
-										  key:_data[PlexData.GetRotation("oEpisodeData", 3)].attributes.thumb});
+										  key:_data[PlexData.GetRotation("oEpisodeData", 3)].thumb});
 			UI.loadImage(h5URL, this.holders[5], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:5});
 		}
 		
 		
 		this.episodes._x = 1017;
-		this.episodes._y = 0;
-		
-		//this._position();
-		//this.deselect()
-		
+		this.episodes._y = 0;		
 	}
 	
 	private function onHolderLoad(success:Boolean, o:Object)
 	{
-		trace("EpisodeNav - Doing onHolderLoad with: " + o.o.holder);
+		D.debug(D.lDev, "EpisodeNav - Doing onHolderLoad with: " + o.o.holder);
 		var holder:Number = o.o.holder;
 		var _sel:Boolean = o.o._selected;
 		if (_sel == undefined || _sel == null || _sel == "")
@@ -258,19 +253,19 @@ class plexNMT.as2.common.EpisodeNav {
 		switch (holder)
 		{
 			case 0:
-				trace("EpisodeNav - Doing holders[0] with autoAlpha of " + this.holders[0].autoAlpha);
+				D.debug(D.lDev, "EpisodeNav - Doing holders[0] with autoAlpha of " + this.holders[0].autoAlpha);
 				TweenLite.to(this.holders[0], 0, {autoAlpha:0, _x:29, _y:-17, _width:234, _height:131.625});
 			break;
 			case 1:
-				trace("EpisodeNav - Doing holders[1] with autoAlpha of " + this.holders[1].autoAlpha);
+				D.debug(D.lDev, "EpisodeNav - Doing holders[1] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[1], 0, {autoAlpha:this.holders[1].autoAlpha, _x:29, _y:123.38, _width:234, _height:131.625});
 			break;
 			case 2:
-				trace("EpisodeNav - Doing holders[2] with autoAlpha of " + this.holders[2].autoAlpha);
+				D.debug(D.lDev, "EpisodeNav - Doing holders[2] with autoAlpha of " + this.holders[2].autoAlpha);
 				TweenLite.to(this.holders[2], 0, {autoAlpha:this.holders[2].autoAlpha, _x:29, _y:263.31, _width:234, _height:131.625});
 			break;
 			case 3:
-				trace("EpisodeNav - Doing holders[3] with autoAlpha of " + this.holders[3].autoAlpha);
+				D.debug(D.lDev, "EpisodeNav - Doing holders[3] with autoAlpha of " + this.holders[3].autoAlpha);
 				if (_sel)
 				{
 					TweenLite.to(this.holders[3], 0, {autoAlpha:this.holders[3].autoAlpha, _x:0, _y:255.16, _width:263, _height:148});
@@ -279,11 +274,11 @@ class plexNMT.as2.common.EpisodeNav {
 				}
 			break;
 			case 4:
-				trace("EpisodeNav - Doing holders[4] with autoAlpha of " + this.holders[4].autoAlpha);
+				D.debug(D.lDev, "EpisodeNav - Doing holders[4] with autoAlpha of " + this.holders[4].autoAlpha);
 				TweenLite.to(this.holders[4], 0, {autoAlpha:this.holders[4].autoAlpha, _x:29, _y:543.19, _width:234, _height:131.625});
 			break;
 			case 5:
-				trace("EpisodeNav - Doing holders[5] with autoAlpha of " + this.holders[5].autoAlpha);
+				D.debug(D.lDev, "EpisodeNav - Doing holders[5] with autoAlpha of " + this.holders[5].autoAlpha);
 				TweenLite.to(this.holders[5], 0, {autoAlpha:0, _x:29, _y:684.38, _width:234, _height:131.625});
 			break;
 		}
@@ -291,7 +286,7 @@ class plexNMT.as2.common.EpisodeNav {
 	
 	private function deselect()
 	{
-		trace("EpisodeNav - Doing deselect...");
+		D.debug(D.lDev, "EpisodeNav - Doing deselect...");
 		var pos:Array = new Array();
 		pos[0] = {autoAlpha:0, _x:29, _y:-17, _width:234, _height:131.625};
 		pos[1] = {autoAlpha:this.holders[1].autoAlpha, _x:29, _y:123.38, _width:234, _height:131.625};
@@ -310,7 +305,7 @@ class plexNMT.as2.common.EpisodeNav {
 	
 	private function _position()
 	{
-		trace("EpisodeNav - Doing position...");
+		D.debug(D.lDev, "EpisodeNav - Doing position...");
 		var pos:Array = new Array();
 		pos[0] = {autoAlpha:0, _x:29, _y:-17, _width:234, _height:131.625};
 		pos[1] = {autoAlpha:this.holders[1].autoAlpha, _x:29, _y:123.38, _width:234, _height:131.625};
@@ -335,10 +330,10 @@ class plexNMT.as2.common.EpisodeNav {
 	
 	private function newImg(intImg:Number, intHolder:Number)
 	{
-		trace("EpisodeNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
-		trace("EpisodeNav - PlexData.oEpisodeData.intPos: " + PlexData.oEpisodeData.intPos);
-		var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video;	
-		var url:String = PlexAPI.getImg({width:246, height:364, key:_data[PlexData.GetRotation("oEpisodeData", intImg)].attributes.thumb});
+		D.debug(D.lDev, "EpisodeNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
+		D.debug(D.lDev, "EpisodeNav - PlexData.oEpisodeData.intPos: " + PlexData.oEpisodeData.intPos);
+		var _data:Array = PlexData.oEpisodeData._children;	
+		var url:String = PlexAPI.getImg({width:246, height:364, key:_data[PlexData.GetRotation("oEpisodeData", intImg)].thumb});
 		UI.loadImage(url, holders[intHolder], "img");
 	}
 	
@@ -388,7 +383,6 @@ class plexNMT.as2.common.EpisodeNav {
 						this.holders[0].autoAlpha = 0;
 					}
 				}
-				trace("EpisodeNav - Calling fastUpdate...");
 				this.fn("episode");
 				this._position();
 			break;
@@ -408,7 +402,6 @@ class plexNMT.as2.common.EpisodeNav {
 						this.holders[5].autoAlpha = 0;
 					}
 				}
-				trace("EpisodeNav - Calling fastUpdate...");
 				this.fn("episode");
 				this._position();
 			break;

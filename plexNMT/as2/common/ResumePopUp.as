@@ -142,7 +142,6 @@ class plexNMT.as2.common.ResumePopUp {
 										  lineThickness:Number, 
 										  lineColor:Number, 
 										  lineAlpha:Number) {
-		trace("ResumePopUp - Doing drawRoundedRectangle with:" + mc);
 		
 		with (mc) {
 			beginFill(fillColor,fillAlpha);
@@ -216,7 +215,6 @@ class plexNMT.as2.common.ResumePopUp {
 				var partKey:String = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].Media[0].Part[0].attributes.key;
 				var resume:Number = this.buttons[0]._time / 1000;
 				popAPI.playVOD(key, partKey, resume);
-				//Return to page
 				this.destroy();
 				this.fn();
 			break;

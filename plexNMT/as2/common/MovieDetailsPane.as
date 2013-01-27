@@ -50,7 +50,7 @@ class plexNMT.as2.common.MovieDetailsPane {
 		current = 0;
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
-		TweenPlugin.activate([GlowFilterPlugin, AutoAlphaPlugin]);
+		TweenPlugin.activate([AutoAlphaPlugin]);
 		
 		return;
 	}
@@ -76,86 +76,100 @@ class plexNMT.as2.common.MovieDetailsPane {
 	public function _update():Void 
 	{	
 		var _data:Array = new Array();
-		_data = PlexData.oMovieData.MediaContainer[0];
+		_data = PlexData.oMovieData._children[0];
 		//D.debug(D.lDev, Utils.varDump(_data));
 
 		//Rating
-		if (_data.Video[0].attributes.rating != undefined &&  _data.Video[0].attributes.rating != 0){
-			TweenLite.to(this.movieDetailsMC.ratingMC.ratingMask, 0.7, {_width:(128 * _data.Video[0].attributes.rating / 10)});
+		if (_data.rating != undefined &&  _data.rating != 0){
+			TweenLite.to(this.movieDetailsMC.ratingMC.ratingMask, 0.7, {_width:(128 * _data.rating / 10)});
 		} else {
 			TweenLite.to(this.movieDetailsMC.ratingMC.ratingMask, 0.7, {_width:0});
 		}
-		var prefix:String = _data.attributes.mediaTagPrefix;
-		var version:String = _data.attributes.mediaTagVersion;
+		var prefix:String = PlexData.oMovieData.mediaTagPrefix;
+		var version:String = PlexData.oMovieData.mediaTagVersion;
 		//Studio Flag
 		trace("Wall Details - Calling PlexAPI.getImg...");
 		var url:String = PlexAPI.getImg({width:200,
 									  height:80,
-									  key:prefix + "studio/" + _data.Video[0].attributes.studio + "?t=" + version});
+									  key:prefix + "studio/" + _data.studio + "?t=" + version});
 		UI.loadImage(url, this.movieDetailsMC.fStudio, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"studio"});
 		//Content Rating Flag
 		var ratingURL:String = PlexAPI.getImg({width:50,
 									  height:50,
-									  key:prefix + "contentRating/" + _data.Video[0].attributes.contentRating + "?t=" + version});
+									  key:prefix + "contentRating/" + _data.contentRating + "?t=" + version});
 		UI.loadImage(ratingURL, this.movieDetailsMC.fRating, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"rating"});
 		//Aspect Ratio Flag
 		var ratioURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:prefix + "aspectRatio/" + _data.Video[0].Media[0].attributes.aspectRatio + "?t=" + version});
+									  key:prefix + "aspectRatio/" + _data._children[0].aspectRatio + "?t=" + version});
 		UI.loadImage(ratioURL, this.movieDetailsMC.fRatio, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"ratio"});
 		//Video Resolution Flag
 		var resolutionURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:prefix + "videoResolution/" + _data.Video[0].Media[0].attributes.videoResolution + "?t=" + version});
+									  key:prefix + "videoResolution/" + _data._children[0].videoResolution + "?t=" + version});
 		UI.loadImage(resolutionURL, this.movieDetailsMC.fResolution, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"resolution"});
 		//Video Codec Flag
 		var videoCodecURL:String = PlexAPI.getImg({width:100,
 									  height:60,
-									  key:prefix + "videoCodec/" + _data.Video[0].Media[0].attributes.videoCodec + "?t=" + version});
+									  key:prefix + "videoCodec/" + _data._children[0].videoCodec + "?t=" + version});
 		UI.loadImage(videoCodecURL, this.movieDetailsMC.fVideoCodec, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"videoCodec"});
 		//Audio Channels Flags
 		var channelsURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:prefix + "audioChannels/" + _data.Video[0].Media[0].attributes.audioChannels + "?t=" + version});
+									  key:prefix + "audioChannels/" + _data._children[0].audioChannels + "?t=" + version});
 		UI.loadImage(channelsURL, this.movieDetailsMC.fChannels, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"channels"});
 		//Audio Codec Flag
 		var audioCodecURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:prefix + "audioCodec/" + _data.Video[0].Media[0].attributes.audioCodec + "?t=" + version});
+									  key:prefix + "audioCodec/" + _data._children[0].audioCodec + "?t=" + version});
 		UI.loadImage(audioCodecURL, this.movieDetailsMC.fAudioCodec, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"audioCodec"});
 		//Times
-		this.movieDetailsMC._runTime.text = "Running Time: " + Utils.formatTime( _data.Video[0].attributes.duration);
-		if (_data.Video[0].attributes.viewOffset != undefined) {
-			this.movieDetailsMC._watchTime.text = "Watched Time: " + Utils.formatTime( _data.Video[0].attributes.viewOffset);
+		this.movieDetailsMC._runTime.text = "Running Time: " + Utils.formatTime( _data.duration);
+		if (_data.viewOffset != undefined) {
+			this.movieDetailsMC._watchTime.text = "Watched Time: " + Utils.formatTime( _data.viewOffset);
 		} else {
 			this.movieDetailsMC._watchTime.text = "Watched: 0hrs 0mins";
 		}
 		//Summary
-		this.movieDetailsMC._summary.text = _data.Video[0].attributes.summary;
-		//Writer
-		this.movieDetailsMC._writer.text = "Writer: " + _data.Video[0].Writer[0].attributes.tag;
-		//Director
-		this.movieDetailsMC._director.text = "Director: " + _data.Video[0].Director[0].attributes.tag;
-		//Cast
-		var castLen:Number = _data.Video[0].Role.length;
-		var cast:String = "Cast: ";
-		for (var c = 0; c<castLen; c++)
-		{
-			//Utils.varDump(c);
-			cast = cast + _data.Video[0].Role[c].attributes.tag + " | ";
-		}
-		cast = cast.substr(0, (cast.length - 3));
-		this.movieDetailsMC._cast.text = cast;
-		//Genre
-		//this.movieDetailsMC._genre.text = "Genre: " + _data.Video[0].Genre[0].attributes.tag;
-		var genreLen:Number = _data.Video[0].Genre.length;
+		this.movieDetailsMC._summary.text = _data.summary;
+		var etLen:Number = _data._children.length;
+		var eType:String = "";
 		var genre:String = "Genre: ";
-		for (var g = 0; g<genreLen;g++)
+		var writer:String = "Writer: ";
+		var director:String = "Director: ";
+		var country:String = "Country: ";
+		var role:String = "Cast: ";
+		for (var et = 0; et < etLen; et++)
 		{
-			genre = genre + _data.Video[0].Genre[g].attributes.tag + " | ";
+			eType = _data._children[et]._elementType.toLowerCase();
+			switch (eType)
+			{
+				case "genre": 
+					//Genre
+					genre += _data._children[et].tag + " | ";
+				break;
+				case "writer": 
+					writer += _data._children[et].tag + " | ";
+				break;
+				case "director": 
+					director += _data._children[et].tag + " | ";
+				break;
+				case "country": 
+					country += _data._children[et].tag + " | ";
+				break;
+				case "role": 
+					role += _data._children[et].tag + " | ";
+				break;
+			}
 		}
-		genre = genre.substr(0, (genre.length - 3));
-		this.movieDetailsMC._genre.text = genre;
+		//Writer
+		this.movieDetailsMC._writer.text = writer.substr(0, (writer.length - 3));
+		//Director
+		this.movieDetailsMC._director.text = director.substr(0, (director.length - 3));
+		//Cast
+		this.movieDetailsMC._cast.text = role.substr(0, (role.length - 3));
+		//Genre
+		this.movieDetailsMC._genre.text = genre.substr(0, (genre.length - 3));
 		//Align
 		UI.align([
 				  {symbol:this.movieDetailsMC._writer},
@@ -232,7 +246,7 @@ class plexNMT.as2.common.MovieDetailsPane {
 	private function buildDetails(mc:MovieClip)
 	{	
 		var _data:Array = new Array();
-		_data = PlexData.oMovieData.MediaContainer[0];
+		_data = PlexData.oMovieData._children[0];
 
 		//background
 		drawRoundedRectangle(mc, 660, 500, 30, 0x000000, 80, 2, 0xCCCCCC, 40);
@@ -343,7 +357,7 @@ class plexNMT.as2.common.MovieDetailsPane {
 		myFormat.size = 18;
 		mc._tagline.setNewTextFormat(myFormat);
 		
-		this.setText(_data.Video[0].attributes.title, _data.Video[0].attributes.year, _data.Video[0].attributes.tagline);
+		this.setText(_data.title, _data.year, _data.tagline);
 		this._update();
 		
 		

@@ -63,10 +63,6 @@ class plexNMT.as2.pages.SettingsPage {
 		//OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin]);
 		
-		
-		//json test
-		//httpService.headers = {Accept:"application/json"};
-		
 		//Key Listener
 		this.keyListener = new Object();
 		Key.addListener(this.keyListener);

@@ -11,8 +11,6 @@ import com.greensock.OverwriteManager;
 import com.greensock.easing.*;
 import com.greensock.plugins.TweenPlugin;
 import com.greensock.plugins.AutoAlphaPlugin;
-import com.greensock.plugins.SetSizePlugin;
-import com.greensock.plugins.GlowFilterPlugin;
 
 import mx.utils.Delegate;
 
@@ -44,7 +42,7 @@ class plexNMT.as2.common.PosterNav {
 	{
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
-		TweenPlugin.activate([GlowFilterPlugin, AutoAlphaPlugin]);
+		TweenPlugin.activate([AutoAlphaPlugin]);
 		
 		//Update function
 		fn = updateFN;
@@ -88,49 +86,47 @@ class plexNMT.as2.common.PosterNav {
 		holder1._alpha = 0;
 		holder1._visible = false;
 		var h1URL:String = PlexAPI.getImg({width:246, height:364,
-									  key:wallData[PlexData.GetRotation("oWallData",-2)].attributes.thumb});
+									  key:wallData[PlexData.GetRotation("oWallData",-2)].thumb});
 		UI.loadImage(h1URL, holder1, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder1"});
 		
 		holder2 = mc.createEmptyMovieClip("holder2", 3);
 		holder2._alpha = 0;
 		holder2._visible = false;
 		var h2URL:String = PlexAPI.getImg({width:246, height:364,
-									  key:wallData[PlexData.GetRotation("oWallData",-1)].attributes.thumb});
+									  key:wallData[PlexData.GetRotation("oWallData",-1)].thumb});
 		UI.loadImage(h2URL, holder2, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder2"});
 		
 		holder3 = mc.createEmptyMovieClip("holder3", 5);
 		holder3._alpha = 0;
 		holder3._visible = false;
 		var h3URL = PlexAPI.getImg({width:246, height:364,
-									  key:wallData[PlexData.GetRotation("oWallData",0)].attributes.thumb});
+									  key:wallData[PlexData.GetRotation("oWallData",0)].thumb});
 		UI.loadImage(h3URL, holder3, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder3"});
 		
 		holder4 = mc.createEmptyMovieClip("holder4", 4);
 		holder4._alpha = 0;
 		holder4._visible = false;
 		var h4URL:String = PlexAPI.getImg({width:246, height:364,
-									  key:wallData[PlexData.GetRotation("oWallData",1)].attributes.thumb});
+									  key:wallData[PlexData.GetRotation("oWallData",1)].thumb});
 		UI.loadImage(h4URL, holder4, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder4"});
 		
 		holder5 = mc.createEmptyMovieClip("holder5", 2);
 		holder5._alpha = 0;
 		holder5._visible = false;
 		var h5URL:String = PlexAPI.getImg({width:246, height:364,
-									  key:wallData[PlexData.GetRotation("oWallData",2)].attributes.thumb});
+									  key:wallData[PlexData.GetRotation("oWallData",2)].thumb});
 		UI.loadImage(h5URL, holder5, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"holder5"});
 		
 		hiResImg = mc.createEmptyMovieClip("hiResImg", 10); //, -198, 479, 156, 231);
 		hiResImg._alpha = 0;
 		hiResImg._visible = false;
 		var hiResURL = PlexAPI.getImg({width:402, height:595,
-									  key:wallData[PlexData.GetRotation("oWallData",0)].attributes.thumb});
+									  key:wallData[PlexData.GetRotation("oWallData",0)].thumb});
 		UI.loadImage(hiResURL, hiResImg, "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:"hiResImg"});
 		
 		this.holders = [holder1, holder2, holder3, holder4, holder5];
 		
 		
-		//Move/Resize Position 3 to un selected state
-		//TweenLite.to(holder3, 30, {autoAlpha:100, _x:0, _y:333, onCompleteScope:this, onComplete:reloadImg, onCompleteParams:["holder3", holder3.url]});
 	}
 	
 	private function onHolderLoad(success:Boolean, o:Object)
@@ -209,23 +205,19 @@ class plexNMT.as2.common.PosterNav {
 	{
 		trace("PosterNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
 		trace("PosterNav - PlexData.oWallData.intPos: " + PlexData.oWallData.intPos);
-		var url:String = PlexAPI.getImg({width:246, height:364, key:wallData[PlexData.GetRotation("oWallData", intImg)].attributes.thumb});
+		var url:String = PlexAPI.getImg({width:246, height:364, key:wallData[PlexData.GetRotation("oWallData", intImg)].thumb});
 		UI.loadImage(url, holders[intHolder], "img");
 	}
 	
 	private function reloadImg()
-	{/*
-		this.holders[2]._xscale = 100;
-		this.holders[2]._yscale = 100;*/
-		var url:String = PlexAPI.getImg({width:402, height:595, key:wallData[PlexData.GetRotation("oWallData", 0)].attributes.thumb});
+	{
+		var url:String = PlexAPI.getImg({width:402, height:595, key:wallData[PlexData.GetRotation("oWallData", 0)].thumb});
 		UI.loadImage(url, hiResImg, "img",{doneCB:Delegate.create(this, this.onImgLoad)});
 		
 	}
 	
 	private function onImgLoad()
 	{
-		/*this.hiResImg._x = 0;
-		this.hiResImg._y = 125.04;*/
 		TweenLite.to(this.hiResImg, 0, {_width:402, _height:595, _x:0, _y:125.04});
 		TweenLite.to(this.hiResImg, 0.4, {autoAlpha:100});
 	}

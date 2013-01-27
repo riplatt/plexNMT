@@ -65,17 +65,11 @@ class plexNMT.as2.pages.Wall
 		this.titleMarquee = null;
 		
 		Utils.cleanUp(this.parentMC);
-		
-		trace("Wall - Done Wall.Clean Up...");
-		Utils.varDump(_level0);
 	}
 
 	public function Wall(parentMC:MovieClip)
 	{
 		D.debug(D.lDebug, "Wall - Doing Wall...");
-		/*Utils.traceVar(_level0);
-		trace("MovieDetails - PlexData.oSettings");
-		Utils.traceVar(PlexData.oSettings);*/
 		D.debug(D.lDebug, "Wall - Free Memory: " + fscommand2("GetFreePlayerMemory") + "kB");
 		
 		_background = new Background(parentMC);
@@ -87,22 +81,22 @@ class plexNMT.as2.pages.Wall
 		// set how many Image will be loading at one time. Default is 1. Maximum 6.
 		this.imgLoader = new IMGLoader(6);
 		
-		if (PlexData.oWallData.MediaContainer[0] != undefined)
+		if (PlexData.oWallData._elementType != undefined)
 		{	
 			D.debug(D.lInfo, "Wall - Already have wall data at pos: " + PlexData.oWallData.intPos);
 			this.onLoadData();
 		} else {
 			var key:String = "/library/sections/";
-			if (PlexData.oSections.MediaContainer[0] != undefined && PlexData.oCategories.MediaContainer[0] == undefined) 
+			if (PlexData.oSections._elementType != undefined && PlexData.oCategories._elementType == undefined) 
 			{
-				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/all";
+				key = key + PlexData.oSections._children[PlexData.oSections.intPos].key + "/all";
 			}else{
-				key = key + PlexData.oSections.MediaContainer[0].Directory[PlexData.oSections.intPos].attributes.key + "/";
-				key = key + PlexData.oCategories.MediaContainer[0].Directory[PlexData.oCategories.intPos].attributes.key + "/";
+				key = key + PlexData.oSections._children[PlexData.oSections.intPos].key + "/";
+				key = key + PlexData.oCategories._children[PlexData.oCategories.intPos].key + "/";
 			}
-			if (PlexData.oFilters.MediaContainer[0] != undefined) 
+			if (PlexData.oFilters._elementType != undefined) 
 			{
-				key = key + PlexData.oFilters.MediaContainer[0].Directory[PlexData.oFilters.intPos].attributes.key;
+				key = key + PlexData.oFilters._children[PlexData.oFilters.intPos].key;
 			}
 			D.debug(D.lInfo, "Wall - Calling getWallData with: " + key);
 			PlexAPI.getWallData(key, Delegate.create(this, this.onLoadData), PlexData.oSettings.timeout);
@@ -114,23 +108,14 @@ class plexNMT.as2.pages.Wall
 
 	private function onLoadData()
 	{
-		var key:String = "";
-		if (PlexData.oWallData.MediaContainer[0].Directory != undefined) 
-		{
-			key = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.art;
-		} else {
-			key = PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.art;
-		}
+		var key:String = PlexData.oWallData._children[PlexData.oWallData.intPos].art;
+
 		_background._set(key);
 		_details.setText();
 		_menu._update();
 		//set up wall thumbs
 		PlexData.setWall();
-		
-		//this.createGridLite();
 		this.createGrid();
-
-	//trace("Done onLoadData...");
 	}
 
 	private function createGrid():Void
@@ -171,13 +156,7 @@ class plexNMT.as2.pages.Wall
 		this.g.xHLStopTime = 700;
 
 		// data to be displayed on the Grid.
-		//this.g.data = data;
-		if (PlexData.oWallData.MediaContainer[0].Video != undefined) 
-		{
-			this.g.data = PlexData.oWallData.MediaContainer[0].Video;
-		} else {
-			this.g.data = PlexData.oWallData.MediaContainer[0].Directory;
-		}
+		this.g.data = PlexData.oWallData._children;
 
 		// --- Set callback functions ---
 
@@ -240,7 +219,6 @@ class plexNMT.as2.pages.Wall
 		this.preloadMC = null;
 		
 		// Highlight with the specified hl(data index) and enable the keyListener.
-		trace("Wall - Highlighting #" + PlexData.oWallData.intPos);
 		this.g.unhighlight()
 		this.g.highlight(PlexData.oWallData.intPos);
 		
@@ -250,24 +228,20 @@ class plexNMT.as2.pages.Wall
 	
 	private function onItemShowCB(o:Object):Void
 	{
-		//trace("Doing onItemShowCB...");
 		o.mc.preload.removeMovieClip();
 		var preload:MovieClip = o.mc.attachMovie("preload40", "poster", 1, {_x:0, _y:0});
 		o.mc.fail.text = "Unable to Load Image...";
-		//trace("o.mc._name:" + o.mc._name);
-		//trace("o.mc.imgMC:" + o.mc.imgMC);
 		this.imgLoader.unload(o.mc._name, o.mc.imgMC, null);
 	}
 
 	private function onItemUpdateCB(o:Object):Void
 	{
-		//trace("Doing onItemUpdateCB with: " + o.mc);
 		if(o.dataIndex == this.g._hl)
 		{
 			this.hlCB(o);
 			this.onHLStopCB(o);
 		}
-		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width="+PlexData.oWall.thumb.size+"&height="+PlexData.oWall.thumb.size+"&url=" + escape(PlexData.oSettings.url + Util.trim(o.data.attributes.thumb))
+		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width="+PlexData.oWall.thumb.size+"&height="+PlexData.oWall.thumb.size+"&url=" + escape(PlexData.oSettings.url + Util.trim(o.data.thumb))
 		this.imgLoader.load(o.mc._name, url, o.mc.imgMC,
 			{
 				mcProps:{_height:200,_width:200}, lmcId:"poster",
@@ -289,7 +263,6 @@ class plexNMT.as2.pages.Wall
 
 	private function onItemClearCB(o:Object):Void
 	{
-		//trace("onItemClearCB...");
 		this.imgLoader.unload(o.mc._name, o.mc.imgMC, "poster");
 
 		this.mainMC.txtName.htmlText = "";
@@ -298,9 +271,6 @@ class plexNMT.as2.pages.Wall
 
 	private function hlCB(o:Object):Void
 	{
-		trace("Wall - Doing hlCB...");
-		/*trace("Wall - PlexData.oWallData.intPos: " + PlexData.oWallData.intPos);
-		trace("Wall - g._hl: " + this.g._hl);*/
 		PlexData.oWallData.intPos = this.g._hl;
 		_details.setText();
 		_menu._update();
@@ -308,12 +278,10 @@ class plexNMT.as2.pages.Wall
 		var data:Object = o.data;
 		var mc:MovieClip = o.mc;
 		mc.gotoAndStop("hl");
-
 	}
 
 	private function unhlCB(o:Object):Void
 	{
-		//trace("Doing unhlCB...");
 		this.titleMarquee.stop();
 		this.mainMC.txtName.htmlText = "";
 		o.mc.gotoAndStop("unhl");
@@ -321,8 +289,7 @@ class plexNMT.as2.pages.Wall
 
 	private function onHLStopCB(o:Object):Void
 	{
-		//trace("Doing onHLStopCB...");
-		// Stop the Marquee
+
 		_details._update();
 		
 		this.mainMC.txtName.htmlText = "";
@@ -335,42 +302,28 @@ class plexNMT.as2.pages.Wall
 	
 	private function updateBackground()
 	{
-		//trace("Wall - Doing Background up date...");
 		clearInterval(delayUpdate);
-		var key:String = "";
-		if (PlexData.oWallData.MediaContainer[0].Directory != undefined) 
-		{
-			key = PlexData.oWallData.MediaContainer[0].Directory[this.g._hl].attributes.art;
-		} else {
-			key = PlexData.oWallData.MediaContainer[0].Video[this.g._hl].attributes.art;
-		}
-		this._background._update(key);
+		this._background._update(PlexData.oWallData._children[this.g._hl].art);
 	}
 	private function onKeyDownCB(obj:Object):Void
 	{
-		//trace(obj.keyCode); // key code receive from listener
-		//trace(obj.asciiCode); // ASCII code receive from listener
 		var txtKeyCode = obj.keyCode;
 		clearInterval(delayUpdate);
 		
 		switch (txtKeyCode)
 		{
-			 case "soft1":
-			 case Remote.BACK:
+			case "soft1":
+			case Remote.BACK:
 				this.destroy();
 				PlexData.oWallData = new Object();
-				//PlexData.oWall.current = new Object();
-				//PlexData.oWall.items = new Array();
 				gotoAndPlay("main");
-			 break;
-			 case "soft2":
-			 case Remote.PLAY:
-				//this.destroy();
-				//var_dump(obj);
+			break;
+			case "soft2":
+			case Remote.PLAY:
 				//D.debug(D.lInfo,"Wall - Trying to play, Title: " + obj.title + " From: " + obj.playURL);
 				//Util.loadURL("http://127.0.0.1:8008/playback?arg0=start_vod&arg1=" + obj.title + "&arg2=" + obj.playURL + "&arg3=show&arg4=0"); // Direct Play.
 			break;
-			 case Remote.HOME:
+			case Remote.HOME:
 				this.destroy();
 				PlexData.oWallData = new Object();
 				gotoAndPlay("main");
@@ -380,13 +333,12 @@ class plexNMT.as2.pages.Wall
 				gotoAndPlay("settings");
 			break;
 		}
-		//delayUpdate = setInterval(Delegate.create(this, updateBackground),700);
 	}
 
 	private function onEnterCB(o:Object):Void
 	{
-		trace("Wall - Doing onEnterCB with type: " + o.data.attributes.type);
-		switch (o.data.attributes.type)
+		D.debug(D.lInfo, "Wall - Doing onEnterCB with type: " + o.data.type);
+		switch (o.data.type)
 		{
 			case "movie":
 				PlexData.oWallData.intPos = this.g._hl;
@@ -399,31 +351,25 @@ class plexNMT.as2.pages.Wall
 				gotoAndPlay("seasonDetails");
 			break;
 		}
-		/*trace("dataIndex: " + o.dataIndex);
-		trace("\n");*/
 	}
 
 	private function overRightCB():Boolean
 	{
-	//trace("over right...");
 		return true; // return false to unhighlight from grid
 	}
 
 	private function overLeftCB():Boolean
 	{
-	//trace("over left...");
 		return true; // return false to unhighlight from grid
 	}
 
 	private function overTopCB():Boolean
 	{
-	//trace("over top...");
 		return true; // return false to unhighlight from grid
 	}
 
 	private function overBottomCB():Boolean
 	{
-	//trace("over bottom...");
 		return true; // return false to unhighlight from grid
 	}
 	

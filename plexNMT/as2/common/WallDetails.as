@@ -59,39 +59,27 @@ class plexNMT.as2.common.WallDetails {
 	public function setText():Void 
 	{
 		var _data:Array = new Array();
-		if (PlexData.oWallData.MediaContainer[0].Video != undefined) 
-		{
-			_data = PlexData.oWallData.MediaContainer[0].Video;
-		} else {
-			_data = PlexData.oWallData.MediaContainer[0].Directory;
-		}
-		scTitle.text = _data[PlexData.oWallData.intPos].attributes.title;
+		_data = PlexData.oWallData._children;
+		scTitle.text = _data[PlexData.oWallData.intPos].title;
 		this.detailsMC._title._x = (this.detailsMC._width/2) - (this.detailsMC._title._width/2);
 		this.detailsMC._title._visible = true;
-		scRunTime.text = "Running Time: " + Utils.formatTime(_data[PlexData.oWallData.intPos].attributes.duration);
+		scRunTime.text = "Running Time: " + Utils.formatTime(_data[PlexData.oWallData.intPos].duration);
 		this.detailsMC._runTime._x = (this.detailsMC._width/2) - (this.detailsMC._runTime._width/2);
 		this.detailsMC._runTime._visible = true;
-		scWatchTime.text = "Watched Time: " + Utils.formatTime(_data[PlexData.oWallData.intPos].attributes.viewOffset);
+		scWatchTime.text = "Watched Time: " + Utils.formatTime(_data[PlexData.oWallData.intPos].viewOffset);
 		this.detailsMC._watchTime._x = (this.detailsMC._width/2) - (this.detailsMC._watchTime._width/2);
 		this.detailsMC._watchTime._visible = true;
-		this.detailsMC._year.text = _data[PlexData.oWallData.intPos].attributes.year;
+		this.detailsMC._year.text = _data[PlexData.oWallData.intPos].year;
 		
 		//Utils.varDump(this.detailsMC);
 	}
 	public function _update():Void 
 	{	
 		var _data:Array = new Array();
-		if (PlexData.oWallData.MediaContainer[0].Video != undefined) 
-		{
-			_data = PlexData.oWallData.MediaContainer[0].Video;
-			//scRunTime.text = Utils.formatTime(PlexData.oWallData.MediaContainer[0].Video[PlexData.oWallData.intPos].attributes.duration);
-		} else {
-			_data = PlexData.oWallData.MediaContainer[0].Directory;
-			//scRunTime.text = Utils.formatTime(PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.duration);
-		}
+		_data = PlexData.oWallData._children;
 		//Rating
-		if (_data[PlexData.oWallData.intPos].attributes.rating != undefined &&  _data[PlexData.oWallData.intPos].attributes.rating != 0){
-			TweenLite.to(this.detailsMC.ratingMC.ratingMask, 0.7, {_width:(128 * _data[PlexData.oWallData.intPos].attributes.rating / 10)});
+		if (_data[PlexData.oWallData.intPos].rating != undefined &&  _data[PlexData.oWallData.intPos].rating != 0){
+			TweenLite.to(this.detailsMC.ratingMC.ratingMask, 0.7, {_width:(128 * _data[PlexData.oWallData.intPos].rating / 10)});
 		} else {
 			TweenLite.to(this.detailsMC.ratingMC.ratingMask, 0.7, {_width:0});
 		}
@@ -99,51 +87,51 @@ class plexNMT.as2.common.WallDetails {
 		trace("Wall Details - Calling PlexAPI.getImg...");
 		var url:String = PlexAPI.getImg({width:200,
 									  height:80,
-									  key:PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix + 
-									  "studio/" + _data[PlexData.oWallData.intPos].attributes.studio +
-									  "?t=" + PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion});
+									  key:PlexData.oWallData.mediaTagPrefix + 
+									  "studio/" + _data[PlexData.oWallData.intPos].studio +
+									  "?t=" + PlexData.oWallData.mediaTagVersion});
 		UI.loadImage(url, this.detailsMC.fStudio, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"studio"});
 		//Content Rating Flag
 		var ratingURL:String = PlexAPI.getImg({width:50,
 									  height:50,
-									  key:PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix + 
-									  "contentRating/" + _data[PlexData.oWallData.intPos].attributes.contentRating +
-									  "?t=" + PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion});
+									  key:PlexData.oWallData.mediaTagPrefix + 
+									  "contentRating/" + _data[PlexData.oWallData.intPos].contentRating +
+									  "?t=" + PlexData.oWallData.mediaTagVersion});
 		UI.loadImage(ratingURL, this.detailsMC.fRating, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"rating"});
 		//Aspect Ratio Flag
 		var ratioURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix + 
-									  "aspectRatio/" + _data[PlexData.oWallData.intPos].Media[0].attributes.aspectRatio +
-									  "?t=" + PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion});
+									  key:PlexData.oWallData.mediaTagPrefix + 
+									  "aspectRatio/" + _data[PlexData.oWallData.intPos]._children[0].aspectRatio +
+									  "?t=" + PlexData.oWallData.mediaTagVersion});
 		UI.loadImage(ratioURL, this.detailsMC.fRatio, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"ratio"});
 		//Video Resolution Flag
 		var resolutionURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix + 
-									  "videoResolution/" + _data[PlexData.oWallData.intPos].Media[0].attributes.videoResolution +
-									  "?t=" + PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion});
+									  key:PlexData.oWallData.mediaTagPrefix + 
+									  "videoResolution/" + _data[PlexData.oWallData.intPos]._children[0].videoResolution +
+									  "?t=" + PlexData.oWallData.mediaTagVersion});
 		UI.loadImage(resolutionURL, this.detailsMC.fResolution, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"resolution"});
 		//Video Codec Flag
 		var videoCodecURL:String = PlexAPI.getImg({width:100,
 									  height:60,
-									  key:PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix + 
-									  "videoCodec/" + _data[PlexData.oWallData.intPos].Media[0].attributes.videoCodec +
-									  "?t=" + PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion});
+									  key:PlexData.oWallData.mediaTagPrefix + 
+									  "videoCodec/" + _data[PlexData.oWallData.intPos]._children[0].videoCodec +
+									  "?t=" + PlexData.oWallData.mediaTagVersion});
 		UI.loadImage(videoCodecURL, this.detailsMC.fVideoCodec, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"videoCodec"});
 		//Audio Channels Flags
 		var channelsURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix + 
-									  "audioChannels/" + _data[PlexData.oWallData.intPos].Media[0].attributes.audioChannels +
-									  "?t=" + PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion});
+									  key:PlexData.oWallData.mediaTagPrefix + 
+									  "audioChannels/" + _data[PlexData.oWallData.intPos]._children[0].audioChannels +
+									  "?t=" + PlexData.oWallData.mediaTagVersion});
 		UI.loadImage(channelsURL, this.detailsMC.fChannels, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"channels"});
 		//Audio Codec Flag
 		var audioCodecURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix + 
-									  "audioCodec/" + _data[PlexData.oWallData.intPos].Media[0].attributes.audioCodec +
-									  "?t=" + PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion});
+									  key:PlexData.oWallData.mediaTagPrefix + 
+									  "audioCodec/" + _data[PlexData.oWallData.intPos]._children[0].audioCodec +
+									  "?t=" + PlexData.oWallData.mediaTagVersion});
 		UI.loadImage(audioCodecURL, this.detailsMC.fAudioCodec, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"audioCodec"});
 		
 		
@@ -202,13 +190,6 @@ class plexNMT.as2.common.WallDetails {
 	}
 	private function buildDetails(mc:MovieClip)
 	{	
-		var _data:Array = new Array();
-		if (PlexData.oWallData.MediaContainer[0].Video != undefined) 
-		{
-			_data = PlexData.oWallData.MediaContainer[0].Video;
-		} else {
-			_data = PlexData.oWallData.MediaContainer[0].Directory;
-		}
 		//background
 		drawRoundedRectangle(mc, 1260, 90, 30, 0x000000, 80, 2, 0xCCCCCC, 40);
 		//Studio Flag
@@ -232,7 +213,7 @@ class plexNMT.as2.common.WallDetails {
 		mc.ratingMC._x = 1120;
 		mc.ratingMC.attachMovie("rating_0", "rating_0", mc.ratingMC.getNextHighestDepth()); 		//background
 		mc.ratingMC.attachMovie("rating_100", "rating_100", mc.ratingMC.getNextHighestDepth()); 	//overlay
-		mc.ratingMC.createEmptyMovieClip("ratingMask", mc.ratingMC.getNextHighestDepth()); 		//crop/mask of overlay
+		mc.ratingMC.createEmptyMovieClip("ratingMask", mc.ratingMC.getNextHighestDepth()); 			//crop/mask of overlay
 		with(mc.ratingMC.ratingMask)
 		{
 			moveTo(0,0);

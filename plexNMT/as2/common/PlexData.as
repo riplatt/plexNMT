@@ -1,4 +1,6 @@
-﻿
+﻿import com.designvox.tranniec.JSON;
+import com.syabas.as2.common.D;
+
 import mx.xpath.XPathAPI;
 
 import plexNMT.as2.common.Utils;
@@ -20,7 +22,7 @@ class plexNMT.as2.common.PlexData {
 	public static var oMovieData:Object = {};
 	public static var oSeasonData:Object = {};
 	public static var oEpisodeData:Object = {};
-	public static var oHeaders:Object = {};
+	public static var oNMT:Object = {};
 	public static var oCurrentTime:Object = {};
 	
 	
@@ -105,7 +107,7 @@ class plexNMT.as2.common.PlexData {
 			oSettings.previous = null;
 			oSettings.debug = new Object();
 			oSettings.debug.level = 0;
-			oSettings.debug.remote = "192.168.1.18";
+			oSettings.debug.remote = "192.168.1.5";
 			oSettings.buffer = 0;
 			oSettings.overscan = false;
 			oSettings.overscanbg = false;
@@ -125,33 +127,10 @@ class plexNMT.as2.common.PlexData {
 			//oPage.histroy = new Array();
 			
 			//ID
-			/*
-			* X-Plex-Platform (Platform name, eg iOS, MacOSX, Android, LG, etc)
-			* X-Plex-Platform-Version (Operating system version, eg 4.3.1, 10.6.7, 3.2)
-			* X-Plex-Provides (one or more of [player, controller, server])
-			* X-Plex-Product (Plex application name, eg Laika, Plex Media Server, Media Link)
-			* X-Plex-Version (Plex application version number)
-			* X-Plex-Device (Device name and model number, eg iPhone3,2, Motorola XOOM™, LG5200TV)
-			* X-Plex-Client-Identifier (UUID, serial number, or other number unique per device)
-			* X-Plex-Client-Platform
-			*/
-			oHeaders.platform = "X-Plex-Platform=POP-408";
-			oHeaders.platformVersion = "&X-Plex-Platform-Version=xxxx-xxxx";
-			oHeaders.provides = "&X-Plex-Provides=Player";
-			oHeaders.product = "&X-Plex-Product=plexNMT";
-			oHeaders.version = "&X-Plex-Version=0.0.1.gitString";
-			oHeaders.device = "&X-Plex-Device=";
-			oHeaders.clientIdentifier = "&X-Plex-Client-Identifier=";
-			oHeaders.clientPlatform = "&X-Plex-Client-Platform=";
-			oHeaders.header = oHeaders.platform +
-							  oHeaders.platformVersion +
-							  oHeaders.provides +
-							  oHeaders.product +
-							  oHeaders.product +
-							  oHeaders.version +
-							  oHeaders.device +
-							  oHeaders.clientIdentifier +
-							  oHeaders.clientPlatform;
+			oNMT.ip = "192.168.1.9";
+			oNMT.firware = "";
+			oNMT.modelname = "Popcorn Hour 200 Series";
+			oNMT.id = "00:00:00:00:00:00";
 			
 		} else {
 			trace("PlexData already built...");
@@ -161,63 +140,61 @@ class plexNMT.as2.common.PlexData {
 	
 	public static function setSections()
 	{
-		var tmpObj1:Object = new Object({attributes:{title:"Settings"}});
-		var tmpObj2:Object = new Object({attributes:{title:"Exit"}});
-		oSections.MediaContainer[0].Directory.push(tmpObj1);
-		oSections.MediaContainer[0].Directory.push(tmpObj2);
-		oSections.MediaContainer[0].attributes.size = (oSections.MediaContainer[0].attributes.size*1) + 2
+		oSections._children.push({title:"Settings"});
+		oSections._children.push({title:"Exit"});
+		
 		oSections.intPos = 0;
-		oSections.intLength = oSections.MediaContainer[0].attributes.size - 1;
-		//Utils.varDump(oSections)
+		oSections.intLength = oSections._children.length - 1;
+		D.debug(D.lDev, "PlexData - oSections.intLength: " + oSections.intLength);
 	}
 	
 	public static function setCategories()
 	{
 		oCategories.intPos = 0;
-		oCategories.intLength = oCategories.MediaContainer[0].attributes.size - 1;
+		oCategories.intLength = oCategories._children.length - 1;
 	}
 	
 	public static function setFilters()
 	{
 		oFilters.intPos = 0;
-		oFilters.intLength = oFilters.MediaContainer[0].attributes.size - 1;
+		oFilters.intLength = oFilters._children.length - 1;
 	}
 	
 	public static function setBackground()
 	{
 		oBackground.intPos = 0;
-		oBackground.intLength = oBackground.MediaContainer[0].attributes.size - 1;
-		trace("PlexData - oBackground.intLength: " + oBackground.intLength);
+		oBackground.intLength = oBackground._children.length - 1;
+		D.debug(D.lDev, "PlexData - oBackground.intLength: " + oBackground.intLength);
 	}
 	
 	public static function setWallData()
 	{
 		oWallData.intPos = 0;
-		oWallData.intLength = oWallData.MediaContainer[0].attributes.size - 1;
+		oWallData.intLength = oWallData._children.length - 1;
 	}
 	
 	public static function setMovieData()
 	{
 		oMovieData.intPos = 0;
-		oMovieData.intLength = oMovieData.MediaContainer[0].attributes.size - 1;
+		oMovieData.intLength = oMovieData._children.length - 1;
 	}
 	
 	public static function setSeasonData()
 	{
 		oSeasonData.intPos = 0;
-		oSeasonData.intLength = oSeasonData.MediaContainer[0].attributes.size - 1;
+		oSeasonData.intLength = oSeasonData._children.length - 1;
 	}
 	
 	public static function setEpisodeData()
 	{
 		oEpisodeData.intPos = 0;
-		oEpisodeData.intLength = oEpisodeData.MediaContainer[0].attributes.size - 1;
+		oEpisodeData.intLength = oEpisodeData._children.length - 1;
 	}
 	
 	public static function GetRotation(_objItem:String, menuRotation:Number):Number
 	{
 		var intPos:Number = PlexData[_objItem].intPos;
-		var len:Number = PlexData[_objItem].MediaContainer[0].attributes.size - 1
+		var len:Number = PlexData[_objItem]._children.length - 1
 		var rot:Number = Math.abs(menuRotation);
 		var ve:Boolean = false;
 		
@@ -278,7 +255,7 @@ class plexNMT.as2.common.PlexData {
 	public static function setWall():Void
 	{
 		//Check for Music or Video
-		var type:String = oWallData.MediaContainer[0].attributes.viewGroup;
+		var type:String = oWallData.viewGroup;
 		trace("PlexData - Doing setWall with:" + type);
 		//Utils.traceVar(PlexData.oSettings);
 		switch (type)

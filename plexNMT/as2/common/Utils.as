@@ -1,5 +1,7 @@
 ﻿
 class plexNMT.as2.common.Utils {
+	
+	
 	public static function varDump(_obj:Object, indent:String):String {
 		var strDump:String = "";
 		if (indent == undefined) {

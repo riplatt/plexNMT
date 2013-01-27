@@ -63,7 +63,7 @@ class plexNMT.as2.pages.SeasonDetails {
 		
 		this.preloadMC = this.mainMC.attachMovie("busy", "busy", mainMC.getNextHighestDepth(), {_x:640, _y:360, _width:200, _height:200});
 		
-		var key:String = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.key
+		var key:String = PlexData.oWallData._children[PlexData.oWallData.intPos].key
 		trace("oWallData.intPos: " + PlexData.oWallData.intPos);
 		//trace("Calling getMovieData With: " + key);
 		D.debug(D.lDev, "SeasonDetails - Calling getSeasonData With: " + key);
@@ -94,7 +94,7 @@ class plexNMT.as2.pages.SeasonDetails {
 	
 	private function onSeasonLoad():Void
 	{
-		var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[0].attributes.key
+		var key:String = PlexData.oSeasonData._children[0].key
 		PlexAPI.getEpisodeData(key, Delegate.create(this, this.onDataLoad), 5000);
 	}
 	private function onDataLoad(data:Object):Void
@@ -105,13 +105,13 @@ class plexNMT.as2.pages.SeasonDetails {
 			
 			_details = new SeasonDetailsPane(this.mainMC);
 			
-			_poster = new PosterNav(this.mainMC, PlexData.oWallData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
-			_season = new SeasonNav(this.mainMC, PlexData.oSeasonData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
-			_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData.MediaContainer[0].Directory, Delegate.create(this, this.fastUpdate));
+			_poster = new PosterNav(this.mainMC, PlexData.oWallData._children, Delegate.create(this, this.fastUpdate));
+			_season = new SeasonNav(this.mainMC, PlexData.oSeasonData._children, Delegate.create(this, this.fastUpdate));
+			_episode = new EpisodeNav(this.mainMC, PlexData.oEpisodeData._children, Delegate.create(this, this.fastUpdate));
 			
 			_menu = new MenuTop(this.mainMC);
 			
-			_background._set(PlexData.oSeasonData.MediaContainer[0].attributes.art);
+			_background._set(PlexData.oSeasonData.art);
 			
 			
 			this.select = [_season, _poster, _episode];
@@ -137,33 +137,24 @@ class plexNMT.as2.pages.SeasonDetails {
 				_details.setEpisodeTitleText("");
 			break;
 			case "season":
-				_details.setSeasonText(PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.title);
+				_details.setSeasonText(PlexData.oSeasonData._children[PlexData.oSeasonData.intPos].title);
 				_details.setEpisodeText("");
 				_details.setEpisodeTitleText("");
-				_details.setSummaryText(PlexData.oSeasonData.MediaContainer[0].attributes.summary);
+				_details.setSummaryText(PlexData.oSeasonData.summary);
 			break;
 			case "episode":
-				var seasonNumber:String = "";
-				if (PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.parentIndex != undefined)
-				{
-					seasonNumber = PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.parentIndex;
-				} else {
-					seasonNumber = PlexData.oEpisodeData.MediaContainer[0].attributes.parentIndex;
-				}
+				var seasonNumber:String = seasonNumber = PlexData.oEpisodeData._children.parentIndex;
 				_details.setSeasonText("Season " + seasonNumber);
-				_details.setEpisodeText("Episode " + PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.index);
-				_details.setEpisodeTitleText(PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.title);
-				_details.setSummaryText(PlexData.oEpisodeData.MediaContainer[0].Video[PlexData.oEpisodeData.intPos].attributes.summary);
+				_details.setEpisodeText("Episode " + PlexData.oEpisodeData._children[PlexData.oEpisodeData.intPos].index);
+				_details.setEpisodeTitleText(PlexData.oEpisodeData._children[PlexData.oEpisodeData.intPos].title);
+				_details.setSummaryText(PlexData.oEpisodeData._children[PlexData.oEpisodeData.intPos].summary);
 			break;
 			default :
-				//_details._update();
-				//_season._update();
-				//_episode._update();
 		}
 		
 		//Slow Update
 		clearInterval(slowUpdateInterval);
-		slowUpdateInterval = setInterval(Delegate.create(this,slowUpdate),700);
+		slowUpdateInterval = setInterval(Delegate.create(this, slowUpdate),700);
 		
 	}
 	
@@ -177,14 +168,15 @@ class plexNMT.as2.pages.SeasonDetails {
 			case "poster":
 				//Update Season
 				PlexData.oSeasonData.intPos = 0;
-				var key:String = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos].attributes.key;
+				var key:String = PlexData.oWallData._children[PlexData.oWallData.intPos].key;
 				PlexAPI.getSeasonData(key, Delegate.create(this, function()
 					{
 						//Update Background
-						_background._update(PlexData.oSeasonData.MediaContainer[0].attributes.art);
+						_background._update(PlexData.oSeasonData.art);
+						//Update Season
 						_season._update();
 						//Update Episode
-						var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.key;
+						var key:String = PlexData.oSeasonData._children[PlexData.oSeasonData.intPos].key;
 						PlexAPI.getEpisodeData(key, Delegate.create(this, function()
 							{
 								_episode._update();
@@ -195,7 +187,7 @@ class plexNMT.as2.pages.SeasonDetails {
 			break;
 			case "season":
 				PlexData.oEpisodeData.intPos = 0;
-				var key:String = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos].attributes.key;
+				var key:String = PlexData.oSeasonData._children[PlexData.oSeasonData.intPos].key;
 				PlexAPI.getEpisodeData(key, Delegate.create(this, function()
 					{
 						_episode._update();
@@ -272,26 +264,26 @@ class plexNMT.as2.pages.SeasonDetails {
 			break;
 			case Remote.PLAY:
 				D.debug(D.lDev, "SeasonDetails - PLAY Button Pressed...");
-				var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video
+				var _data:Array = PlexData.oEpisodeData._children
 				var _len:Number = PlexData.oEpisodeData.intLength
 				var key:String = "";
 				var _title:String = "";
 				var i:Number = 0;
-				popAPI.playVOD(_data[PlexData.oEpisodeData.intPos].attributes.title, _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].attributes.key, 0);
+				popAPI.playVOD(_data[PlexData.oEpisodeData.intPos].title, _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].key, 0);
 				for (i=PlexData.oEpisodeData.intPos + 1; i<_len; i++)
 				{
-					_title = _data[i].attributes.title;
+					_title = _data[i].title;
 					D.debug(D.lDev, "SeasonDetails - Adding" + _title + " to queue");
-					key = _data[i].Media[0].Part[0].attributes.key;
+					key = _data[i].Media[0].Part[0].key;
 					popAPI.queueVOD(_title, key);
 				}
 				
 			break;
 			case Remote.ENTER:
 				D.debug(D.lDev, "SeasonDetails - ENTER Button Pressed...");
-				var _data:Array = PlexData.oEpisodeData.MediaContainer[0].Video;
-				var partKey:String = _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].attributes.key;
-				var key:String = _data[PlexData.oEpisodeData.intPos].attributes.title;
+				var _data:Array = PlexData.oEpisodeData._children;
+				var partKey:String = _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].key;
+				var key:String = _data[PlexData.oEpisodeData.intPos].title;
 				var resume:Number = 0;
 				
 				D.debug(D.lDev, "SeasonDetails - Calling playVOD with: key => " + key);
