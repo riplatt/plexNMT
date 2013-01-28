@@ -55,7 +55,7 @@ class plexNMT.as2.api.PopAPI {
 		D.debug(D.lDev, "PopAPI - Doing playQueueVOD...");
 		Util.loadURL("http://127.0.0.1:8008/playback" + 
 					 "?arg0=next_vod_in_queue");
-		playingInterval = setInterval(Delegate.create(this,getCurrentTime), PlexData.oSettings.timeout);
+		this.playingInterval = setInterval(Delegate.create(this,getCurrentTime), PlexData.oSettings.timeout);
 	}
 	
 	public function stopUpdates()
@@ -143,7 +143,6 @@ class plexNMT.as2.api.PopAPI {
 				D.debug(D.lDev,"Doing PopAPI - getCurrentTime successful: " + success);
                 PlexData.oCurrentTime = new XMLObject().parseXML(xml, true);
                 delete xml
-				//Utils.varDump(PlexData.oCategories)
 			}else{
 				D.debug(D.lDebug, "PopAPI - Failed to get Current Time...");
 			}
@@ -162,7 +161,7 @@ class plexNMT.as2.api.PopAPI {
 			var _state:String = PlexData.oCurrentTime.theDavidBox[0].response[0].currentStatus[0].data;
 			PlexAPI._setProgress(key, time, _state);
 		} else {
-			clearInterval(playingInterval);
+			clearInterval(this.playingInterval);
 		}
 		
 	}

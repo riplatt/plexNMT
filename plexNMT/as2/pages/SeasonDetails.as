@@ -275,12 +275,12 @@ class plexNMT.as2.pages.SeasonDetails {
 				var key:String = "";
 				var _title:String = "";
 				var i:Number = 0;
-				popAPI.playVOD(_data[PlexData.oEpisodeData.intPos].title, _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].key, 0);
+				popAPI.playVOD(_data[PlexData.oEpisodeData.intPos].title, _data[PlexData.oEpisodeData.intPos]._children[0]._children[0].key, 0);
 				for (i=PlexData.oEpisodeData.intPos + 1; i<_len; i++)
 				{
 					_title = _data[i].title;
 					D.debug(D.lDev, "SeasonDetails - Adding" + _title + " to queue");
-					key = _data[i].Media[0].Part[0].key;
+					key = _data[i]._children[0]._children[0].key;
 					popAPI.queueVOD(_title, key);
 				}
 				
@@ -288,7 +288,7 @@ class plexNMT.as2.pages.SeasonDetails {
 			case Remote.ENTER:
 				D.debug(D.lDev, "SeasonDetails - ENTER Button Pressed...");
 				var _data:Array = PlexData.oEpisodeData._children;
-				var partKey:String = _data[PlexData.oEpisodeData.intPos].Media[0].Part[0].key;
+				var partKey:String = _data[PlexData.oEpisodeData.intPos]._children[0]._children[0].key;
 				var key:String = _data[PlexData.oEpisodeData.intPos].title;
 				var resume:Number = 0;
 				
