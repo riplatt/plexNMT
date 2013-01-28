@@ -25,9 +25,9 @@ class plexNMT.as2.common.Background {
 	// Initialization:
 	public function Background(parentMC:MovieClip)
 	{
-		trace("Background - Doing Initialization...");
+		D.debug(D.lDev, "Background - Doing Initialization...");
 		backgroundMC = parentMC.createEmptyMovieClip("backgroundMC", parentMC.getNextHighestDepth());
-		trace("Background - Got a depth of " + backgroundMC.getDepth());
+		D.debug(D.lDev, "Background - Got a depth of " + backgroundMC.getDepth());
 		backgroundMC.swapDepths(0)
 		current = 0;
 		
@@ -40,6 +40,7 @@ class plexNMT.as2.common.Background {
 	// Public Methods:
 	public function _set(key:String)
 	{
+		D.debug(D.lDebug, "Background - Setting background to " + key);
 		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width=1280&height=720&url=" + escape(PlexData.oSettings.url + key)
 		UI.loadImage(url, this.backgroundMC,"imgBG2", {scaleMode:2});
 		this.current = 1;
@@ -47,7 +48,7 @@ class plexNMT.as2.common.Background {
 	
 	public function _update(key:String)
 	{
-		//trace("Background - Updating Background with: " + key + ", " + this.current);
+		D.debug(D.lDebug, "Background - Updating background to " + key);
 		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width=1280&height=720&url=" + escape(PlexData.oSettings.url + key)
 		if (this.current == 0) {
 			//trace("Doing 0 with: " + url);
@@ -66,8 +67,6 @@ class plexNMT.as2.common.Background {
 			TweenLite.to(this.backgroundMC.imgBG2, 0, {autoAlpha:0});
 			this.current = 0;
 		}
-		//trace("Background - Dumping this.backgroundMC...");
-		//Utils.varDump(this.backgroundMC);
 		return;
 	}
 	

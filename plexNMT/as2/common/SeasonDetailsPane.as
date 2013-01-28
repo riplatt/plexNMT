@@ -38,13 +38,11 @@ class plexNMT.as2.common.SeasonDetailsPane {
 
 	// Initialization:
 	public function SeasonDetailsPane(parentMC:MovieClip) {
-		trace("SeasonDetailsPane - parentMC:" + parentMC);
-		//Utils.varDump(this.parentMC);
-		trace("SeasonDetailsPane - Adding new Details Box...");
+		D.debug(D.lDev, "SeasonDetailsPane - parentMC:" + parentMC);
 		seasonDetailsMC = parentMC.createEmptyMovieClip("seasonDetailsMC", parentMC.getNextHighestDepth()); //,{_x:10, _y:600});
-		//trace("WallDetails - Calling draw...");
-		seasonDetailsMC._x = 414 //, 50);
+		seasonDetailsMC._x = 414;
 		seasonDetailsMC._y = 126;
+		
 		buildDetails(seasonDetailsMC);
 		
 		current = 0;
@@ -97,91 +95,106 @@ class plexNMT.as2.common.SeasonDetailsPane {
 	{	
 		var _season:Array = new Array();
 		var _wall:Array = new Array();
-		_wall = PlexData.oWallData.MediaContainer[0].Directory[PlexData.oWallData.intPos];
-		_season = PlexData.oSeasonData.MediaContainer[0].Directory[PlexData.oSeasonData.intPos];
+		_wall = PlexData.oWallData._children[PlexData.oWallData.intPos];
+		_season = PlexData.oSeasonData._children[PlexData.oSeasonData.intPos];
 		//D.debug(D.lDev, Utils.varDump(_data));
 		
 		//Title
-		this.seasonDetailsMC._title.text = _wall.attributes.title;
+		this.seasonDetailsMC._title.text = _wall.title;
 		//Year
-		this.seasonDetailsMC._year.text = _wall.attributes.year;
+		this.seasonDetailsMC._year.text = _wall.year;
 		//Rating
-		if (_wall.attributes.rating != undefined &&  _wall.attributes.rating != 0){
-			TweenLite.to(this.seasonDetailsMC.ratingMC.ratingMask, 0.7, {_width:(128 * _wall.attributes.rating / 10)});
+		if (_wall.rating != undefined &&  _wall.rating != 0){
+			TweenLite.to(this.seasonDetailsMC.ratingMC.ratingMask, 0.7, {_width:(128 * _wall.rating / 10)});
 		} else {
 			TweenLite.to(this.seasonDetailsMC.ratingMC.ratingMask, 0.7, {_width:0});
 		}
-		var prefix:String = PlexData.oWallData.MediaContainer[0].attributes.mediaTagPrefix;
-		var version:String = PlexData.oWallData.MediaContainer[0].attributes.mediaTagVersion;
+		var prefix:String = PlexData.oWallData.mediaTagPrefix;
+		var version:String = PlexData.oWallData.mediaTagVersion;
 		//Studio Flag
-		trace("Wall Details - Calling PlexAPI.getImg...");
+		D.debug(D.lDev, "Wall Details - Calling PlexAPI.getImg...");
 		var url:String = PlexAPI.getImg({width:200,
 									  height:80,
-									  key:prefix + "studio/" + _wall.attributes.studio + "?t=" + version});
+									  key:prefix + "studio/" + _wall.studio + "?t=" + version});
 		UI.loadImage(url, this.seasonDetailsMC.fStudio, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"studio"});
 		//Content Rating Flag
 		var ratingURL:String = PlexAPI.getImg({width:40,
 									  height:40,
-									  key:prefix + "contentRating/" + _wall.attributes.contentRating + "?t=" + version});
+									  key:prefix + "contentRating/" + _wall.contentRating + "?t=" + version});
 		UI.loadImage(ratingURL, this.seasonDetailsMC.fRating, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"rating"});
 		//Aspect Ratio Flag
 		var ratioURL:String = PlexAPI.getImg({width:30,
 									  height:30,
-									  key:prefix + "aspectRatio/" + _wall.attributes.aspectRatio + "?t=" + version});
+									  key:prefix + "aspectRatio/" + _wall._children.aspectRatio + "?t=" + version});
 		UI.loadImage(ratioURL, this.seasonDetailsMC.fRatio, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"ratio"});
 		//Video Resolution Flag
 		var resolutionURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:prefix + "videoResolution/" + _wall.attributes.videoResolution + "?t=" + version});
+									  key:prefix + "videoResolution/" + _wall._children.videoResolution + "?t=" + version});
 		UI.loadImage(resolutionURL, this.seasonDetailsMC.fResolution, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"resolution"});
 		//Video Codec Flag
 		var videoCodecURL:String = PlexAPI.getImg({width:100,
 									  height:60,
-									  key:prefix + "videoCodec/" + _wall.attributes.videoCodec + "?t=" + version});
+									  key:prefix + "videoCodec/" + _wall._children.videoCodec + "?t=" + version});
 		UI.loadImage(videoCodecURL, this.seasonDetailsMC.fVideoCodec, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"videoCodec"});
 		//Audio Channels Flags
 		var channelsURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:prefix + "audioChannels/" + _wall.attributes.audioChannels + "?t=" + version});
+									  key:prefix + "audioChannels/" + _wall._children.audioChannels + "?t=" + version});
 		UI.loadImage(channelsURL, this.seasonDetailsMC.fChannels, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"channels"});
 		//Audio Codec Flag
 		var audioCodecURL:String = PlexAPI.getImg({width:60,
 									  height:34,
-									  key:prefix + "audioCodec/" + _wall.attributes.audioCodec + "?t=" + version});
+									  key:prefix + "audioCodec/" + _wall._children.audioCodec + "?t=" + version});
 		UI.loadImage(audioCodecURL, this.seasonDetailsMC.fAudioCodec, "img",{doneCB:Delegate.create(this, this.onFlagLoad), flag:"audioCodec"});
 		//Times
-		this.seasonDetailsMC._runTime.text = "Running Time: " + Utils.formatTime( _wall.attributes.duration);
-		if (_wall.attributes.viewOffset != undefined) {
-			this.seasonDetailsMC._watchTime.text = "Watched Time: " + Utils.formatTime( _wall.attributes.viewOffset);
+		this.seasonDetailsMC._runTime.text = "Running Time: " + Utils.formatTime( _wall.duration);
+		if (_wall.viewOffset != undefined) {
+			this.seasonDetailsMC._watchTime.text = "Watched Time: " + Utils.formatTime( _wall.viewOffset);
 		} else {
 			this.seasonDetailsMC._watchTime.text = "Watched: 0hrs 0mins";
 		}
 		//Summary
-		this.seasonDetailsMC._summary.text = _wall.attributes.summary;
-		//Writer
-		this.seasonDetailsMC._writer.text = "Writer: " + _wall.Writer[0].attributes.tag;
-		//Director
-		this.seasonDetailsMC._director.text = "Director: " + _wall.Director[0].attributes.tag;
-		//Cast
-		var castLen:Number = _wall.Role.length;
-		var cast:String = "Cast: ";
-		for (var c = 0; c<castLen; c++)
-		{
-			//Utils.varDump(c);
-			cast = cast + _wall.Role[c].attributes.tag + " | ";
-		}
-		cast = cast.substr(0, (cast.length - 3));
-		this.seasonDetailsMC._cast.text = cast;
-		//Genre
-		//this.seasonDetailsMC._genre.text = "Genre: " + _wall.Genre[0].attributes.tag;
-		var genreLen:Number = _wall.Genre.length;
+		this.seasonDetailsMC._summary.text = _wall.summary;
+		
+		var etLen:Number = _season._children.length;
+		var eType:String = "";
 		var genre:String = "Genre: ";
-		for (var g = 0; g<genreLen;g++)
+		var writer:String = "Writer: ";
+		var director:String = "Director: ";
+		var country:String = "Country: ";
+		var role:String = "Cast: ";
+		for (var et = 0; et < etLen; et++)
 		{
-			genre = genre + _wall.Genre[g].attributes.tag + " | ";
+			eType = _season._children[et]._elementType.toLowerCase();
+			switch (eType)
+			{
+				case "genre": 
+					//Genre
+					genre += _season._children[et].tag + " | ";
+				break;
+				case "writer": 
+					writer += _season._children[et].tag + " | ";
+				break;
+				case "director": 
+					director += _season._children[et].tag + " | ";
+				break;
+				case "country": 
+					country += _season._children[et].tag + " | ";
+				break;
+				case "role": 
+					role += _season._children[et].tag + " | ";
+				break;
+			}
 		}
-		genre = genre.substr(0, (genre.length - 3));
-		this.seasonDetailsMC._genre.text = genre;
+		//Writer
+		this.seasonDetailsMC._writer.text = writer.substr(0, (writer.length - 3));
+		//Director
+		this.seasonDetailsMC._director.text = director.substr(0, (director.length - 3));
+		//Cast
+		this.seasonDetailsMC._cast.text = role.substr(0, (role.length - 3));
+		//Genre
+		this.seasonDetailsMC._genre.text = genre.substr(0, (genre.length - 3));
 		//Align
 		UI.align([
 				  {symbol:this.seasonDetailsMC._genre},
@@ -193,7 +206,6 @@ class plexNMT.as2.common.SeasonDetailsPane {
 
 
 	public function destroy():Void {
-		//this.seasonDetailsMC.removeMovieClip();
 		Utils.cleanUp(this.seasonDetailsMC);
 		this.seasonDetailsMC.removeMovieClip();
 		delete seasonDetailsMC.removeMovieClip();
@@ -201,8 +213,8 @@ class plexNMT.as2.common.SeasonDetailsPane {
 	// Private Methods:
 	private function onFlagLoad(success:Boolean, o:Object)
 	{
-		//trace("SeasonDetailsPane - Doing onFlagLoad with:" + o.o.flag);
-		//trace("this.seasonDetailsMC._width:" + this.seasonDetailsMC._width);
+		//D.debug(D.lDev, "SeasonDetailsPane - Doing onFlagLoad with:" + o.o.flag);
+		//D.debug(D.lDev, "this.seasonDetailsMC._width:" + this.seasonDetailsMC._width);
 		var flag:String = o.o.flag;
 		if (flag != undefined)
 		{
@@ -237,7 +249,7 @@ class plexNMT.as2.common.SeasonDetailsPane {
 					this.seasonDetailsMC.fAudioCodec._y = 495 - this.seasonDetailsMC.fAudioCodec._height;
 				break;
 				default :
-					trace("WallDetails - Default switch...");
+					D.debug(D.lDev, "WallDetails - Default switch...");
 				break;
 			}
 		}
@@ -255,7 +267,7 @@ class plexNMT.as2.common.SeasonDetailsPane {
 	private function buildDetails(mc:MovieClip)
 	{	
 		var _data:Array = new Array();
-		_data = PlexData.oSeasonData.MediaContainer[0];
+		_data = PlexData.oSeasonData._children;
 
 		//background
 		drawRoundedRectangle(mc, 618, 405, 30, 0x000000, 80, 2, 0xCCCCCC, 40);
@@ -384,7 +396,7 @@ class plexNMT.as2.common.SeasonDetailsPane {
 		mc._episodeTitle.setNewTextFormat(myFormat);
 		mc._episodeTitle.text = "Episode Title"
 		
-		this.setText(_data.Video[0].attributes.title, _data.Video[0].attributes.year, _data.Video[0].attributes.tagline);
+		this.setText(_data._children[0].title, _data._children[0].year, _data._children[0].tagline);
 		this._update();
 		
 		
@@ -398,8 +410,7 @@ class plexNMT.as2.common.SeasonDetailsPane {
 										  lineThickness:Number, 
 										  lineColor:Number, 
 										  lineAlpha:Number) {
-		trace("WallDetails - Doing drawRoundedRectangle with:" + mc);
-		
+	
 		with (mc) {
 			beginFill(fillColor,fillAlpha);
 			lineStyle(lineThickness,lineColor,lineAlpha);

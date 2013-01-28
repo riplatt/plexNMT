@@ -1,11 +1,11 @@
 ﻿import mx.utils.Delegate;
 import mx.xpath.XPathAPI;
 
-import com.syabas.as2.common.GridLite;
-import com.syabas.as2.common.Util;
-import com.syabas.as2.common.UI;
-import com.syabas.as2.common.Marquee;
-import com.syabas.as2.common.IMGLoader;
+//import com.syabas.as2.common.GridLite;
+//import com.syabas.as2.common.Util;
+//import com.syabas.as2.common.UI;
+//import com.syabas.as2.common.Marquee;
+//import com.syabas.as2.common.IMGLoader;
 import com.syabas.as2.common.D;
 
 import plexNMT.as2.api.PlexAPI;
@@ -64,10 +64,8 @@ class plexNMT.as2.pages.SeasonDetails {
 		this.preloadMC = this.mainMC.attachMovie("busy", "busy", mainMC.getNextHighestDepth(), {_x:640, _y:360, _width:200, _height:200});
 		
 		var key:String = PlexData.oWallData._children[PlexData.oWallData.intPos].key
-		trace("oWallData.intPos: " + PlexData.oWallData.intPos);
 		//trace("Calling getMovieData With: " + key);
-		D.debug(D.lDev, "SeasonDetails - Calling getSeasonData With: " + key);
-		trace("SeasonDetails - Calling getSeasonData With: " + key);
+		D.debug(D.lDebug, "SeasonDetails - Calling getSeasonData With: " + key);
 		PlexAPI.getSeasonData(key, Delegate.create(this, this.onSeasonLoad), 5000);
 		
 	}
@@ -94,7 +92,9 @@ class plexNMT.as2.pages.SeasonDetails {
 	
 	private function onSeasonLoad():Void
 	{
+		D.debug(D.lDebug, "SeasonDetails - onSeasonLoad PlexData.oSeasonData._elementType: " + PlexData.oSeasonData._elementType);
 		var key:String = PlexData.oSeasonData._children[0].key
+		D.debug(D.lDebug, "SeasonDetails - Calling getEpisodeData With: " + key);
 		PlexAPI.getEpisodeData(key, Delegate.create(this, this.onDataLoad), 5000);
 	}
 	private function onDataLoad(data:Object):Void
@@ -143,7 +143,13 @@ class plexNMT.as2.pages.SeasonDetails {
 				_details.setSummaryText(PlexData.oSeasonData.summary);
 			break;
 			case "episode":
-				var seasonNumber:String = seasonNumber = PlexData.oEpisodeData._children.parentIndex;
+				var seasonNumber:String = "";
+				if (PlexData.oEpisodeData._children.parentIndex != undefined)
+				{
+					seasonNumber = PlexData.oEpisodeData._children.parentIndex;
+				} else {
+					seasonNumber = PlexData.oEpisodeData.parentIndex;
+				}
 				_details.setSeasonText("Season " + seasonNumber);
 				_details.setEpisodeText("Episode " + PlexData.oEpisodeData._children[PlexData.oEpisodeData.intPos].index);
 				_details.setEpisodeTitleText(PlexData.oEpisodeData._children[PlexData.oEpisodeData.intPos].title);

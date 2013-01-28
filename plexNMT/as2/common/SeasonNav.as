@@ -42,8 +42,8 @@ class plexNMT.as2.common.SeasonNav {
 	// Initialization:
 	public function SeasonNav(parentMC:MovieClip, data:Array, updateFN:Function) 
 	{
-		trace("SeasonNav - Doing Initializtion...");
-		//trace(Utils.varDump(data));
+		D.debug(D.lDev, "SeasonNav - Doing Initializtion...");
+		//D.debug(D.lDev, Utils.varDump(data));
 		//GreenSock Tween Control
 		OverwriteManager.init(OverwriteManager.PREEXISTING);
 		TweenPlugin.activate([AutoAlphaPlugin]);
@@ -64,7 +64,7 @@ class plexNMT.as2.common.SeasonNav {
 		//this.selectToggle = true;
 		this._position();
 		this.enableKeyListener();
-		//trace("SeasonNav - Calling fastUpdate...");
+		//D.debug(D.lDev, "SeasonNav - Calling fastUpdate...");
 		this.fn("season");
 	}
 	
@@ -88,11 +88,14 @@ class plexNMT.as2.common.SeasonNav {
 	
 	public function _update()
 	{
-		trace("SeasonNav - Doing _update...");
+		D.debug(D.lDev, "SeasonNav - Doing _update...");
 		//this.delHolders();
 		PlexData.oSeasonData.intPos = 0;
 		
 		var _data:Array = PlexData.oSeasonData._children;
+		D.debug(D.lDebug, "SeasonNav - PlexData.oSeasonData.intPos: " + PlexData.oSeasonData.intPos);
+		D.debug(D.lDebug, "SeasonNav - PlexData.oSeasonData.intLength: " + PlexData.oSeasonData.intLength);
+		
 		this.holders[0].autoAlpha = 0;
 		UI.loadImage("poster.png", this.holders[0], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:0});
 		this.holders[1].autoAlpha = 0;
@@ -135,12 +138,12 @@ class plexNMT.as2.common.SeasonNav {
 			UI.loadImage(h7URL, this.holders[6], "img",{doneCB:Delegate.create(this, this.onHolderLoad), holder:6});
 		}
 		
-		trace("SeasonNav - Done _update...");
+		D.debug(D.lDev, "SeasonNav - Done _update...");
 	}
 	// Private Methods:
 	private function delHolders()
 	{
-		trace("SeasonNav - Doing delHolders...");
+		D.debug(D.lDev, "SeasonNav - Doing delHolders...");
 		this.holder1.removeMovieClip();
 		this.holder2.removeMovieClip();
 		this.holder3.removeMovieClip();
@@ -163,7 +166,7 @@ class plexNMT.as2.common.SeasonNav {
 	
 	private function buildHolders(mc:MovieClip)
 	{
-		trace("SeasonNav - Doing buildHolders with: " + mc);
+		D.debug(D.lDev, "SeasonNav - Doing buildHolders with: " + mc);
 		var _data:Array = PlexData.oSeasonData._children;
 				
 		holder1 = mc.createEmptyMovieClip("holder1", 1);
@@ -262,7 +265,7 @@ class plexNMT.as2.common.SeasonNav {
 	
 	private function onHolderLoad(success:Boolean, o:Object)
 	{
-		trace("SeasonNav - Doing onHolderLoad with: " + o.o.holder);
+		D.debug(D.lDev, "SeasonNav - Doing onHolderLoad with: " + o.o.holder);
 		var holder:Number = o.o.holder;
 		var _sel:Boolean = o.o._selected;
 		if (_sel == undefined || _sel == null || _sel == "")
@@ -270,19 +273,15 @@ class plexNMT.as2.common.SeasonNav {
 		switch (holder)
 		{
 			case 0:
-				trace("SeasonNav - Doing holders[0] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[0], 0, {autoAlpha:0, _x:0, _y:25, _width:117, _height:173});
 			break;
 			case 1:
-				trace("SeasonNav - Doing holders[1] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[1], 0, {autoAlpha:this.holders[1].autoAlpha, _x:129, _y:25, _width:117, _height:173});
 			break;
 			case 2:
-				trace("SeasonNav - Doing holders[2] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[2], 0, {autoAlpha:this.holders[2].autoAlpha, _x:254.25, _y:25, _width:117, _height:173});
 			break;
 			case 3:
-				trace("SeasonNav - Doing holders[3] with autoAlpha of " + this.holders[1].autoAlpha);
 				if (_sel)
 				{
 					TweenLite.to(this.holders[3], 0, {autoAlpha:this.holders[3].autoAlpha, _x:372.59, _y:0, _width:134, _height:198});
@@ -291,15 +290,12 @@ class plexNMT.as2.common.SeasonNav {
 				}
 			break;
 			case 4:
-				trace("SeasonNav - Doing holders[4] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[4], 0, {autoAlpha:this.holders[4].autoAlpha, _x:504.75, _y:25, _width:117, _height:173});
 			break;
 			case 5:
-				trace("SeasonNav - Doing holders[5] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[5], 0, {autoAlpha:this.holders[5].autoAlpha, _x:630, _y:25, _width:117, _height:173});
 			break;
 			case 6:
-				trace("SeasonNav - Doing holders[6] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[6], 0, {autoAlpha:0, _x:760.5, _y:25, _width:117, _height:173});
 			break;
 		}
@@ -307,7 +303,7 @@ class plexNMT.as2.common.SeasonNav {
 	
 	private function deselect()
 	{
-		trace("SeasonNav - Doing deselect...");
+		D.debug(D.lDev, "SeasonNav - Doing deselect...");
 		var pos:Array = new Array();
 		pos[0] = {autoAlpha:0, _x:0, _y:25, _width:117, _height:173};
 		pos[1] = {autoAlpha:this.holders[1].autoAlpha, _x:129, _y:25, _width:117, _height:173};
@@ -336,7 +332,7 @@ class plexNMT.as2.common.SeasonNav {
 	
 	private function _position()
 	{
-		trace("SeasonNav - Doing position...");
+		D.debug(D.lDev, "SeasonNav - Doing position...");
 		var pos:Array = new Array();
 		pos[0] = {autoAlpha:0, _x:0, _y:25, _width:117, _height:173};
 		pos[1] = {autoAlpha:this.holders[1].autoAlpha, _x:129, _y:25, _width:117, _height:173};
@@ -364,8 +360,8 @@ class plexNMT.as2.common.SeasonNav {
 	
 	private function newImg(intImg:Number, intHolder:Number)
 	{
-		trace("SeasonNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
-		trace("SeasonNav - PlexData.oSeasonData.intPos: " + PlexData.oSeasonData.intPos);
+		D.debug(D.lDev, "SeasonNav - Doing newImg With intImg: " + intImg + ", intHolder: " + intHolder);
+		D.debug(D.lDev, "SeasonNav - PlexData.oSeasonData.intPos: " + PlexData.oSeasonData.intPos);
 		var _data:Array = PlexData.oSeasonData._children;
 		var url:String = PlexAPI.getImg({width:134, height:198, key:_data[PlexData.GetRotation("oSeasonData", intImg)].thumb});
 		UI.loadImage(url, holders[intHolder], "img");
@@ -416,7 +412,7 @@ class plexNMT.as2.common.SeasonNav {
 					} else {
 						this.holders[0].autoAlpha = 0;
 					}
-					trace("SeasonNav - Calling fastUpdate...");
+					D.debug(D.lDev, "SeasonNav - Calling fastUpdate...");
 					this.fn("season");
 				}
 				this._position();
@@ -436,7 +432,7 @@ class plexNMT.as2.common.SeasonNav {
 					} else {
 						this.holders[6].autoAlpha = 0;
 					}
-					trace("SeasonNav - Calling fastUpdate...");
+					D.debug(D.lDev, "SeasonNav - Calling fastUpdate...");
 					this.fn("season");
 				}
 				this._position();

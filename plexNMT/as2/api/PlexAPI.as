@@ -87,7 +87,16 @@ class plexNMT.as2.api.PlexAPI
                 D.debug(D.lDebug, "Error loading JSON content.");
                 onLoadCB(false, null);
             }
-            jsonData = JSONUtil.parseJSON(src);
+			if (src.indexOf("}{") != -1)
+			{
+				D.debug(D.lError, "PlexAPI - Malformed json string found...");
+				src = src.split("}{").join("},{");
+				jsonData = JSONUtil.parseJSON(src);
+			} else {
+				D.debug(D.lDebug, "PlexAPI - JSON string Formate OK...");
+				jsonData = JSONUtil.parseJSON(src);
+			}
+			D.debug(D.lDebug, "PlexAPI - loadJSON typeOf(jsonData): " + typeof(jsonData));
 			onLoadCB(true, jsonData);
         };
 		
@@ -112,11 +121,11 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				D.debug(D.lDev, "PlexAPI - Got Sections from PLEX...");
+				D.debug(D.lDebug, "PlexAPI - Got Sections from PLEX...");
                 PlexData.oSections = json;
 				PlexData.setSections();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Sections from PLEX...");
+				D.debug(D.lError, "PlexAPI - Failed to get Sections from PLEX...");
 			}
 			this.onLoad();
 		}), false);
@@ -128,11 +137,11 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				D.debug(D.lDev, "PlexAPI - Got Categories from PLEX...");
+				D.debug(D.lDebug, "PlexAPI - Got Categories from PLEX...");
                 PlexData.oCategories =  json;
 				PlexData.setCategories();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Categories from PLEX...");
+				D.debug(D.lError, "PlexAPI - Failed to get Categories from PLEX...");
 			}
 			this.onLoad();
 		}), false);
@@ -144,11 +153,11 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				D.debug(D.lDev, "PlexAPI - Got Filters from PLEX...");
+				D.debug(D.lDebug, "PlexAPI - Got Filters from PLEX...");
                 PlexData.oFilters = json;
 				PlexData.setFilters();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Filters from PLEX...");
+				D.debug(D.lError, "PlexAPI - Failed to get Filters from PLEX...");
 			}
 			this.onLoad();
 		}), false);
@@ -160,11 +169,11 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				D.debug(D.lDev, "PlexAPI - Got Wall Data from PLEX...");
+				D.debug(D.lDebug, "PlexAPI - Got Wall Data from PLEX...");
                 PlexData.oWallData = json;
 				PlexData.setWallData();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Wall Data from PLEX...");
+				D.debug(D.lError, "PlexAPI - Failed to get Wall Data from PLEX...");
 			}
 			this.onLoad();
 		}), false);
@@ -176,11 +185,11 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				D.debug(D.lDev, "PlexAPI - Got MovieData from PLEX...");
+				D.debug(D.lDebug, "PlexAPI - Got MovieData from PLEX...");
                 PlexData.oMovieData = json;
 				PlexData.setMovieData();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Movie Data...");
+				D.debug(D.lError, "PlexAPI - Failed to get Movie Data from PLEX...");
 			}
 			this.onLoad();
 		}), false);
@@ -192,11 +201,11 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				D.debug(D.lDev, "PlexAPI - Got SeasonData from PLEX...");
+				D.debug(D.lDebug, "PlexAPI - Got SeasonData from PLEX...");
                 PlexData.oSeasonData = json;
 				PlexData.setSeasonData();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Season Data...");
+				D.debug(D.lError, "PlexAPI - Failed to get Season Data from PLEX...");
 			}
 			this.onLoad();
 		}), false);
@@ -208,11 +217,11 @@ class plexNMT.as2.api.PlexAPI
 		{
 			if(success)
 			{
-				D.debug(D.lDev, "PlexAPI - Got EpisodeData from PLEX...");
+				D.debug(D.lDebug, "PlexAPI - Got EpisodeData from PLEX...");
                 PlexData.oEpisodeData = json;
 				PlexData.setEpisodeData();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Episode Data...");
+				D.debug(D.lError, "PlexAPI - Failed to get Episode Data from PLEX...");
 			}
 			this.onLoad(PlexData.oEpisodeData);
 		}), false);
@@ -228,7 +237,7 @@ class plexNMT.as2.api.PlexAPI
                 PlexData.oBackground = json;
 				PlexData.setBackground();
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get Background...");
+				D.debug(D.lError, "PlexAPI - Failed to get Background Data from PLEX...");
 			}
 			this.onLoad(PlexData.oWallData);
 		}), false);
@@ -246,7 +255,7 @@ class plexNMT.as2.api.PlexAPI
 				D.debug(D.lDebug, "PlexAPI - Got ViewGroup from PLEX...");
 				viewGroup = Util.trim(XPathAPI.selectSingleNode(xml.firstChild, "/MediaContainer").attributes.viewGroup.toString());
 			}else{
-				D.debug(D.lDebug, "PlexAPI - Failed to get ViewGroup from PLEX...");
+				D.debug(D.lError, "PlexAPI - Failed to get ViewGroup Data from PLEX...");
 			}
 			this.onLoad(viewGroup);
 		}), {target:"xml", timeout:timeout});
@@ -283,11 +292,6 @@ class plexNMT.as2.api.PlexAPI
 	
 	public static function markWatched(key:String)
 	{
-		//http://plexIP:32400/:/scrobble?key=26360&identifier=com.plexapp.plugins.library
-		/*/:/scrobble?key=26360						Video key
-		&identifier=com.plexapp.plugins.library
-		*/
-		
 		var url:String = PlexData.oSettings.url + "/:/scrobble" +
 						 "?key=" + key +
 						 "&identifier=com.plexapp.plugins.library";

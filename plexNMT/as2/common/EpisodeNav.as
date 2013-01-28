@@ -253,19 +253,15 @@ class plexNMT.as2.common.EpisodeNav {
 		switch (holder)
 		{
 			case 0:
-				D.debug(D.lDev, "EpisodeNav - Doing holders[0] with autoAlpha of " + this.holders[0].autoAlpha);
 				TweenLite.to(this.holders[0], 0, {autoAlpha:0, _x:29, _y:-17, _width:234, _height:131.625});
 			break;
 			case 1:
-				D.debug(D.lDev, "EpisodeNav - Doing holders[1] with autoAlpha of " + this.holders[1].autoAlpha);
 				TweenLite.to(this.holders[1], 0, {autoAlpha:this.holders[1].autoAlpha, _x:29, _y:123.38, _width:234, _height:131.625});
 			break;
 			case 2:
-				D.debug(D.lDev, "EpisodeNav - Doing holders[2] with autoAlpha of " + this.holders[2].autoAlpha);
 				TweenLite.to(this.holders[2], 0, {autoAlpha:this.holders[2].autoAlpha, _x:29, _y:263.31, _width:234, _height:131.625});
 			break;
 			case 3:
-				D.debug(D.lDev, "EpisodeNav - Doing holders[3] with autoAlpha of " + this.holders[3].autoAlpha);
 				if (_sel)
 				{
 					TweenLite.to(this.holders[3], 0, {autoAlpha:this.holders[3].autoAlpha, _x:0, _y:255.16, _width:263, _height:148});
@@ -274,11 +270,9 @@ class plexNMT.as2.common.EpisodeNav {
 				}
 			break;
 			case 4:
-				D.debug(D.lDev, "EpisodeNav - Doing holders[4] with autoAlpha of " + this.holders[4].autoAlpha);
 				TweenLite.to(this.holders[4], 0, {autoAlpha:this.holders[4].autoAlpha, _x:29, _y:543.19, _width:234, _height:131.625});
 			break;
 			case 5:
-				D.debug(D.lDev, "EpisodeNav - Doing holders[5] with autoAlpha of " + this.holders[5].autoAlpha);
 				TweenLite.to(this.holders[5], 0, {autoAlpha:0, _x:29, _y:684.38, _width:234, _height:131.625});
 			break;
 		}
