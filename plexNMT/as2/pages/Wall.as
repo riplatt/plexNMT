@@ -241,7 +241,7 @@ class plexNMT.as2.pages.Wall
 			this.hlCB(o);
 			this.onHLStopCB(o);
 		}
-		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width="+PlexData.oWall.thumb.size+"&height="+PlexData.oWall.thumb.size+"&url=" + escape(PlexData.oSettings.url + Util.trim(o.data.thumb))
+		var url:String = PlexData.oSettings.url + "/photo/:/transcode?width="+PlexData.oWall.thumb.size+"&height="+PlexData.oWall.thumb.size+"&url=" + escape(PlexData.oSettings.url + Util.trim(o.data.thumb));
 		this.imgLoader.load(o.mc._name, url, o.mc.imgMC,
 			{
 				mcProps:{_height:200,_width:200}, lmcId:"poster",

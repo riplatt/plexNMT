@@ -179,6 +179,23 @@ class plexNMT.as2.api.PlexAPI
 		}), false);
 	}
 	
+	public static function getPartWallData(key:String, offset:Number, size:Number, onLoad:Function, timeout:Number):Void
+	{
+		var urlEatra:String = "?type=1&X-Plex-Container-Size="+size+"&X-Plex-Container-Start="+offset;
+		PlexAPI.loadJSON(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, json:Object):Void
+		{
+			if(success)
+			{
+				D.debug(D.lDebug, "PlexAPI - Got Part Wall Data from PLEX...");
+                //PlexData.oWallData = json;
+				PlexData.addWallData(json);
+			}else{
+				D.debug(D.lError, "PlexAPI - Failed to get Part Wall Data from PLEX...");
+			}
+			this.onLoad();
+		}), false);
+	}
+	
 	public static function getMovieData(key:String, onLoad:Function, timeout:Number):Void
 	{
 		PlexAPI.loadJSON(PlexData.oSettings.url + key, Delegate.create({onLoad:onLoad}, function(success:Boolean, json:Object):Void

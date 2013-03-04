@@ -173,6 +173,17 @@ class plexNMT.as2.common.PlexData {
 		oWallData.intLength = oWallData._children.length - 1;
 	}
 	
+	public static function addWallData(json:Object)
+	{
+		var len:Number = json._children.length - 1;
+		var offset:Number = json.offset;
+		for (var i:Number = 0; i < len; i++) {
+			oWallData._children.(offset, 0, json._children[i]);
+			offset++;
+		}\21
+		oWallData.intLength = oWallData._children.length - 1;
+	}
+	
 	public static function setMovieData()
 	{
 		oMovieData.intPos = 0;
