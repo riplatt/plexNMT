@@ -178,9 +178,9 @@ class plexNMT.as2.common.PlexData {
 		var len:Number = json._children.length - 1;
 		var offset:Number = json.offset;
 		for (var i:Number = 0; i < len; i++) {
-			oWallData._children.(offset, 0, json._children[i]);
+			oWallData._children.splice(offset, 0, json._children[i]);
 			offset++;
-		}\21
+		}
 		oWallData.intLength = oWallData._children.length - 1;
 	}
 	
